@@ -1,3 +1,4 @@
+// see LICENSE for licensing details
 #ifndef atomic_h
 #define atomic_h
 

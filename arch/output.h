@@ -1,5 +1,6 @@
-#ifndef __OUTPUT_H__
-#define __OUTPUT_H__
+// see LICENSE for licensing details
+#ifndef __output_h__
+#define __output_h__
 
 #include "ostream.h"
 
@@ -22,4 +23,4 @@ extern HTIFOutputStream kout;
 extern UARTOutputStream kout;
 #endif
 
-#endif // __OUTPUT_H__
+#endif 

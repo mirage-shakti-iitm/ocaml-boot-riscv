@@ -1,3 +1,4 @@
+// see LICENSE for licensing details
 #include "constructors.h"
 
 extern "C" {

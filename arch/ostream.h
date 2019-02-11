@@ -1,11 +1,3 @@
-/**
- * \file
- *
- * \ingroup generic
- *
- * \brief C++ style output stream.
- */
-
 #ifndef __OSTREAM_H__
 #define __OSTREAM_H__
 
