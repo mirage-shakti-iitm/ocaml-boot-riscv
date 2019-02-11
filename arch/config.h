@@ -1,0 +1,3 @@
+#define STACK_SIZE 4096
+#define STACK_SHIFT 12
+#define MAX_HARTS 1

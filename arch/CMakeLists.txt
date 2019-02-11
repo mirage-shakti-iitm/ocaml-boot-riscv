@@ -1,0 +1,10 @@
+add_library(arch
+    constructors.cc
+    fdt.cc
+    htif.cc
+    startup.cc
+    output.cc
+    string.cc
+    uart.cc
+    startup.S
+)
