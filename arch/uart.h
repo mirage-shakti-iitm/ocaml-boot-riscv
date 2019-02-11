@@ -1,4 +1,4 @@
-// See LICENSE for license details.
+// taken (and modified) from riscv-pk. See LICENSE.riscv-pk
 
 #ifndef _RISCV_UART_H
 #define _RISCV_UART_H

@@ -1,4 +1,4 @@
-// See LICENSE for license details.
+// taken (and modified) from riscv-pk. See LICENSE.riscv-pk
 
 #ifndef RISCV_CSR_ENCODING_H
 #define RISCV_CSR_ENCODING_H

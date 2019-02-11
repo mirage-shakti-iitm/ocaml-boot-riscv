@@ -1,4 +1,4 @@
-// See LICENSE for license details.
+// taken (and modified) from riscv-pk. See LICENSE.riscv-pk
 
 #include <stdbool.h>
 #include <stdint.h>
