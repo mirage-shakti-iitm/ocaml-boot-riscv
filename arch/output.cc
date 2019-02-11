@@ -1,5 +1,4 @@
 // see LICENSE for licensing details
-#include "machine.h"
 #include "output.h"
 #include "htif.h"
 #include "uart.h"

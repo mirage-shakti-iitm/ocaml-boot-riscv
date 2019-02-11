@@ -6,5 +6,6 @@ add_library(arch
     output.cc
     string.cc
     uart.cc
+    ocaml-freestanding-compat.cc
     startup.S
 )
