@@ -1,4 +1,4 @@
-# ocaml-riscv-boot
+# ocaml-boot-riscv
 
 ## Required packages
 
@@ -8,9 +8,9 @@
 
 	$ mkdir build && cd build 
     $ cmake ..
-    $ make
+    $ make all install
 
-This will generate a `libocaml-riscv-boot.a` with a matching `ocaml-riscv-boot.h` in your systems include directories
+This will generate a `libocaml-boot-riscv.a` with a matching `ocaml-boot-riscv.h` in your systems include directories
 
 
 

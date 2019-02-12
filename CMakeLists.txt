@@ -10,7 +10,7 @@ cmake_minimum_required(VERSION 3.5)
 
 enable_language(ASM)
 
-project(ocaml-riscv-boot VERSION 0.1)
+project(ocaml-boot-riscv VERSION 0.1)
 
 # linker & compiler flags
 # XXX: make this use set_target_properties
@@ -21,7 +21,7 @@ set(CMAKE_CXX_FLAGS "-mcmodel=medany -Og -g -DHTIF")
 set(CMAKE_EXE_LINKER_FLAGS "-static -Wl,-T${CMAKE_CURRENT_SOURCE_DIR}/linker.x -nostartfiles")
 
 # build a library
-add_library(ocaml-riscv-boot
+add_library(ocaml-boot-riscv
     src/constructors.cc
     src/fdt.cc
     src/htif.cc
@@ -33,7 +33,7 @@ add_library(ocaml-riscv-boot
     src/startup.S
 )
 # includes
-target_include_directories(ocaml-riscv-boot
+target_include_directories(ocaml-boot-riscv
     PUBLIC
     $<INSTALL_INTERFACE:include> 
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -42,14 +42,14 @@ target_include_directories(ocaml-riscv-boot
     )
 
 # set VERSION properly
-set_target_properties(ocaml-riscv-boot PROPERTIES VERSION ${PROJECT_VERSION})
+set_target_properties(ocaml-boot-riscv PROPERTIES VERSION ${PROJECT_VERSION})
 
 # declare public header
-set_target_properties(ocaml-riscv-boot PROPERTIES PUBLIC_HEADER ${CMAKE_CURRENT_SOURCE_DIR}/include/ocaml-riscv-boot.h)
+set_target_properties(ocaml-boot-riscv PROPERTIES PUBLIC_HEADER ${CMAKE_CURRENT_SOURCE_DIR}/include/ocaml-boot-riscv.h)
 
 # install library
 include(GNUInstallDirs)
-install(TARGETS ocaml-riscv-boot
+install(TARGETS ocaml-boot-riscv
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} 
     PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
@@ -57,11 +57,11 @@ install(TARGETS ocaml-riscv-boot
 
 # pkg-config support
 configure_file(
-	${CMAKE_CURRENT_SOURCE_DIR}/ocaml-riscv-boot.pc.in 
-	ocaml-riscv-boot.pc 
+	${CMAKE_CURRENT_SOURCE_DIR}/ocaml-boot-riscv.pc.in 
+	ocaml-boot-riscv.pc 
 	@ONLY
 )
 install(
-	FILES ${CMAKE_BINARY_DIR}/ocaml-riscv-boot.pc 
+	FILES ${CMAKE_BINARY_DIR}/ocaml-boot-riscv.pc 
 	DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/pkgconfig
 )
