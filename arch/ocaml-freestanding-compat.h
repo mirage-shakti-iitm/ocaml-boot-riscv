@@ -10,6 +10,6 @@ extern char __KERNEL_END;
 
 // provided by ocaml-freestanding
 extern "C" {
-    extern void caml_startup(char**);
-    extern void _nolibc_init(unsigned long heap_start, unsigned long heap_size);
+    void caml_startup(char**);
+    void _nolibc_init(unsigned long heap_start, unsigned long heap_size);
 }
