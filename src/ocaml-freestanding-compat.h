@@ -1,10 +1,5 @@
-// functions exposed to ocaml-freestanding
-extern "C" {
-    void riscv_poweroff();
-    void riscv_write(const char* s, unsigned int length);
-    unsigned long long riscv_clock_monotonic();
-}
-
+// include headers that are exported
+#include <ocaml-bootcode.h>
 // provided by the linker
 extern char __KERNEL_END;
 
