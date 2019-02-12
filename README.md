@@ -1,4 +1,4 @@
-# libocaml-bootcode
+# ocaml-riscv-boot
 
 ## Required packages
 
@@ -10,7 +10,7 @@
     $ cmake ..
     $ make
 
-This will generate a `libocaml-bootcode.a` with a matching `ocaml-bootcode.h` in your systems include directories
+This will generate a `libocaml-riscv-boot.a` with a matching `ocaml-riscv-boot.h` in your systems include directories
 
 
 

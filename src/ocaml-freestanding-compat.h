@@ -1,5 +1,5 @@
 // include headers that are exported
-#include <ocaml-bootcode.h>
+#include <ocaml-riscv-boot.h>
 // provided by the linker
 extern char __KERNEL_END;
 
