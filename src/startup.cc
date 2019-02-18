@@ -1,33 +1,24 @@
 #include "assert.h"
-#include "fdt.h"
 #include "uart.h"
 #include "config.h"
 #include "ocaml-freestanding-compat.h"
 
 extern "C" {
-    void boot_primary(uintptr_t hartid, uintptr_t dtb);
-    void boot_secondary(uintptr_t hartid, uintptr_t dtb);
+    void boot_primary();
+    void boot_secondary();
 }
 extern void _nolibc_init(uintptr_t heap_start, uint64_t heap_size);
 
 extern "C" {
-    unsigned char __attribute__(( aligned (16) )) stacks[STACK_SIZE * MAX_HARTS] = {0xde, 0xad, 0xbe, 0xef};
+    unsigned char 
+        __attribute__(( aligned (16) )) 
+        stack[config::stack_size] = {0xde, 0xad, 0xbe, 0xef};
 
-void boot_primary(uintptr_t hartid, uintptr_t dtb) {
-    // output first
-    pk::query_uart(dtb);
-
-    // system info
-    pk::query_harts(dtb);
-    pk::query_mem(dtb);
-    pk::query_clint(dtb);
-
-
-    pk::fdt_print(dtb);
-
+void boot_primary() {
     // init nolibc of ocaml_freestanding
     uintptr_t start = (uintptr_t) &__KERNEL_END;
-    _nolibc_init(start, pk::mem_size - start);
+    uintptr_t size = config::mem_size - start;
+    _nolibc_init(start, size);
 
     // call ocaml land
     caml_startup(nullptr);
@@ -37,7 +28,7 @@ void boot_primary(uintptr_t hartid, uintptr_t dtb) {
     __builtin_unreachable();
 }
 
-void boot_secondary(uintptr_t hartid, uintptr_t dtb) {
+void boot_secondary() {
     assert(false && "multicore systems are not supported");
     __builtin_unreachable();
 }

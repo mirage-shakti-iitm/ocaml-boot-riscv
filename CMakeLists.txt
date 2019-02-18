@@ -23,11 +23,11 @@ set(CMAKE_EXE_LINKER_FLAGS "-static -Wl,-T${CMAKE_CURRENT_SOURCE_DIR}/linker.x -
 # build a library
 add_library(ocaml-boot-riscv
     src/constructors.cc
-    src/fdt.cc
     src/htif.cc
     src/startup.cc
-    src/output.cc
     src/string.cc
+    src/print.cc
+    src/trap.cc
     src/uart.cc
     src/ocaml-freestanding-compat.cc
     src/startup.S

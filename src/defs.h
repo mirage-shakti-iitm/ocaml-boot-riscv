@@ -1,0 +1,2 @@
+#define STACK_SIZE 4096
+#define STACK_SHIFT 12

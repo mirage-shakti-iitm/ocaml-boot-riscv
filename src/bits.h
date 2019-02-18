@@ -34,3 +34,6 @@
 #define REGBYTES (1 << LOG_REGBYTES)
 
 #endif
+
+// XXX: fixme, why is size_t not defined
+typedef unsigned int size_t;

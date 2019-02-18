@@ -2,13 +2,22 @@
 
 #include "string.h"
 #include "uart.h"
-#include "fdt.h"
+#include "config.h"
+
 
 namespace pk {
-    volatile uint32_t* uart;
+#define UART_REG_TXFIFO		0
+#define UART_REG_RXFIFO		1
+#define UART_REG_TXCTRL		2
+#define UART_REG_RXCTRL		3
+#define UART_REG_DIV		4
+
+#define UART_TXEN		 0x1
+#define UART_RXEN		 0x1
 
     void uart_putchar(uint8_t ch)
     {
+        volatile uint32_t *uart = (volatile uint32_t*) config::uart_base;
 #ifdef __riscv_atomic
         int32_t r;
         do {
@@ -26,56 +35,18 @@ namespace pk {
 
     int uart_getchar()
     {
+        volatile uint32_t *uart = (volatile uint32_t*) config::uart_base;
         int32_t ch = uart[UART_REG_RXFIFO];
         if (ch < 0) return -1;
         return ch;
     }
 
-    struct uart_scan
+    void init_uart()
     {
-        int compat;
-        uint64_t reg;
-    };
-
-    static void uart_open(const struct fdt_scan_node *node, void *extra)
-    {
-        struct uart_scan *scan = (struct uart_scan *)extra;
-        util::memset(scan, 0, sizeof(*scan));
-    }
-
-    static void uart_prop(const struct fdt_scan_prop *prop, void *extra)
-    {
-        struct uart_scan *scan = (struct uart_scan *)extra;
-        if (!util::strcmp(prop->name, "compatible") && !util::strcmp((const char*)prop->value, "sifive,uart0")) {
-            scan->compat = 1;
-        } else if (!util::strcmp(prop->name, "reg")) {
-            fdt_get_address(prop->node->parent, prop->value, &scan->reg);
-        }
-    }
-
-    static void uart_done(const struct fdt_scan_node *node, void *extra)
-    {
-        struct uart_scan *scan = (struct uart_scan *)extra;
-        if (!scan->compat || !scan->reg || uart) return;
-
+        volatile uint32_t *uart = (volatile uint32_t*) config::uart_base;
         // Enable Rx/Tx channels
-        uart = (volatile uint32_t*)(uintptr_t)scan->reg;
         uart[UART_REG_TXCTRL] = UART_TXEN;
         uart[UART_REG_RXCTRL] = UART_RXEN;
-    }
-
-    void query_uart(uintptr_t fdt)
-    {
-        struct fdt_cb cb;
-        struct uart_scan scan;
-
-        util::memset(&cb, 0, sizeof(cb));
-        cb.open = uart_open;
-        cb.prop = uart_prop;
-        cb.done = uart_done;
-        cb.extra = &scan;
-
-        fdt_scan(fdt, &cb);
     }
 
 }

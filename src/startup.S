@@ -1,5 +1,4 @@
-#include "bits.h"
-#include "config.h"
+#include "defs.h"
 #include "encoding.h"
 
 .option norvc
@@ -20,9 +19,8 @@ do_reset:
         li x7, 0
         li x8, 0
         li x9, 0
-        // save a0 and a1; arguments from previous boot loader stage:
-        //  li x10, 0
-        //  li x11, 0
+        li x10, 0
+        li x11, 0
         li x12, 0
         li x13, 0
         li x14, 0
@@ -52,12 +50,10 @@ do_reset:
 1:      bne t0, t1, 1b
 
         // stacks grow backwards, set correct tos for hart 0
-        la sp, stacks + STACK_SIZE
-        // pick correct stack for each hart
+        la sp, stack + STACK_SIZE
+
+        // boot process is different for each hart
         csrr a3, mhartid
-        // multiply hartid by STACK_SIZE to get correct offset
-        slli a2, a3, STACK_SHIFT
-        add sp, sp, a2
 
         // jump into arch_startup on hart 0
         beqz a3, 2f
@@ -71,7 +67,7 @@ do_reset:
         j boot_primary
 .size do_reset, . - do_reset
 
-.global interrupt_handler
+.global trap_handler
 .global trap_vector
 trap_vector:
     csrw mscratch, sp
@@ -118,8 +114,8 @@ trap_vector:
     sd a1, 2*8(sp)            # store user sp on stack
     csrr a0, mcause
     mv a1, sp
-    # note: this should not return
-    # jal interrupt_handler
+    
+    jal trap_handler
 
     # Restore exception pointer
     ld a0, 0*8(sp)

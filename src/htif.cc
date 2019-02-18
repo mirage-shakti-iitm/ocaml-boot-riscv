@@ -2,7 +2,6 @@
 
 #include "htif.h"
 #include "atomic.h"
-#include "fdt.h"
 #include <string.h>
 
 
