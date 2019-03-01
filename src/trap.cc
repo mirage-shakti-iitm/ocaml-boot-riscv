@@ -13,6 +13,6 @@ extern "C" void trap_handler(uint64_t mcause, uintptr_t context) {
         uint64_t masked = mcause & mask;
         // irq
         util::printf("ocaml boot: irq (%d) @ 0x%x mtval=0x%x\n", masked, read_csr(mepc), read_csr(mtval));
+    }
     pk::htif_poweroff();
-
 }
