@@ -17,6 +17,9 @@ extern "C" {
         stack[config::stack_size] = {0xde, 0xad, 0xbe, 0xef};
 
 void boot_primary() {
+    // init floating point unit
+    write_csr(mstatus, MSTATUS_FS);
+
     // init nolibc of ocaml_freestanding
     uintptr_t start = (uintptr_t) &__KERNEL_END;
 
