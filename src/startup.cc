@@ -30,11 +30,9 @@ void boot_primary() {
 
     // idle spin
     while(1);
-    __builtin_unreachable();
 }
 
 void boot_secondary() {
     assert(false && "multicore systems are not supported");
-    __builtin_unreachable();
 }
 }
