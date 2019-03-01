@@ -4,6 +4,7 @@
 #include "ocaml-freestanding-compat.h"
 #include "print.h"
 #include "encoding.h"
+#include "htif.h"
 
 extern "C" {
     void boot_primary();
@@ -31,8 +32,12 @@ void boot_primary() {
     // call ocaml land
     caml_startup(argv);
 
-    // idle spin
+    util::printf("ocaml-boot: caml runtime returned. shutting down!\n");
+#ifndef UART
+    pk::htif_poweroff();
+#else
     while(1);
+#endif
 }
 
 void boot_secondary() {
