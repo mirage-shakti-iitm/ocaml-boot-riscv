@@ -62,7 +62,7 @@ do_reset:
         j boot_secondary
 2:
         // run constructors on hart 0
-        j run_constructors
+        jal run_constructors
         // and then call c-land
         j boot_primary
 .size do_reset, . - do_reset
