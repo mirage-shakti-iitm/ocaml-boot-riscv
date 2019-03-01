@@ -4,12 +4,12 @@
 #include "atomic.h"
 #include <string.h>
 
+extern uint64_t __htif_base;
+volatile uint64_t tohost __attribute__((section(".htif")));
+volatile uint64_t fromhost __attribute__((section(".htif")));
+volatile int htif_console_buf;
 
 namespace pk {
-    extern uint64_t __htif_base;
-    volatile uint64_t tohost __attribute__((section(".htif")));
-    volatile uint64_t fromhost __attribute__((section(".htif")));
-    volatile int htif_console_buf;
     Ticketlock htif_lock;
 
 #define TOHOST(base_int)	(uint64_t *)(base_int + TOHOST_OFFSET)
