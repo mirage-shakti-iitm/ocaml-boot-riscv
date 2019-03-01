@@ -8,8 +8,7 @@ extern "C" {
         pk::htif_poweroff();
     }
     void riscv_write(const char* s, unsigned int length) {
-        for(unsigned int i = 0; i < length; ++i)
-            util::putstring(s, length);
+        util::putstring(s, length);
     }
     unsigned long long riscv_clock_monotonic() {
         volatile unsigned long* tmp = (volatile unsigned long*)config::mtime;
