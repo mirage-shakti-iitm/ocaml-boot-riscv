@@ -119,4 +119,5 @@ SECTIONS
    * used for heap allocation
    */ 
   PROVIDE( __KERNEL_END = . );
+  __KERNEL_END = .;
 }
