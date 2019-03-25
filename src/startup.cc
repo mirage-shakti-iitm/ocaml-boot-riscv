@@ -1,16 +1,10 @@
 #include "assert.h"
 #include "uart.h"
 #include "config.h"
-#include "ocaml-freestanding-compat.h"
+#include "startup.h"
 #include "print.h"
 #include "encoding.h"
 #include "htif.h"
-
-extern "C" {
-    void boot_primary();
-    void boot_secondary();
-}
-extern void _nolibc_init(uintptr_t heap_start, uint64_t heap_size);
 
 extern "C" {
     unsigned char 
