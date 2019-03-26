@@ -58,7 +58,7 @@ set_target_properties(boot
 
 set_target_properties(boot
     PROPERTIES PUBLIC_HEADER 
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/boot.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/ocaml-boot-riscv.h
     )
 
 # installing include
@@ -67,7 +67,7 @@ include(GNUInstallDirs)
 install(TARGETS boot EXPORT boot-targets
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} 
-    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/ocaml-boot-riscv.h
+    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
     INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/ocaml-boot-riscv/"
     )
 install(
