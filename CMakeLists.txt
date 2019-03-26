@@ -27,7 +27,7 @@ set(CMAKE_C_FLAGS "-mcmodel=medany -Og -g -DHTIF")
 set(CMAKE_CXX_FLAGS "-mcmodel=medany -Og -g -DHTIF")
 
 # build a library
-add_library(ocaml-boot-riscv
+add_library(boot
     src/constructors.cc
     src/htif.cc
     src/print.cc
@@ -39,7 +39,7 @@ add_library(ocaml-boot-riscv
 )
 
 # includes
-target_include_directories(ocaml-boot-riscv
+target_include_directories(boot
     PUBLIC
     $<INSTALL_INTERFACE:include> 
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -48,19 +48,19 @@ target_include_directories(ocaml-boot-riscv
     )
 
 # set VERSION properly
-set_target_properties(ocaml-boot-riscv 
+set_target_properties(boot
     PROPERTIES VERSION ${PROJECT_VERSION}
     )
 
-# declare public header
-set_target_properties(ocaml-boot-riscv  
+set_target_properties(boot
     PROPERTIES PUBLIC_HEADER 
     ${CMAKE_CURRENT_SOURCE_DIR}/include/boot.h
     )
 
-# install library
+# installing include
 include(GNUInstallDirs)
-install(TARGETS ocaml-boot-riscv
+# install library
+install(TARGETS boot EXPORT boot-targets
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} 
     PUBLIC_HEADER DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/ocaml-boot-riscv/"
@@ -69,6 +69,41 @@ install(TARGETS ocaml-boot-riscv
 install(
     DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/include/" DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/ocaml-boot-riscv"
     )
+
+# generate boot{Config,Version}.cmake
+include(CMakePackageConfigHelpers)
+write_basic_package_version_file(
+  "${CMAKE_CURRENT_BINARY_DIR}/ocaml-boot-riscv/bootConfigVersion.cmake"
+  VERSION ${PROJECT_VERSION}
+  COMPATIBILITY AnyNewerVersion
+)
+
+set(ConfigPackageLocation lib/cmake/ocaml-boot-riscv)
+configure_file(cmake/bootConfig.cmake
+  "${CMAKE_CURRENT_BINARY_DIR}/ocaml-boot-riscv/bootConfig.cmake"
+  COPYONLY
+)
+install(
+  FILES
+    cmake/bootConfig.cmake
+    "${CMAKE_CURRENT_BINARY_DIR}/ocaml-boot-riscv/bootConfigVersion.cmake"
+  DESTINATION
+    ${ConfigPackageLocation}
+)
+
+#export targets
+export(EXPORT boot-targets
+  FILE "${CMAKE_CURRENT_BINARY_DIR}/ocaml-boot-riscv/bootTargets.cmake"
+  NAMESPACE ocaml-boot-riscv::
+)
+install(EXPORT boot-targets
+    FILE
+    bootTargets.cmake
+    NAMESPACE
+    ocaml-boot-riscv::
+    DESTINATION
+    ${ConfigPackageLocation}
+)
 
 # pkg-config support
 configure_file(

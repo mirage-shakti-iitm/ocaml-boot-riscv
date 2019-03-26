@@ -8,5 +8,5 @@ Description: @PROJECT_DESCRIPTION@
 Version: @PROJECT_VERSION@
 
 Requires:
-Libs: -L${libdir} -locaml-boot-riscv
+Libs: -L${libdir} -lboot
 Cflags: -I${includedir}
