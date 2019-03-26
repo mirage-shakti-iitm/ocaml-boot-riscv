@@ -1,17 +1,19 @@
 cmake_minimum_required(VERSION 3.5)
 
-# FIXME: should be in parent cmake file
 # cross-compiling setup
-set(CMAKE_SYSTEM_NAME Generic)
-set(CMAKE_SYSTEM_PROCESSOR riscv)
-set(CMAKE_CROSSCOMPILING 1)
-set(CMAKE_CXX_COMPILER "riscv64-unknown-elf-g++")
-set(CMAKE_C_COMPILER "riscv64-unknown-elf-gcc")
-set(CMAKE_ASM_COMPILER "riscv64-unknown-elf-gcc")
-set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
-set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
-set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
-set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
+# CMAKE_CXX_COMPILER can't be set twice
+if(NOT CMAKE_CROSSCOMPILING)
+    set(CMAKE_SYSTEM_NAME Generic)
+    set(CMAKE_SYSTEM_PROCESSOR riscv)
+    set(CMAKE_CROSSCOMPILING 1)
+    set(CMAKE_CXX_COMPILER "riscv64-unknown-elf-g++")
+    set(CMAKE_C_COMPILER "riscv64-unknown-elf-gcc")
+    set(CMAKE_ASM_COMPILER "riscv64-unknown-elf-gcc")
+    set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+    set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+    set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+    set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
+endif(NOT CMAKE_CROSSCOMPILING)
 
 project(ocaml-boot-riscv
     VERSION 0.1
@@ -42,7 +44,9 @@ add_library(boot
 target_include_directories(boot
     PUBLIC
     $<INSTALL_INTERFACE:include> 
+    $<INSTALL_INTERFACE:include/ocaml-boot-riscv> 
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/ocaml-boot-riscv>
     PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src
     )
@@ -63,11 +67,12 @@ include(GNUInstallDirs)
 install(TARGETS boot EXPORT boot-targets
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} 
-    PUBLIC_HEADER DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/ocaml-boot-riscv/"
+    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/ocaml-boot-riscv.h
     INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/ocaml-boot-riscv/"
     )
 install(
-    DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/include/" DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/ocaml-boot-riscv"
+    DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/include/" 
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
     )
 
 # generate boot{Config,Version}.cmake
