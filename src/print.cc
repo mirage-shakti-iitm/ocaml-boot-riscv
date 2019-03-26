@@ -1,5 +1,6 @@
 // taken (and modified) from riscv-pk. See LICENSE.riscv-pk
 #include "config.h"
+#include "bits.h"
 #include "print.h"
 #include "string.h"
 #include "uart.h"
@@ -23,7 +24,7 @@ void printf(const char* s, ...)
   va_end(vl);
 }
 
-void putstring(const char* s, size_t len){
+void putstring(const char* s,unsigned int len){
     for(size_t i = 0; i < len; ++i)
 #ifdef UART 
             pk::uart_putchar(s[i]);

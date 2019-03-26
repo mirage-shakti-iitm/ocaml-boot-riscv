@@ -4,7 +4,6 @@
 #define _RISCV_HTIF_H
 
 #include <stdint.h>
-#include "assert.h"
 
 #if __riscv_xlen == 64
 # define TOHOST_CMD(dev, cmd, payload) \

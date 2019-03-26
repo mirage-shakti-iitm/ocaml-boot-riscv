@@ -2,6 +2,7 @@
 
 #include "htif.h"
 #include "atomic.h"
+#include "assert.h"
 #include <string.h>
 
 extern uint64_t __htif_base;
