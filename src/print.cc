@@ -26,10 +26,12 @@ void printf(const char* s, ...)
 
 void putstring(const char* s,unsigned int len){
     for(size_t i = 0; i < len; ++i)
-#ifdef UART 
+#if defined(QEMU_UART) || defined(SHAKTI_UART)
             pk::uart_putchar(s[i]);
-#else
+#elif defined(HTIF)
             pk::htif_console_putchar(s[i]);
+#else
+#error "none of QEMU_UART, SHAKTI_UART or HTIF is defined!"
 #endif
 
 }

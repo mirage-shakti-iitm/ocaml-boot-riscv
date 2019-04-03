@@ -22,11 +22,6 @@ project(ocaml-boot-riscv
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 
-# FIXME: should be in parent cmake file
-# FIXME: make this use set_target_properties
-# linker & compiler flags
-set(CMAKE_C_FLAGS "-mcmodel=medany -Og -g -DHTIF")
-set(CMAKE_CXX_FLAGS "-mcmodel=medany -Og -g -DHTIF")
 
 # build a library
 add_library(boot
@@ -39,6 +34,22 @@ add_library(boot
     src/startup.cc
     src/startup.S
 )
+
+target_compile_options(boot INTERFACE
+    "-mcmodel=medany"
+    )
+
+set(OUTPUT_MODE "htif" CACHE STRING "set the output mode to use, possible values are htif, qemu (for qemu uart) or shakti")
+if(OUTPUT_MODE STREQUAL "htif")
+    target_compile_definitions(boot PRIVATE HTIF)
+elseif(OUTPUT_MODE STREQUAL "qemu")
+    target_compile_definitions(boot PRIVATE QEMU_UART)
+elseif(OUTPUT_MODE STREQUAL "shakti")
+    target_compile_definitions(boot PRIVATE SHAKTI_UART)
+else()
+    message(FATAL_ERROR "please define a valid output mode to use, possible values include: htif, qemu or shakti")
+endif()
+
 
 # includes
 target_include_directories(boot

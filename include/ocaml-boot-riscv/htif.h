@@ -9,6 +9,9 @@
 # define TOHOST_CMD(dev, cmd, payload) \
   (((uint64_t)(dev) << 56) | ((uint64_t)(cmd) << 48) | (uint64_t)(payload))
 #else
+#ifdef HTIF
+#error "HTIF is only supported on 64bit targets"
+#endif
 # define TOHOST_CMD(dev, cmd, payload) ({ \
   if ((dev) || (cmd)) __builtin_trap(); \
   (payload); })

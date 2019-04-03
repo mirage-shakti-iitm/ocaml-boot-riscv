@@ -10,8 +10,13 @@ namespace config {
 
     // uart base address
     // hardcoded riscv-qemu's virt-io uart. change as needed.
-    // note: spike doesn't support uart yet.
+#if defined(SHAKTI_UART) && !defined(QEMU_UART) && !defined(HTIF)
     constexpr uintptr_t uart_base = 0x10000000;
+#elif !defined(SHAKTI_UART) && defined(QEMU_UART) && !defined(HTIF)
+    constexpr uintptr_t uart_base = 0x10000000;
+#elif !defined(SHAKTI_UART) && !defined(QEMU_UART) && defined(HTIF)
+    // no uart
+#endif
 
     // mtime address
     // note: uses spike default clint offset of 0x02000000
