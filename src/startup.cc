@@ -13,7 +13,12 @@ extern "C" {
 
 void boot_primary() {
     // init floating point unit
-    write_csr(mstatus, MSTATUS_FS);
+    // enable timer interrupts & interrupts in general
+    uint64_t status = read_csr(mstatus);
+    status |= MSTATUS_FS;
+    status |= MSTATUS_MIE;
+    write_csr(mstatus, status);
+    set_csr(mie, IRQ_M_TIMER);
 
     // init nolibc of ocaml_freestanding
     uintptr_t start = (uintptr_t) &__KERNEL_END;
