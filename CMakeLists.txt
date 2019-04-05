@@ -31,6 +31,7 @@ add_library(boot
     src/string.cc
     src/trap.cc
     src/uart.cc
+    src/timer.cc
     src/startup.cc
     src/startup.S
 )
