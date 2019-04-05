@@ -18,10 +18,15 @@ namespace config {
     // no uart
 #endif
 
-    // mtime address
-    // note: uses spike default clint offset of 0x02000000
-    //       mtime is clint_base + 0xbff8
-    constexpr uintptr_t mtime = 0x0200bff8;
+    enum class clint_consts: uintptr_t {
+        msip = 0x0,
+        mtimecmp = 0x4000,
+        mtime = 0xbff8
+    };
+    constexpr uintptr_t clint_base = 0x2000000;
+    constexpr uintptr_t msip = clint_base + static_cast<uintptr_t>(clint_consts::msip);
+    constexpr uintptr_t mtimecmp = clint_base + static_cast<uintptr_t>(clint_consts::mtimecmp);
+    constexpr uintptr_t mtime = clint_base + static_cast<uintptr_t>(clint_consts::mtime);
 
     //mirror defs.h
     constexpr uint64_t stack_size = STACK_SIZE;
