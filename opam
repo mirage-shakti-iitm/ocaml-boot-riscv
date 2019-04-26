@@ -1,0 +1,29 @@
+opam-version: "2.0"
+maintainer: "Malte Bargholz <malte@screenri.de>"
+authors: "Malte Bargholz <malte@screenri.de>"
+homepage: "https://gitlab.com/shaktiproject/tools/shakti-tee/ocaml-boot-riscv"
+bug-reports: "https://gitlab.com/shaktiproject/tools/shakti-tee/ocaml-boot-riscv/issues"
+license: "MIT"
+tags: "org:mirage"
+dev-repo: "git+https://gitlab.com/shaktiproject/tools/shakti-tee/ocaml-boot-riscv.git#mirage"
+build: [
+        [cmake -DCMAKE_INSTALL_PREFIX=%{prefix}% .]
+        [make]
+]
+install: [make install]
+remove: []
+depends: [
+  "conf-cmake" {build}
+  "ocamlfind" {build}
+  "ocaml-src" {build}
+  "ocaml" {>= "4.04.2" & < "4.08.0"}
+]
+conflicts: []
+available: [
+  ((os = "linux" & (arch = "x86_64" | arch = "arm64"))
+  | (os = "freebsd" & arch = "x86_64")
+  | (os = "openbsd" & arch = "x86_64"))
+]
+synopsis: "Core package for booting anything on riscv"
+description:
+  "This package provides a baselayer on which ocaml-boot-riscv-freestanding-compat build to provide basic boot abstraction to the ocaml-freestanding runtime on the RISC-V/SHAKTI architecture"
