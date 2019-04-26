@@ -7,23 +7,16 @@ license: "MIT"
 tags: "org:mirage"
 dev-repo: "git+https://gitlab.com/shaktiproject/tools/shakti-tee/ocaml-boot-riscv.git#mirage"
 build: [
-        [cmake -DCMAKE_INSTALL_PREFIX=%{prefix}% .]
+        ["cmake" "-DCMAKE_INSTALL_PREFIX=%{prefix}%"]
         [make]
 ]
-install: [make install]
+install: [make "install"]
 remove: []
 depends: [
   "conf-cmake" {build}
-  "ocamlfind" {build}
-  "ocaml-src" {build}
-  "ocaml" {>= "4.04.2" & < "4.08.0"}
 ]
 conflicts: []
-available: [
-  ((os = "linux" & (arch = "x86_64" | arch = "arm64"))
-  | (os = "freebsd" & arch = "x86_64")
-  | (os = "openbsd" & arch = "x86_64"))
-]
+available: []
 synopsis: "Core package for booting anything on riscv"
 description:
   "This package provides a baselayer on which ocaml-boot-riscv-freestanding-compat build to provide basic boot abstraction to the ocaml-freestanding runtime on the RISC-V/SHAKTI architecture"
