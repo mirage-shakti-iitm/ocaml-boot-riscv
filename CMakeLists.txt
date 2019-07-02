@@ -32,6 +32,7 @@ add_library(boot
     src/trap.cc
     src/uart.cc
     src/timer.cc
+    src/compat.cc
     src/startup.cc
     src/startup.S
 )

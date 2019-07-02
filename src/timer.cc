@@ -1,5 +1,5 @@
-#include <ocaml-boot-riscv/timer.h>
-#include <ocaml-boot-riscv/config.h>
+#include <timer.h>
+#include <config.h>
 #include <encoding.h>
 
 
