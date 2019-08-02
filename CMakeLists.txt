@@ -21,7 +21,8 @@ project(ocaml-boot-riscv
     )
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
-
+set(CMAKE_C_FLAGS "-mcmodel=medany")
+set(CMAKE_CXX_FLAGS "-mcmodel=medany")
 
 # build a library
 add_library(boot
