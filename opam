@@ -1,4 +1,5 @@
 opam-version: "2.0"
+version: "0.1"
 maintainer: [
 	"Malte Bargholz <malte@screenri.de>"
 	"Sai Venkata Krishnan <saiganesha5.svkv@gmail.com>" 
@@ -22,4 +23,4 @@ conflicts: []
 available: []
 synopsis: "Core package for booting anything on riscv"
 description:
-  "This package provides a baselayer on which ocaml-boot-riscv-freestanding-compat build to provide basic boot abstraction to the ocaml-freestanding runtime on the RISC-V/SHAKTI architecture"
+  "This package provides a bootlayer to the ocaml-freestanding runtime on the RISC-V/SHAKTI architecture"
