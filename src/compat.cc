@@ -23,7 +23,7 @@ extern "C" {
         time__t next = curr+delay;
         pk::set_timer(next);
         while(!pk::timer_pending()){
-            //asm volatile("wfi");
+            asm volatile("wfi");
         }
         pk::clear_timer();
     }
