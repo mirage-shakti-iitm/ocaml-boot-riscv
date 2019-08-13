@@ -21,7 +21,7 @@ extern "C" {
     void riscv_wait(time__t delay) {
         time__t curr = riscv_clock_monotonic();
         time__t next = curr+delay;
-        next = next/(10^5);
+        next = next/(100000);
         pk::set_timer(next);
         while(!pk::timer_pending()){
             //asm volatile("wfi");
