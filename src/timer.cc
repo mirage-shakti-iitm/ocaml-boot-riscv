@@ -6,6 +6,7 @@
 namespace pk {
     bool timer_pending() {
         int ip = read_csr(mip);
+        int ie = read_csr(mie);
         return (ip & MIP_MTIP) > 0;
     }
     void set_timer(unsigned long long deadline) {
