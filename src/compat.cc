@@ -23,7 +23,7 @@ extern "C" {
         delay = delay/(500);
         time__t next = curr+delay;
         pk::set_timer(next);
-        util::putstring(":hello:");
+        util::printf(":hello:");
         while(!pk::timer_pending()){
             //asm volatile("wfi");
         }
