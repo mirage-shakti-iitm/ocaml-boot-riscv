@@ -19,9 +19,10 @@ extern "C" {
     }
 
     void riscv_wait(time__t delay) {
-        time__t curr = riscv_clock_monotonic();
-        delay = delay;
-        time__t next = curr+delay;
+        //time__t curr = riscv_clock_monotonic();
+        //delay = delay;
+        time__t next = delay;
+        //time__t next = curr+delay;
         pk::set_timer(next);
         util::printf(":hello:");
         while(!pk::timer_pending()){
