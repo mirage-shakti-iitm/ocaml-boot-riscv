@@ -20,7 +20,7 @@ extern "C" {
 
     void riscv_wait(time__t delay) {
         time__t curr = riscv_clock_monotonic();
-        delay = delay/90;
+        // delay = delay/90;
         // time__t next = delay;
         time__t next = curr+delay;
         pk::set_timer(next);
