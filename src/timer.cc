@@ -7,7 +7,7 @@ namespace pk {
     bool timer_pending() {
         int ip = read_csr(mip);
         int ie = read_csr(mie);
-        if(ip) {util::printf("%d",ip);}
+        if(ip) {util::printf("mip:%d .. mie:%d",ip,ie);}
         return (ip & MIP_MTIP) > 0;
     }
     void set_timer(unsigned long long deadline) {
