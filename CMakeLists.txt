@@ -42,7 +42,7 @@ target_compile_options(boot INTERFACE
     "-mcmodel=medany"
     )
 
-set(OUTPUT_MODE "shakti" CACHE STRING "set the output mode to use, possible values are htif, qemu (for qemu uart) or shakti")
+set(OUTPUT_MODE "htif" CACHE STRING "set the output mode to use, possible values are htif, qemu (for qemu uart) or shakti")
 if(OUTPUT_MODE STREQUAL "htif")
     target_compile_definitions(boot PRIVATE HTIF)
 elseif(OUTPUT_MODE STREQUAL "qemu")
