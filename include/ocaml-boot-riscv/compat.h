@@ -7,7 +7,7 @@ extern "C" {
 	typedef unsigned long long time__t;
     void riscv_poweroff(int status) __attribute__((noreturn));
     void riscv_write(const char* s, unsigned int length);
-    void riscv_write(char* s, unsigned int length);
+    void riscv_read(char* s, unsigned int length);
     time__t riscv_clock_monotonic();
     void riscv_wait(time__t delay);
 
