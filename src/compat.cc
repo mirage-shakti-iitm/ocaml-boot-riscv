@@ -1,6 +1,7 @@
 #include "htif.h"
 #include "config.h"
 #include "print.h"
+#include "read.h"
 #include "timer.h"
 #include <ocaml-boot-riscv/compat.h>
 
@@ -12,6 +13,9 @@ extern "C" {
     }
     void riscv_write(const char* s, unsigned int length) {
         util::putstring(s, length);
+    }
+    void riscv_read(char* s, unsigned int length) {
+        util::getstring(s, length);
     }
     time__t riscv_clock_monotonic() {
         volatile unsigned long* tmp = (volatile unsigned long*)config::mtime;
