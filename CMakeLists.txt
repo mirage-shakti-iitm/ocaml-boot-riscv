@@ -29,6 +29,7 @@ add_library(boot
     src/constructors.cc
     src/htif.cc
     src/print.cc
+    src/read.cc
     src/string.cc
     src/trap.cc
     src/uart.cc
