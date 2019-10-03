@@ -6,7 +6,7 @@
 #include "uart.h"
 #include "htif.h"
 
-namespace util {
+namespace util2 {
     
 size_t getstring(char* s,unsigned int len){
     size_t i = 0;
