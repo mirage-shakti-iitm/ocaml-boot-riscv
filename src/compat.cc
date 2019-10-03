@@ -16,7 +16,7 @@ extern "C" {
         util::putstring(s, length);
     }
     size_t riscv_read(char* s, unsigned int length) {
-        size_t n = util2::get_string(s, length);
+        size_t n = util::getstring(s, length);
         return n;
     }
     time__t riscv_clock_monotonic() {

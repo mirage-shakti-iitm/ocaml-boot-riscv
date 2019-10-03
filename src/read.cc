@@ -6,9 +6,9 @@
 #include "uart.h"
 #include "htif.h"
 
-namespace util2 {
+namespace util {
     
-size_t get_string(char* s,unsigned int len){
+size_t getstring(char* s,unsigned int len){
     size_t i = 0;
     for(i = 0; i < len; ++i) {
 #if defined(QEMU_UART) || defined(SHAKTI_UART)
