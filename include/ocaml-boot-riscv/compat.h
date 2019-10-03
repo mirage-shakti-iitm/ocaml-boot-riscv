@@ -1,6 +1,5 @@
 // functions exposed to ocaml-freestanding
 // these need to not be name mangled
-#include "bits.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -9,7 +8,7 @@ extern "C" {
 
     void riscv_poweroff(int status) __attribute__((noreturn));
     void riscv_write(const char* s, unsigned int length);
-    size_t riscv_read(char* s, unsigned int length);
+    unsigned int riscv_read(char* s, unsigned int length);
     time__t riscv_clock_monotonic();
     void riscv_wait(time__t delay);
 
