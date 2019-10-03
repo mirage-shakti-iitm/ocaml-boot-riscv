@@ -2,5 +2,5 @@
 #include <stdarg.h>
 
 namespace util {
-    void getstring(char* s, unsigned int len);
+    size_t getstring(char* s, unsigned int len);
 }

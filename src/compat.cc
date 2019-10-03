@@ -3,6 +3,7 @@
 #include "print.h"
 #include "read.h"
 #include "timer.h"
+#include "bits.h"
 #include <ocaml-boot-riscv/compat.h>
 
 extern "C" {
@@ -14,8 +15,9 @@ extern "C" {
     void riscv_write(const char* s, unsigned int length) {
         util::putstring(s, length);
     }
-    void riscv_read(char* s, unsigned int length) {
-        util::getstring(s, length);
+    size_t riscv_read(char* s, unsigned int length) {
+        size_t n = util::getstring(s, length);
+        return n;
     }
     time__t riscv_clock_monotonic() {
         volatile unsigned long* tmp = (volatile unsigned long*)config::mtime;
