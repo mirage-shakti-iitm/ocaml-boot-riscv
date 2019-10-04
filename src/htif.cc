@@ -61,7 +61,7 @@ namespace pk {
             __set_tohost(1, 0, 0);
         }
         htif_lock.unlock();
-        htif_console_putchar(ch);        
+        htif_console_putchar('a');        
         return ch - 1;
     }
 
