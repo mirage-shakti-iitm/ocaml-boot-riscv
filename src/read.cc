@@ -19,7 +19,7 @@ size_t getstring(char* s,unsigned int len){
 #error "none of QEMU_UART, SHAKTI_UART or HTIF is defined!"
 #endif
            i++;
-  } while( s[i-1] == '\0' || s[i-1] == '\n' || (i-1) < len );
+  } while( s[i-1] == '\0' || s[i-1] == '\n'  );
   return i-1;
 }
 
