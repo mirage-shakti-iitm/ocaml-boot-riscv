@@ -10,8 +10,10 @@ namespace util {
     
 size_t getstring(char* s,unsigned int len){
     size_t i = 0;
+   #if defined(QEMU_UART) || defined(SHAKTI_UART)
     s[i++] = pk::uart_getchar();
     s[i++] = pk::uart_getchar();
+   #endif
 //     do{
 // #if defined(QEMU_UART) || defined(SHAKTI_UART)
 //             s[i] = pk::uart_getchar();
