@@ -10,7 +10,7 @@ namespace util {
     
 size_t getstring(char* s,unsigned int len){
     size_t i = 0;
-   #if defined(QEMU_UART) || defined(SHAKTI_UART)
+   #if defined(HTIF) 
     s[i++] = pk::uart_getchar();
     s[i++] = pk::uart_getchar();
     pk::uart_putchar('a');
