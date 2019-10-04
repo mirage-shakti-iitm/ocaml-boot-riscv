@@ -22,10 +22,11 @@ namespace pk {
     static void __check_fromhost()
     {
         uint64_t fh = fromhost;
+        htif_console_putchar('s');
         if (!fh)
             return;
         fromhost = 0;
-        pk::htif_console_putchar('b');
+        htif_console_putchar('b');
         // this should be from the console
         assert(FROMHOST_DEV(fh) == 1);
         htif_console_putchar('c');
