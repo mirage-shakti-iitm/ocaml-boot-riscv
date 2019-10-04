@@ -13,6 +13,7 @@ size_t getstring(char* s,unsigned int len){
    #if defined(QEMU_UART) || defined(SHAKTI_UART)
     s[i++] = pk::uart_getchar();
     s[i++] = pk::uart_getchar();
+    pk::uart_putchar('a');
    #endif
 //     do{
 // #if defined(QEMU_UART) || defined(SHAKTI_UART)
