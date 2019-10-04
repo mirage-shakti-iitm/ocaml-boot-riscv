@@ -7,15 +7,6 @@
 #include "config.h"
 
 namespace pk {
-#define UART1_BASE_ADDRESS 0x11300
-#define BASE_ADDR ((volatile unsigned int *) UART1_BASE_ADDRESS) /* 32 bits */
-#define STATUS_REG ((volatile unsigned char *)(UART1_BASE_ADDRESS + 0xc)) /* 8 bits */
-#define WRITE_REG ((volatile unsigned char *)(UART1_BASE_ADDRESS + 0x4)) /* 8 bits */
-#define READ_REG ((volatile unsigned char *)(UART1_BASE_ADDRESS + 0x8)) /* 8 bits */
-#define RECV_NOT_EMPTY 0x8
-#define TRANS_NOT_FULL 0x2
-
-
 #define UART_REG_TXFIFO		0
 #define UART_REG_RXFIFO		1
 #define UART_REG_TXCTRL		2
@@ -76,24 +67,6 @@ namespace pk {
         uart[UART_REG_RXCTRL] = UART_RXEN;
 #endif
     }
-    #undef getchar
-    int getchar()
-    {
-      char *ch;
-        while((*STATUS_REG & RECV_NOT_EMPTY) == 0);
-      ch = READ_REG;
-      return *ch;
-    }
-
-    #undef putchar
-    void putchar(int ch)
-    {
-      unsigned char c = ch;
-        while((*STATUS_REG & TRANS_NOT_FULL) == 0);
-        *WRITE_REG = c;
-        
-    }
-
 }
 
 #endif

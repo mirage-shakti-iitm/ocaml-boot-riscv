@@ -12,7 +12,7 @@ size_t getstring(char* s,unsigned int len){
     size_t i = 0;
     do{
 #if defined(QEMU_UART) || defined(SHAKTI_UART)
-            s[i] = pk::getchar();
+            s[i] = pk::uart_getchar();
 #elif defined(HTIF)
            s[i] = pk::htif_console_getchar();
 #else
