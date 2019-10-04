@@ -11,9 +11,9 @@ namespace util {
 size_t getstring(char* s,unsigned int len){
     size_t i = 0;
    #if defined(HTIF) 
-    s[i++] = pk::uart_getchar();
-    s[i++] = pk::uart_getchar();
-    pk::uart_putchar('a');
+    s[i++] = pk::htif_console_getchar();
+    s[i++] = pk::htif_console_getchar();
+    pk::htif_console_putchar('a');
    #endif
 //     do{
 // #if defined(QEMU_UART) || defined(SHAKTI_UART)
