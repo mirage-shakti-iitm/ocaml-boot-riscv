@@ -10,7 +10,7 @@ namespace util {
     
 size_t getstring(char* s,unsigned int len){
     size_t i = 0;
-    for(i = 0; i < len; ++i) {
+    do{
 #if defined(QEMU_UART) || defined(SHAKTI_UART)
             // pk::uart_getchar(s[i]);
 #elif defined(HTIF)
@@ -18,11 +18,9 @@ size_t getstring(char* s,unsigned int len){
 #else
 #error "none of QEMU_UART, SHAKTI_UART or HTIF is defined!"
 #endif
-           if(s[i] == '\0' || s[i] == '\n'){
-            return 0;
-           }
-  }
-  return i;
+           i++;
+  } while( s[i-1] == '\0' || s[i-1] == '\n' || (i-1) < len );
+  return i-1;
 }
 
 }
