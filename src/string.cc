@@ -1,7 +1,7 @@
 // taken (and modified) from riscv-pk. See LICENSE.riscv-pk
 #include "string.h"
 
-int util::strcmp(const char *a, const char *b) {
+int strcmp(const char *a, const char *b) {
     for (int i = 0; ; i++) {
         if (a[i] != b[i]) {
             return a[i] < b[i] ? -1 : 1;
@@ -12,7 +12,7 @@ int util::strcmp(const char *a, const char *b) {
     }
 }
 
-char* util::strcpy(char *dst, const char *src) {
+char* strcpy(char *dst, const char *src) {
     for (int i = 0; ; i++) {
         dst[i] = src[i];
         if (src[i] == '\0') {
@@ -21,7 +21,7 @@ char* util::strcpy(char *dst, const char *src) {
     }
 }
 
-int util::strlen(const char *a) {
+int strlen(const char *a) {
     unsigned ret = 0;
     for (; *a != '\0'; ret ++) {
         a++;
@@ -29,7 +29,7 @@ int util::strlen(const char *a) {
     return ret;
 }
 
-int util::isstring(char c)
+int isstring(char c)
 {
   if (c >= 'A' && c <= 'Z')
     return 1;
@@ -42,13 +42,13 @@ int util::isstring(char c)
   return 0;
 }
 
-void util::memset(void *x, int c, uint32_t n) {
+void memset(void *x, int c, uint32_t n) {
     for (uint32_t i = 0; i < n; i++) {
         ((volatile char *)x)[i] = c;
     }
 }
 
-int util::vsnprintf(char* out, size_t n, const char* s, va_list vl)
+int vsnprintf(char* out, size_t n, const char* s, va_list vl)
 {
   bool format = false;
   bool longarg = false;
@@ -131,7 +131,7 @@ int util::vsnprintf(char* out, size_t n, const char* s, va_list vl)
   return pos;
 }
 
-int util::snprintf(char* out, size_t n, const char* s, ...)
+int snprintf(char* out, size_t n, const char* s, ...)
 {
   va_list vl;
   va_start(vl, s);

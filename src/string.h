@@ -7,7 +7,7 @@
 #include <stdint.h>
 #include "bits.h"
 
-namespace util {
+
     int strcmp(const char * a, const char* b);
     char* strcpy(char* dst, const char* src);
     int strlen(const char* a);
@@ -15,5 +15,5 @@ namespace util {
     void memset(void *x, int c, uint32_t n);
     int vsnprintf(char* out, size_t n, const char* s, va_list vl);
     int snprintf(char* out, size_t n, const char* s, ...);
-}
+
 #endif
