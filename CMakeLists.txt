@@ -17,7 +17,7 @@ endif(NOT CMAKE_CROSSCOMPILING)
 
 project(ocaml-boot-riscv
     VERSION 0.1
-    LANGUAGES ASM CXX 
+    LANGUAGES ASM C 
     )
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
@@ -26,15 +26,15 @@ set(CMAKE_CXX_FLAGS "-mcmodel=medany")
 
 # build a library
 add_library(boot
-    src/constructors.cc
-    src/htif.cc
-    src/print.cc
-    src/string.cc
-    src/trap.cc
-    src/uart.cc
-    src/timer.cc
-    src/compat.cc
-    src/startup.cc
+    src/constructors.c
+    src/htif.c
+    src/print.c
+    src/string.c
+    src/trap.c
+    src/uart.c
+    src/timer.c
+    src/compat.c
+    src/startup.c
     src/startup.S
 )
 
