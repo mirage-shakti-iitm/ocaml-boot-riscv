@@ -1,7 +1,7 @@
 // see LICENSE for licensing details
 #include "constructors.h"
 
-extern "C" {
+
     // defined by linker, first global constructor
     extern void (*__CTORS_START)(void);
     // defined by linker, last global constructor
@@ -20,4 +20,3 @@ extern "C" {
             (*ctor)();
         }
     }
-}
