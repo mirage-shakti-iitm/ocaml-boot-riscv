@@ -19,14 +19,14 @@
 #endif
 
     
-    const uintptr_t msip = 0x0;
-    const uintptr_t mtimecmp = 0x4000;
-    const uintptr_t mtime = 0xbff8;
+    const uintptr_t clint_consts_msip = 0x0;
+    const uintptr_t clint_consts_mtimecmp = 0x4000;
+    const uintptr_t clint_consts_mtime = 0xbff8;
     
     const uintptr_t clint_base = 0x2000000;
-    const uintptr_t msip = clint_base + msip;
-    const uintptr_t mtimecmp = clint_base + mtimecmp;
-    const uintptr_t mtime = clint_base + mtime;
+    const uintptr_t msip = 0x2000000 + 0x0; // clint_base + clint_consts_msip
+    const uintptr_t mtimecmp = 0x2000000 + 0x4000; // clint_base + clint_consts_mtimecmp
+    const uintptr_t mtime = 0x2000000 + 0xbff8; // clint_base + clint_consts_mtime
 
     //mirror defs.h
     const uint64_t stack_size = STACK_SIZE;
