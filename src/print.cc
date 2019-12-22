@@ -6,8 +6,8 @@
 #include "uart.h"
 #include "htif.h"
 
-namespace util {
-    void vprintf(const char* s, va_list vl)
+
+void vprintf(const char* s, va_list vl)
 {
   char buf[256];
   vsnprintf(buf, sizeof buf, s, vl);
@@ -33,8 +33,5 @@ void putstring(const char* s,unsigned int len){
 #else
 #error "none of QEMU_UART, SHAKTI_UART or HTIF is defined!"
 #endif
-
-}
-
 
 }

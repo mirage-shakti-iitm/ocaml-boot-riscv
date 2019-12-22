@@ -5,7 +5,7 @@
 
 #define assert(x) do {                                          \
   if (!(x)) {                                                   \
-     util::printf("Assertion '%s' failed in file/line %s:%s\n",#x, __FILE__, __LINE__);               \
+     printf("Assertion '%s' failed in file/line %s:%s\n",#x, __FILE__, __LINE__);               \
     while(1);                                                  \
   } } while(0)                                                  \
 

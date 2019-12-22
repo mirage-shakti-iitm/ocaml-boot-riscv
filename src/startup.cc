@@ -23,7 +23,7 @@ void boot_primary() {
     // init nolibc of ocaml_freestanding
     uintptr_t start = (uintptr_t) &__KERNEL_END;
 
-    util::printf("ocaml-boot: heap@0x%x stack@0x%x\n",start, &stack[stack_size]);
+    printf("ocaml-boot: heap@0x%x stack@0x%x\n",start, &stack[stack_size]);
     /*  
     _nolibc_init(start, mem_size);
 
@@ -34,7 +34,7 @@ void boot_primary() {
     */
     riscv_boot_finished(start, mem_size);
 
-    util::printf("ocaml-boot: caml runtime returned. shutting down!\n");
+    printf("ocaml-boot: caml runtime returned. shutting down!\n");
 // #ifndef UART
 #if !defined(SHAKTI_UART)   
     htif_poweroff();
