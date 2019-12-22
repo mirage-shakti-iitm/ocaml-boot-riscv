@@ -4,7 +4,7 @@
 #include "timer.h"
 #include <ocaml-boot-riscv/compat.h>
 
-extern "C" {
+
     typedef unsigned long long time__t;
 
     void riscv_poweroff(int status){
@@ -28,4 +28,3 @@ extern "C" {
         }
         clear_timer();
     }
-}
