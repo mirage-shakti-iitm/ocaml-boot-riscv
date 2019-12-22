@@ -8,13 +8,13 @@ extern "C" {
     typedef unsigned long long time__t;
 
     void riscv_poweroff(int status){
-        pk::htif_poweroff();
+        htif_poweroff();
     }
     void riscv_write(const char* s, unsigned int length) {
         util::putstring(s, length);
     }
     time__t riscv_clock_monotonic() {
-        volatile unsigned long* tmp = (volatile unsigned long*)config::mtime;
+        volatile unsigned long* tmp = (volatile unsigned long*)mtime;
         return (time__t) *tmp;
     }
 
@@ -22,10 +22,10 @@ extern "C" {
         // time__t curr = riscv_clock_monotonic();
         // time__t next = curr+delay;
         time__t next = delay;
-        pk::set_timer(next);
-        while(!pk::timer_pending()){
+        set_timer(next);
+        while(!timer_pending()){
             // asm volatile("wfi");
         }
-        pk::clear_timer();
+        clear_timer();
     }
 }

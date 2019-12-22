@@ -37,7 +37,7 @@ void boot_primary() {
     util::printf("ocaml-boot: caml runtime returned. shutting down!\n");
 // #ifndef UART
 #if !defined(SHAKTI_UART)   
-    pk::htif_poweroff();
+    htif_poweroff();
 #else
     while(1);
 #endif

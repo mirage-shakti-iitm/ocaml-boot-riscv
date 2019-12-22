@@ -20,11 +20,11 @@
 #define FROMHOST_CMD(fromhost_value) ((uint64_t)(fromhost_value) << 8 >> 56)
 #define FROMHOST_DATA(fromhost_value) ((uint64_t)(fromhost_value) << 16 >> 16)
 
-namespace pk {
+
     void htif_console_putchar(uint8_t);
     int htif_console_getchar();
     void htif_poweroff() __attribute__((noreturn));
     void htif_syscall(uintptr_t);
-}
+
 
 #endif

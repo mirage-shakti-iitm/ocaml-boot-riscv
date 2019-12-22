@@ -27,9 +27,9 @@ void printf(const char* s, ...)
 void putstring(const char* s,unsigned int len){
     for(size_t i = 0; i < len; ++i)
 #if defined(QEMU_UART) || defined(SHAKTI_UART)
-            pk::uart_putchar(s[i]);
+            uart_putchar(s[i]);
 #elif defined(HTIF)
-            pk::htif_console_putchar(s[i]);
+            htif_console_putchar(s[i]);
 #else
 #error "none of QEMU_UART, SHAKTI_UART or HTIF is defined!"
 #endif

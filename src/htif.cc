@@ -10,7 +10,6 @@ volatile uint64_t tohost __attribute__((section(".htif")));
 volatile uint64_t fromhost __attribute__((section(".htif")));
 volatile int htif_console_buf;
 
-namespace pk {
     
 
 #define TOHOST(base_int)	(uint64_t *)(base_int + TOHOST_OFFSET)
@@ -112,4 +111,3 @@ namespace pk {
             tohost = 1;
         }
     }
-}
