@@ -3,7 +3,7 @@
 #include "encoding.h"
 #include "htif.h"
 
-extern "C" void trap_handler(uint64_t mcause, uintptr_t context) {
+void trap_handler(uint64_t mcause, uintptr_t context) {
     if(mcause > 0 ) {
         //trap
         printf("ocaml boot: trap (%d) @ 0x%x mtval=0x%x\n", mcause, read_csr(mepc), read_csr(mtval));
