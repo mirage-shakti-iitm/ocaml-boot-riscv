@@ -6,7 +6,7 @@
 #include "encoding.h"
 #include "htif.h"
 
-extern "C" {
+
     unsigned char 
         __attribute__(( aligned (16) )) 
         stack[stack_size] = {0xde, 0xad, 0xbe, 0xef};
@@ -46,4 +46,4 @@ void boot_primary() {
 void boot_secondary() {
     assert(false && "multicore systems are not supported");
 }
-}
+
