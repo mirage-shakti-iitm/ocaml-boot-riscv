@@ -6,7 +6,7 @@
 #include "uart.h"
 #include "config.h"
 
-namespace pk {
+
 #define UART_REG_TXFIFO		0
 #define UART_REG_RXFIFO		1
 #define UART_REG_TXCTRL		2
@@ -67,6 +67,6 @@ namespace pk {
         uart[UART_REG_RXCTRL] = UART_RXEN;
 #endif
     }
-}
+
 
 #endif
