@@ -1,7 +1,7 @@
 // taken (and modified) from riscv-pk. See LICENSE.riscv-pk
 
 #include "htif.h"
-#include "atomic.h"
+// #include "atomic.h"
 #include "assert.h"
 #include <string.h>
 
@@ -11,7 +11,7 @@ volatile uint64_t fromhost __attribute__((section(".htif")));
 volatile int htif_console_buf;
 
 namespace pk {
-    Ticketlock htif_lock;
+    
 
 #define TOHOST(base_int)	(uint64_t *)(base_int + TOHOST_OFFSET)
 #define FROMHOST(base_int)	(uint64_t *)(base_int + FROMHOST_OFFSET)
@@ -53,21 +53,21 @@ namespace pk {
         return -1;
 #endif
 
-        htif_lock.lock();
+        
         __check_fromhost();
         int ch = htif_console_buf;
         if (ch >= 0) {
             htif_console_buf = -1;
             __set_tohost(1, 0, 0);
         }
-        htif_lock.unlock();
+        
 
         return ch - 1;
     }
 
     static void do_tohost_fromhost(uintptr_t dev, uintptr_t cmd, uintptr_t data)
     {
-        htif_lock.lock();
+        
         __set_tohost(dev, cmd, data);
 
         while (1) {
@@ -80,7 +80,7 @@ namespace pk {
                 __check_fromhost();
             }
         }
-        htif_lock.unlock();
+        
     }
 
     void htif_syscall(uintptr_t arg)
@@ -99,9 +99,9 @@ namespace pk {
         magic_mem[3] = 1;
         do_tohost_fromhost(0, 0, (uintptr_t)magic_mem);
 #else
-        htif_lock.lock();
+        
         __set_tohost(1, 1, ch);
-        htif_lock.unlock();
+        
 #endif
     }
 

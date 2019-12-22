@@ -19,7 +19,7 @@ namespace pk {
     void uart_putchar(uint8_t ch)
     {
 #if defined(QEMU_UART) && !defined(SHAKTI_UART)
-        volatile uint32_t *uart = (volatile uint32_t*) config::uart_base;
+        volatile uint32_t *uart = (volatile uint32_t*) uart_base;
         volatile uint32_t *tx = uart + UART_REG_TXFIFO;
         while ((int32_t)(*tx) < 0);
         *tx = ch;
@@ -40,7 +40,7 @@ namespace pk {
     {
         int32_t ch;
 #if defined(QEMU_UART) && !defined(SHAKTI_UART)
-        volatile uint32_t *uart = (volatile uint32_t*) config::uart_base;
+        volatile uint32_t *uart = (volatile uint32_t*) uart_base;
         ch = uart[UART_REG_RXFIFO];
         if (ch < 0) return -1;
 #elif !defined(QEMU_UART) && defined(SHAKTI_UART)
@@ -61,7 +61,7 @@ namespace pk {
     void init_uart()
     {
 #ifdef QEMU_UART
-        volatile uint32_t *uart = (volatile uint32_t*) config::uart_base;
+        volatile uint32_t *uart = (volatile uint32_t*) uart_base;
         // Enable Rx/Tx channels
         uart[UART_REG_TXCTRL] = UART_TXEN;
         uart[UART_REG_RXCTRL] = UART_RXEN;

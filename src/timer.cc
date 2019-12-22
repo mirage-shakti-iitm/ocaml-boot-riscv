@@ -9,11 +9,11 @@ namespace pk {
         return (ip & MIP_MTIP) > 0;
     }
     void set_timer(unsigned long long deadline) {
-        volatile unsigned long *cmp = (volatile unsigned long*)config::mtimecmp;
+        volatile unsigned long *cmp = (volatile unsigned long*)mtimecmp;
         *cmp = deadline;
     }
     void clear_timer() {
-        volatile unsigned long *cmp = (volatile unsigned long*)config::mtimecmp;
+        volatile unsigned long *cmp = (volatile unsigned long*)mtimecmp;
         *cmp = 0;
     }
 
