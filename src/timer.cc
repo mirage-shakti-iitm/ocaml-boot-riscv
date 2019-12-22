@@ -3,7 +3,7 @@
 #include <encoding.h>
 
 
-namespace pk {
+
     bool timer_pending() {
         int ip = read_csr(mip);
         return (ip & MIP_MTIP) > 0;
@@ -17,4 +17,4 @@ namespace pk {
         *cmp = 0;
     }
 
-}
+
