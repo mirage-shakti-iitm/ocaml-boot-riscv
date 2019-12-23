@@ -1,7 +1,7 @@
 #include <timer.h>
 #include <config.h>
 #include <encoding.h>
-
+#include "bool.h"
 
 
     bool timer_pending() {
