@@ -26,6 +26,7 @@ set(CMAKE_CXX_FLAGS "-mcmodel=medany")
 
 # build a library
 add_library(boot
+    src/config.c
     src/constructors.c
     src/htif.c
     src/print.c
