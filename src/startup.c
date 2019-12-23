@@ -16,7 +16,7 @@ void boot_primary() {
     // init floating point unit
     // enable timer interrupts & interrupts in general
     uint64_t status = read_csr(mstatus);
-    // status |= MSTATUS_FS;
+    status |= MSTATUS_FS;
     status |= MSTATUS_MIE;
     write_csr(mstatus, status);
     set_csr(mie, IRQ_M_TIMER);
