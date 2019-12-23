@@ -5,17 +5,18 @@
 #include "print.h"
 #include "encoding.h"
 #include "htif.h"
-
+#include "defs.h"
+#include "bool.h"
 
     unsigned char 
         __attribute__(( aligned (16) )) 
-        stack[stack_size] = {0xde, 0xad, 0xbe, 0xef};
+        stack[STACK_SIZE] = {0xde, 0xad, 0xbe, 0xef};
     extern void riscv_boot_finished(uintptr_t heap_start, uint64_t heap_size);
 void boot_primary() {
     // init floating point unit
     // enable timer interrupts & interrupts in general
     uint64_t status = read_csr(mstatus);
-    status |= MSTATUS_FS;
+    // status |= MSTATUS_FS;
     status |= MSTATUS_MIE;
     write_csr(mstatus, status);
     set_csr(mie, IRQ_M_TIMER);
