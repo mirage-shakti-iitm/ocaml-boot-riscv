@@ -15,11 +15,7 @@ build: [
 ]
 install: [make "install"]
 remove: []
-depends: [
-  "conf-cmake" {build}
-]
-conflicts: []
-available: []
+
 synopsis: "Core package for booting anything on riscv"
 description:
   "This package provides a bootlayer to the ocaml-freestanding runtime on the RISC-V/SHAKTI architecture"
