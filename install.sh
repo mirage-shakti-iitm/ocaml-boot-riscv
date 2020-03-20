@@ -4,7 +4,7 @@
 # if [ "$prefix" = "" ]; then
     prefix=`opam config var prefix`
 # fi
-DESTINC=${prefix}/include/ocaml-boot-riscv
+DESTINC=${prefix}/include
 # DESTLIB=${prefix}/lib/ocaml-boot-riscv
 DESTLIB=${prefix}/lib
 # mkdir -p ${DESTINC} ${DESTLIB}
