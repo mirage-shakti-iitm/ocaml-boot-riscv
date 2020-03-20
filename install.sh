@@ -7,7 +7,7 @@
 DESTINC=${prefix}/include
 # DESTLIB=${prefix}/lib/ocaml-boot-riscv
 DESTLIB=${prefix}/lib
-# mkdir -p ${DESTINC} ${DESTLIB}
+mkdir -p ${DESTINC} ${DESTLIB}
 # mkdir -p ${DESTINC}
 
 # "nolibc"
