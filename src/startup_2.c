@@ -1,7 +1,7 @@
 #include "assert.h"
 #include "uart.h"
 #include "config.h"
-#include "startup.h"
+#include "startup_2.h"
 #include "print.h"
 #include "encoding.h"
 #include "htif.h"
