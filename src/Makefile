@@ -37,7 +37,7 @@ startup_asm.o:
 	$(CC) $(ASM_DEFINES) $(ASM_INCLUDES) $(C_FLAGS) -o startup_asm.o -c startup_1.S
 # 	$(CC) $(ASM_DEFINES) $(ASM_INCLUDES) $(C_FLAGS) -o startup_asm.o -c startup.S  
 
-libboot.a: add-checkcap $(OBJS) # startup_asm.o
+libboot.a: $(OBJS) # startup_asm.o
 	riscv64-unknown-elf-ar qc libboot.a $(OBJS) # startup_asm.o
 	riscv64-unknown-elf-ranlib libboot.a
 
