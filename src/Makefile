@@ -13,10 +13,42 @@ C_DEFINES=-DHTIF
 # C_INCLUDES=-I/home/sai/Shakti_TEE_Practical/mirage-shakti/ocaml-boot-riscv/include -I/home/sai/Shakti_TEE_Practical/mirage-shakti/ocaml-boot-riscv/include/ocaml-boot-riscv -I/home/sai/Shakti_TEE_Practical/mirage-shakti/ocaml-boot-riscv/src 
 C_INCLUDES=-I../include -I../include/ocaml-boot-riscv -I. 
 
-OBJS=config.o constructors.o htif.o print.o string.o trap.o uart.o timer.o compat.o startup.o
+OBJS=config.o constructors.o htif.o print.o string.o trap.o uart.o timer.o compat.o startup_2.o
 
-$(OBJS):%.o: %.c
+SRCS=config.c constructors.c htif.c print.c string.c trap.c uart.c timer.c compat.c startup_2.c # startup_1.S
+
+ASMS=config.s constructors.s htif.s print.s string.s trap.s uart.s timer.s compat.s startup_2.s startup_1.s
+
+CAPS=config.cap constructors.cap htif.cap print.cap string.cap trap.cap uart.cap timer.cap compat.cap startup_2.cap startup_1.cap
+
+$(OBJS):%.o: %.s
 	$(CC) $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o $@ -c $<
+
+# $(ASMS):%.s: %.c
+# 	$(CC) $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o $@ -c $<
+
+
+.phony: generate-asm generate-initial-cap-tee add-checkap
+
+add-checkcap: $(ASMS)
+	for f in $^; do postProcessing.py ./$$f; done
+
+startup_asm.o:
+	$(CC) $(ASM_DEFINES) $(ASM_INCLUDES) $(C_FLAGS) -o startup_asm.o -c startup_1.S
+# 	$(CC) $(ASM_DEFINES) $(ASM_INCLUDES) $(C_FLAGS) -o startup_asm.o -c startup.S  
+
+libboot.a: add-checkcap $(OBJS) # startup_asm.o
+	riscv64-unknown-elf-ar qc libboot.a $(OBJS) # startup_asm.o
+	riscv64-unknown-elf-ranlib libboot.a
+
+generate-asm: $(SRCS)
+	$(CC) $(C_DEFINES) $(C_INCLUDES) $(SRCS) -S
+	$(CC) $(C_DEFINES) $(C_INCLUDES) startup_1.S -S >> startup_1.s
+
+generate-initial-cap-tee: $(ASMS)
+	initial_cap_file_generator c 254 $(ASMS)
+# 	python postProcessing.py passParams.s passParams_out.s
+
 
 # config.o:
 # 	$(CC) $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o config.o -c config.c
@@ -47,11 +79,3 @@ $(OBJS):%.o: %.c
 
 # startup.o:
 # 	$(CC) $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o startup.o -c startup.c
-
-startup_asm.o:
-	$(CC) $(ASM_DEFINES) $(ASM_INCLUDES) $(C_FLAGS) -o startup_asm.o -c startup.S  
-
-libboot.a: $(OBJS) startup_asm.o
-	riscv64-unknown-elf-ar qc libboot.a $(OBJS) startup_asm.o
-	riscv64-unknown-elf-ranlib libboot.a
-
