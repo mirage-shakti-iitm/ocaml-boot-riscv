@@ -41,13 +41,12 @@ trap_handler:
 	mv	a3,a5
 	mv	a2,a4
 	ld	a1,-72(s0)
-	lui	a5,%hi(.LC0)
-	addi	a0,a5,%lo(.LC0)
+	lla	a0,.LC0
 	call	printf
 	j	.L3
 .L2:
-	lui	a5,%hi(mask.1573)
-	ld	a5,%lo(mask.1573)(a5)
+	lla	a5,mask.1573
+	ld	a5,0(a5)
 	ld	a4,-72(s0)
 	and	a5,a4,a5
 	sd	a5,-24(s0)
@@ -68,8 +67,7 @@ trap_handler:
 	mv	a3,a5
 	mv	a2,a4
 	ld	a1,-24(s0)
-	lui	a5,%hi(.LC1)
-	addi	a0,a5,%lo(.LC1)
+	lla	a0,.LC1
 	call	printf
 .L3:
 	call	htif_poweroff

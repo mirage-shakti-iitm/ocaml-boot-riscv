@@ -258,37 +258,39 @@ vsnprintf:
 	slli	a5,a3,32
 	srli	a5,a5,32
 	slli	a4,a5,2
-	lui	a5,%hi(.L32)
-	addi	a5,a5,%lo(.L32)
+	lla	a5,.L32
 	add	a5,a4,a5
 	lw	a5,0(a5)
+	sext.w	a4,a5
+	lla	a5,.L32
+	add	a5,a4,a5
 	jr	a5
 	.section	.rodata
 	.align	2
 	.align	2
 .L32:
-	.word	.L37
-	.word	.L36
-	.word	.L67
-	.word	.L67
-	.word	.L67
-	.word	.L67
-	.word	.L67
-	.word	.L67
-	.word	.L67
-	.word	.L35
-	.word	.L67
-	.word	.L67
-	.word	.L67
-	.word	.L34
-	.word	.L67
-	.word	.L67
-	.word	.L33
-	.word	.L67
-	.word	.L67
-	.word	.L67
-	.word	.L67
-	.word	.L31
+	.word	.L37-.L32
+	.word	.L36-.L32
+	.word	.L67-.L32
+	.word	.L67-.L32
+	.word	.L67-.L32
+	.word	.L67-.L32
+	.word	.L67-.L32
+	.word	.L67-.L32
+	.word	.L67-.L32
+	.word	.L35-.L32
+	.word	.L67-.L32
+	.word	.L67-.L32
+	.word	.L67-.L32
+	.word	.L34-.L32
+	.word	.L67-.L32
+	.word	.L67-.L32
+	.word	.L33-.L32
+	.word	.L67-.L32
+	.word	.L67-.L32
+	.word	.L67-.L32
+	.word	.L67-.L32
+	.word	.L31-.L32
 	.text
 .L35:
 	li	a5,1

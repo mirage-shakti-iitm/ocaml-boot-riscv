@@ -37,8 +37,8 @@ set_timer:
 	sd	s0,40(sp)
 	addi	s0,sp,48
 	sd	a0,-40(s0)
-	lui	a5,%hi(mtimecmp)
-	ld	a5,%lo(mtimecmp)(a5)
+	lla	a5,mtimecmp
+	ld	a5,0(a5)
 	sd	a5,-24(s0)
 	ld	a5,-24(s0)
 	ld	a4,-40(s0)
@@ -55,8 +55,8 @@ clear_timer:
 	addi	sp,sp,-32
 	sd	s0,24(sp)
 	addi	s0,sp,32
-	lui	a5,%hi(mtimecmp)
-	ld	a5,%lo(mtimecmp)(a5)
+	lla	a5,mtimecmp
+	ld	a5,0(a5)
 	sd	a5,-24(s0)
 	ld	a5,-24(s0)
 	sd	zero,0(a5)

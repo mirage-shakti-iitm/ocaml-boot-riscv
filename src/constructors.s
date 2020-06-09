@@ -12,8 +12,7 @@ run_constructors:
 	sd	ra,24(sp)
 	sd	s0,16(sp)
 	addi	s0,sp,32
-	lui	a5,%hi(_fbss)
-	addi	a5,a5,%lo(_fbss)
+	lla	a5,_fbss
 	sd	a5,-24(s0)
 	j	.L2
 .L3:
@@ -24,11 +23,9 @@ run_constructors:
 	sd	a5,-24(s0)
 .L2:
 	ld	a4,-24(s0)
-	lui	a5,%hi(_ebss)
-	addi	a5,a5,%lo(_ebss)
+	lla	a5,_ebss
 	bne	a4,a5,.L3
-	lui	a5,%hi(__CTORS_START)
-	addi	a5,a5,%lo(__CTORS_START)
+	lla	a5,__CTORS_START
 	sd	a5,-32(s0)
 	j	.L4
 .L5:
@@ -40,8 +37,7 @@ run_constructors:
 	sd	a5,-32(s0)
 .L4:
 	ld	a4,-32(s0)
-	lui	a5,%hi(__CTORS_END)
-	addi	a5,a5,%lo(__CTORS_END)
+	lla	a5,__CTORS_END
 	bne	a4,a5,.L5
 	nop
 	nop

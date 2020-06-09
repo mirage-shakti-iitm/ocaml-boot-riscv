@@ -39,24 +39,21 @@ __check_fromhost:
 	sd	ra,24(sp)
 	sd	s0,16(sp)
 	addi	s0,sp,32
-	lui	a5,%hi(fromhost)
-	ld	a5,%lo(fromhost)(a5)
+	lla	a5,fromhost
+	ld	a5,0(a5)
 	sd	a5,-24(s0)
 	ld	a5,-24(s0)
 	beq	a5,zero,.L12
-	lui	a5,%hi(fromhost)
-	sd	zero,%lo(fromhost)(a5)
+	lla	a5,fromhost
+	sd	zero,0(a5)
 	ld	a5,-24(s0)
 	srli	a4,a5,56
 	li	a5,1
 	beq	a4,a5,.L4
 	li	a3,29
-	lui	a5,%hi(.LC0)
-	addi	a2,a5,%lo(.LC0)
-	lui	a5,%hi(.LC1)
-	addi	a1,a5,%lo(.LC1)
-	lui	a5,%hi(.LC2)
-	addi	a0,a5,%lo(.LC2)
+	lla	a2,.LC0
+	lla	a1,.LC1
+	lla	a0,.LC2
 	call	printf
 .L5:
 	j	.L5
@@ -74,17 +71,14 @@ __check_fromhost:
 	sext.w	a5,a5
 	addiw	a5,a5,1
 	sext.w	a4,a5
-	lui	a5,%hi(htif_console_buf)
-	sw	a4,%lo(htif_console_buf)(a5)
+	lla	a5,htif_console_buf
+	sw	a4,0(a5)
 	j	.L1
 .L11:
 	li	a3,37
-	lui	a5,%hi(.LC0)
-	addi	a2,a5,%lo(.LC0)
-	lui	a5,%hi(.LC3)
-	addi	a1,a5,%lo(.LC3)
-	lui	a5,%hi(.LC2)
-	addi	a0,a5,%lo(.LC2)
+	lla	a2,.LC0
+	lla	a1,.LC3
+	lla	a0,.LC2
 	call	printf
 .L9:
 	j	.L9
@@ -113,8 +107,8 @@ __set_tohost:
 .L16:
 	call	__check_fromhost
 .L15:
-	lui	a5,%hi(tohost)
-	ld	a5,%lo(tohost)(a5)
+	lla	a5,tohost
+	ld	a5,0(a5)
 	bne	a5,zero,.L16
 	ld	a5,-24(s0)
 	slli	a4,a5,56
@@ -123,8 +117,8 @@ __set_tohost:
 	or	a4,a4,a5
 	ld	a5,-40(s0)
 	or	a4,a4,a5
-	lui	a5,%hi(tohost)
-	sd	a4,%lo(tohost)(a5)
+	lla	a5,tohost
+	sd	a4,0(a5)
 	nop
 	ld	ra,40(sp)
 	ld	s0,32(sp)
@@ -140,15 +134,15 @@ htif_console_getchar:
 	sd	s0,16(sp)
 	addi	s0,sp,32
 	call	__check_fromhost
-	lui	a5,%hi(htif_console_buf)
-	lw	a5,%lo(htif_console_buf)(a5)
+	lla	a5,htif_console_buf
+	lw	a5,0(a5)
 	sw	a5,-20(s0)
 	lw	a5,-20(s0)
 	sext.w	a5,a5
 	blt	a5,zero,.L18
-	lui	a5,%hi(htif_console_buf)
+	lla	a5,htif_console_buf
 	li	a4,-1
-	sw	a4,%lo(htif_console_buf)(a5)
+	sw	a4,0(a5)
 	li	a2,0
 	li	a1,0
 	li	a0,1
@@ -178,8 +172,8 @@ do_tohost_fromhost:
 	ld	a0,-40(s0)
 	call	__set_tohost
 .L24:
-	lui	a5,%hi(fromhost)
-	ld	a5,%lo(fromhost)(a5)
+	lla	a5,fromhost
+	ld	a5,0(a5)
 	sd	a5,-24(s0)
 	ld	a5,-24(s0)
 	beq	a5,zero,.L24
@@ -192,8 +186,8 @@ do_tohost_fromhost:
 	srli	a5,a5,56
 	ld	a4,-48(s0)
 	bne	a4,a5,.L22
-	lui	a5,%hi(fromhost)
-	sd	zero,%lo(fromhost)(a5)
+	lla	a5,fromhost
+	sd	zero,0(a5)
 	j	.L25
 .L22:
 	call	__check_fromhost
@@ -253,11 +247,11 @@ htif_poweroff:
 	sd	s0,8(sp)
 	addi	s0,sp,16
 .L29:
-	lui	a5,%hi(fromhost)
-	sd	zero,%lo(fromhost)(a5)
-	lui	a5,%hi(tohost)
+	lla	a5,fromhost
+	sd	zero,0(a5)
+	lla	a5,tohost
 	li	a4,1
-	sd	a4,%lo(tohost)(a5)
+	sd	a4,0(a5)
 	j	.L29
 	.size	htif_poweroff, .-htif_poweroff
 	.ident	"GCC: (GNU) 9.2.0"

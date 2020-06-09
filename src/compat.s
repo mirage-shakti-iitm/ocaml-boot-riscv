@@ -44,8 +44,8 @@ riscv_clock_monotonic:
 	addi	sp,sp,-32
 	sd	s0,24(sp)
 	addi	s0,sp,32
-	lui	a5,%hi(mtime)
-	ld	a5,%lo(mtime)(a5)
+	lla	a5,mtime
+	ld	a5,0(a5)
 	sd	a5,-24(s0)
 	ld	a5,-24(s0)
 	ld	a5,0(a5)
