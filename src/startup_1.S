@@ -1,5 +1,7 @@
 #include "defs.h"
 #include "encoding.h"
+#include "cap_matrix.h"
+
 
 .option norvc
 .section .text.init,"ax",@progbits
@@ -8,8 +10,26 @@ reset_vector:
    j do_reset
 
 .global do_reset;
-.global run_constructors
+# .global run_constructors
 do_reset:
+        # Enable Capability control
+        li t0, ENABLE_CAP # ENABLE_CAP is 0x1 for now
+        # Initial compartment i.e. starting compartment
+        li t1, INITIAL_COMPARTMENT
+        # Load cap_matrix_base 
+        la t2, cap_matrix
+        # Load checkcap_sp to save/restore registers etc...
+        la t3, checkcap_stack + CHECKCAP_STACK_SIZE
+        # Disable no_cross_comp initially. Always fist compartment should not be 255/254
+        li t4, 0x0
+
+        # set corresponding CSRs
+        csrw mcapctl, t0
+        csrw ucurrcap, t1
+        csrw ucapmatrixbase, t2
+        csrw ucheckcapsp, t3
+        csrw unocrosscomp, t4
+
         li x1, 0
         li x2, 0
         li x3, 0
@@ -62,7 +82,7 @@ do_reset:
         j boot_secondary
 2:
         // run constructors on hart 0
-        jal run_constructors
+        # jal run_constructors
         // and then call c-land
         j boot_primary
 .size do_reset, . - do_reset
@@ -70,6 +90,17 @@ do_reset:
 .global trap_handler
 .global trap_vector
 trap_vector:
+    # csrw mscratch, t0
+    csrr t2, mcause
+    li t3, CAUSE_TEE_CROSS_COMP_EXCEPTION
+    beq t3, t2, CHECKCAP_CROSS_COMP
+    li t3, CAUSE_TEE_254_EXCEPTION
+    beq t3, t2, CHECKCAP_254
+    li t3, CAUSE_TEE_NON_254_EXCEPTION
+    beq t3, t2, CHECKCAP_NON_254
+    li t3, CAUSE_TEE_COMP_ALL_COND_FAIL
+    beq t3, t2, CHECKCAP_ALL_COND_FAIL
+
     csrw mscratch, sp
     addi sp, sp, -32*8
 
@@ -157,3 +188,229 @@ trap_vector:
     mret
 
 .size trap_vector, . - trap_vector
+
+.global print_capability_fail
+.global print_checkcap_all_cond_fail
+
+CHECKCAP_254:
+    #Step 1: Read CSR_MCHECKCAPSP
+    csrr t2, mcheckcapsp
+
+    #Step 2: Storing ra register
+
+    addi t2, t2, -1*8
+    sd ra, 0*8(t2)
+
+    # update CSR_MCHECKCAPSP
+    csrw mcheckcapsp, t2
+
+
+    #Step 3: Enabling the CSR_UNOCROSSCOMP
+    li t2, 0x1
+    csrw unocrosscomp, t2
+
+    #Step 4: Zero out the register t2
+    li t2, 0
+
+    #Step 5: setting the ra to point to CHECKCAP_254_RETURN
+    la ra, CHECKCAP_254_RETURN
+
+    #Step 6: Call target function again
+    mret
+    
+CHECKCAP_254_RETURN:
+    #Step 1: Read CSR_MCHECKCAPSP
+    csrr t2, mcheckcapsp
+
+    #Step 2: Popping the registers first itself
+    ld ra, 0*8(t2)
+
+    # update CSR_MCHECKCAPSP
+    addi t2, t2, 1*8
+    csrw mcheckcapsp, t2
+
+    # Step 3: Zero out the register t2
+    li t2, 0
+
+    #Step 4: Disabling the CSR_UNOCROSSCOMP
+    csrw unocrosscomp, t2
+
+    #Step 5: Return to caller function
+    jr ra
+
+CHECKCAP_NON_254:
+    #Step 1: Read CSR_MCHECKCAPSP
+    csrr t2, mcheckcapsp
+
+    #Step 2: Storing ra register
+
+    addi t2, t2, -1*8
+    sd ra, 0*8(t2)
+
+    # update CSR_MCHECKCAPSP
+    csrw mcheckcapsp, t2
+
+    # Step 3: Zero out the register t2
+    li t2, 0
+
+    #Step 4: Disabling the CSR_UNOCROSSCOMP
+    csrw unocrosscomp, t2
+
+    #Step 5: setting the ra to point to CHECKCAP_254_RETURN
+    la ra, CHECKCAP_NON_254_RETURN
+
+    #Step 6: Call target function again
+    mret
+
+CHECKCAP_NON_254_RETURN:
+    #Step 1: Read CSR_MCHECKCAPSP
+    csrr t2, mcheckcapsp
+
+    #Step 2: Popping the registers first itself
+    ld ra, 0*8(t2)
+
+    # update CSR_MCHECKCAPSP
+    addi t2, t2, 1*8
+    csrw mcheckcapsp, t2
+
+    #Step 3: Enabling the CSR_UNOCROSSCOMP
+    li t2, 1
+    csrw unocrosscomp, t2
+
+    # Step 4: Zero out the register t2
+    li t2, 0
+
+    #Step 5: Return to caller function
+    jr ra
+    
+
+CHECKCAP_CROSS_COMP:
+    csrr t2, mcheckcapsp
+
+    #Step 1: Storing curr_cap, ra, sp, gp, tp register
+
+    addi t2, t2, -5*8
+
+    # actual t0 stored in mscratch is saved later
+    sd ra, 1*8(t2)
+    sd sp, 2*8(t2)
+    sd gp, 3*8(t2)
+    sd tp, 4*8(t2)
+
+    csrr t3, ucurrcap
+
+    #store CURRCAP
+    sd t3, 0*8(t2)
+
+    ##### Not doing this check for now
+    #Step 2: Checking whether CSR_MCHECKCAPSP is within CSR_MCHECKCAPSPBASE and CSR_MCHECKCAPSPBOUND
+    # (lower addr) Bound ---- SP ---- (higher addr) Base
+    # csrr t1, mcheckcapspbase
+    # csrr t2, mcheckcapspbound
+    # blt t0, t1, Checkcap_SP_Out_Of_Bound
+    # blt t1, t2, Checkcap_SP_Out_Of_Bound
+
+
+    #Step 3: Checking for cross-compartment Capability condition
+    # ucurrcap
+    # utargetcap
+    # ucapmatrixbase
+    ## access capability matrix. 
+    # Here I am assuming that the capability matrix base address is stored in CSR_BASE_CAP_MATRIX
+    csrr t0, ucapmatrixbase
+    # Current Capability and Target Capability stored in CSRs CSR_UCURRCAP and CSR_UTARGETCAP respectively
+    csrr t1, ucurrcap
+    csrr t2, utargetcap
+    # Assuming that the Capability matrix is stored as an array, where each compartment has its corresponding capability information in 256 bit entry.
+    # Assuming each word is 64 bits, so the word that contains the target_cap info w.r.t curr_cap has to be loaded.
+    # Accessing the capability matrix for a given curr_cap and target_cap is as follows:
+    # SubStep 1: Finding the index(t3) corresponding to the target_cap and curr_cap: 
+    # t3 = (t5)5*curr_cap + (t3){either of 0,1,2 or 3, depending on which group the target_cap lies, whether in 0-63, 64-127, 128-191, 192-255}*8(why 8 because
+    # byte addressable). 
+    addi t3, x0, 0 
+    addi t4, x0, 0x40
+    bltu t2, t4, Found_index
+    addi t3, t3, 1
+    addi t4, t4, 0x40
+    bltu t2, t4, Found_index
+    addi t3, t3, 1
+    addi t4, t4, 0x40
+    bltu t2, t4, Found_index
+    addi t3, t3, 1
+    addi t4, t4, 0x40
+Found_index:
+    sll t5, t1, 0x5 # t5= curr_cap * 32
+    sll t3, t3, 0x3 # t3= word_offset wrt curr cap entry in table * 8
+    add t5, t5, t3  # word offset wrt to start of table
+    add t0, t0, t5  # word offset + base address of cap matrix
+    ld t3, 0(t0)    # 64-bit entry of corresponding cap matrix
+    # Getting the bit corresponding to the target_cap from the loaded word based on generating an appropriate mask w.r.t target_cap and &ing with the
+    # loaded word  
+    sub t4, t4, t2 # {256, 192, 128, 64} - target_cap. t4= {1-64}
+    addi t4, t4, -0x1 # t4= {0-63} 
+    # setting the MSB as 1 and rest 0's
+    addi t5, x0, 0x1
+    # setting bit w.r.t target_cap 1 and rest 0's
+    slli t5, t5, 0x3f
+    srl t5, t5, t4
+    # anding t3 and t5(mask). If the output is 0 then check fail else, pass
+    and t3, t3, t5
+    beqz t3, CAPABILITY_CHECK_FAIL
+
+    #Step 4: Change current_cap to target_cap
+    csrw ucurrcap, t2
+
+    #Step 5: zeroing out non-argument/return value registers. Not zeroing out sp, tp, gp, fp
+    li t0, 0
+    li t1, 0
+    li t2, 0
+    li t3, 0
+    li t4, 0
+    li t5, 0
+    li t6, 0
+    csrw mscratch, x0
+
+    #Step 6: setting the ra to point to CHECKCAP_CROSS_COMP_RETURN
+    la ra, CHECKCAP_CROSS_COMP_RETURN
+
+    #Step 7: Call target function again
+    mret
+
+CHECKCAP_CROSS_COMP_RETURN:
+    #Step 1: Read CSR_MCHECKCAPSP
+    csrr t2, mcheckcapsp
+
+    #Step 2: Popping the registers first itself
+
+    # actual t0, t1 restored later
+    ld ra, 1*8(t2)
+    ld sp, 2*8(t2)
+    ld gp, 3*8(t2)
+    ld tp, 4*8(t2)
+    
+    # restore CSR_UCURRCAP
+    ld t1, 0*8(t2)
+    csrw ucurrcap, t1
+
+    # update CSR_MCHECKCAPSP
+    addi t2, t2, 5*8
+    csrw mcheckcapsp, t2
+
+    # Step 3: Zero out the registers t2 and t1 
+    li t1, 0
+    li t2, 0
+
+    #Step 4: Return to caller function
+    jr ra
+
+
+CAPABILITY_CHECK_FAIL:
+    # If we follow the idea where we store the registers before the actual checking is done, then we need to remove them before we exit. And next, what 
+    # should we do, poweroff!! ?
+    j print_capability_fail
+
+CHECKCAP_ALL_COND_FAIL:
+    # None of conditions in the checkcap instruction are not satisfied, then possibly some condition missed out
+    j print_checkcap_all_cond_fail
+
+

@@ -8,6 +8,12 @@
 #include "defs.h"
 #include "bool.h"
 
+
+    unsigned char 
+    __attribute__((section (".checkcap-stack-reserved") ))
+    __attribute__(( aligned (16) ))
+    checkcap_stack[1048576] = {0xde, 0xad, 0xbe, 0xef};
+
     unsigned char 
         __attribute__(( aligned (16) )) 
         stack[STACK_SIZE] = {0xde, 0xad, 0xbe, 0xef};
@@ -23,6 +29,8 @@ void boot_primary() {
 
     // init nolibc of ocaml_freestanding
     uintptr_t start = (uintptr_t) &__KERNEL_END;
+
+    printf("\nGanesha\n");
 
     // printf("ocaml-boot: heap@0x%x stack@0x%x\n",start, &stack[stack_size]);
     /*  
