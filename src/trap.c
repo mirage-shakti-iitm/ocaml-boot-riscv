@@ -20,8 +20,10 @@ void trap_handler(uint64_t mcause, uintptr_t context) {
 
 void print_checkcap_all_cond_fail() {
     printf("\nCheckcap all condition fail fail : (%d) to (%d) at 0x%x\n", read_csr(ucurrcap), read_csr(utargetcap), read_csr(mepc)); 
+    htif_poweroff();
 }
 
 void print_capability_fail() {
     printf("\ncross compartment fail : (%d) to (%d) at 0x%x\n", read_csr(ucurrcap), read_csr(utargetcap), read_csr(mepc)); 
+    htif_poweroff();    
 }
