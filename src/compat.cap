@@ -1,4 +1,0 @@
-riscv_poweroff:254
-riscv_write:254
-riscv_clock_monotonic:254
-riscv_wait:254
