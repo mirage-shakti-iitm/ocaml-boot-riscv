@@ -62,7 +62,7 @@ __attribute__((section (".capability-matrix-reserved") ))
  __attribute__(( aligned (16) ))
  cap_matrix[256*4] = {
 0, 0, 0, 0,
-4, 0, 0, 0,
+0, 0, 0, 0,
 0, 0, 0, 0,
 0, 0, 0, 0,
 0, 0, 0, 0,
