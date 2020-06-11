@@ -13,13 +13,13 @@ C_DEFINES=-DHTIF
 # C_INCLUDES=-I/home/sai/Shakti_TEE_Practical/mirage-shakti/ocaml-boot-riscv/include -I/home/sai/Shakti_TEE_Practical/mirage-shakti/ocaml-boot-riscv/include/ocaml-boot-riscv -I/home/sai/Shakti_TEE_Practical/mirage-shakti/ocaml-boot-riscv/src 
 C_INCLUDES=-I../include -I../include/ocaml-boot-riscv -I. 
 
-OBJS=config.o htif.o print.o string.o trap.o uart.o timer.o compat.o startup_2.o startup_1.o htif_exception.o print_exception.o
+OBJS=config.o htif.o print.o string.o trap.o uart.o timer.o compat.o startup_2.o startup_1.o # htif_exception.o print_exception.o
 
-SRCS=config.c htif.c print.c string.c trap.c uart.c timer.c compat.c startup_2.c startup_1.S htif_exception.c print_exception.c
+SRCS=config.c htif.c print.c string.c trap.c uart.c timer.c compat.c startup_2.c startup_1.S # htif_exception.c print_exception.c
 
-ASMS=config.s htif.s print.s string.s trap.s uart.s timer.s compat.s startup_2.s startup_1.s htif_exception.s print_exception.s
+ASMS=config.s htif.s print.s string.s trap.s uart.s timer.s compat.s startup_2.s startup_1.s # htif_exception.s print_exception.s
 
-CAPS=config.cap htif.cap print.cap string.cap trap.cap uart.cap timer.cap compat.cap startup_2.cap startup_1.cap htif_exception.cap print_exception.cap
+CAPS=config.cap htif.cap print.cap string.cap trap.cap uart.cap timer.cap compat.cap startup_2.cap startup_1.cap # htif_exception.cap print_exception.cap
 
 $(OBJS):%.o: %.s
 	$(CC) $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o $@ -c $<

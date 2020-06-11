@@ -1,5 +1,5 @@
 
-kernel_cap_19:     file format elf64-littleriscv
+kernel_cap_5:     file format elf64-littleriscv
 
 
 Disassembly of section .text:
@@ -372,7 +372,7 @@ Disassembly of section .text:
     800004c6:	a001                	j	800004c6 <boot_secondary+0x2c>
 
 00000000800004c8 <__check_fromhost>:
-    800004c8:	0020000b          	checkcap	2
+    800004c8:	0010000b          	checkcap	1
     800004cc:	1101                	addi	sp,sp,-32
     800004ce:	ec06                	sd	ra,24(sp)
     800004d0:	e822                	sd	s0,16(sp)
@@ -433,7 +433,7 @@ Disassembly of section .text:
     8000057e:	8082                	ret
 
 0000000080000580 <__set_tohost>:
-    80000580:	0020000b          	checkcap	2
+    80000580:	0010000b          	checkcap	1
     80000584:	7179                	addi	sp,sp,-48
     80000586:	f406                	sd	ra,40(sp)
     80000588:	f022                	sd	s0,32(sp)
@@ -495,7 +495,7 @@ Disassembly of section .text:
     80000622:	8082                	ret
 
 0000000080000624 <do_tohost_fromhost>:
-    80000624:	0020000b          	checkcap	2
+    80000624:	0010000b          	checkcap	1
     80000628:	7139                	addi	sp,sp,-64
     8000062a:	fc06                	sd	ra,56(sp)
     8000062c:	f822                	sd	s0,48(sp)
@@ -552,7 +552,7 @@ Disassembly of section .text:
     800006c0:	8082                	ret
 
 00000000800006c2 <htif_console_putchar>:
-    800006c2:	0ff0000b          	checkcap	255
+    800006c2:	0010000b          	checkcap	1
     800006c6:	1101                	addi	sp,sp,-32
     800006c8:	ec06                	sd	ra,24(sp)
     800006ca:	e822                	sd	s0,16(sp)
@@ -585,7 +585,7 @@ Disassembly of section .text:
     8000070e:	b7e5                	j	800006f6 <htif_poweroff+0xa>
 
 0000000080000710 <vprintf>:
-    80000710:	0fe0000b          	checkcap	254
+    80000710:	0ff0000b          	checkcap	255
     80000714:	7169                	addi	sp,sp,-304
     80000716:	f606                	sd	ra,296(sp)
     80000718:	f222                	sd	s0,288(sp)
@@ -615,7 +615,7 @@ Disassembly of section .text:
     80000762:	8082                	ret
 
 0000000080000764 <printf>:
-    80000764:	0010000b          	checkcap	1
+    80000764:	0ff0000b          	checkcap	255
     80000768:	7159                	addi	sp,sp,-112
     8000076a:	f406                	sd	ra,40(sp)
     8000076c:	f022                	sd	s0,32(sp)
@@ -644,7 +644,7 @@ Disassembly of section .text:
     800007b0:	8082                	ret
 
 00000000800007b2 <putstring>:
-    800007b2:	0010000b          	checkcap	1
+    800007b2:	0ff0000b          	checkcap	255
     800007b6:	7179                	addi	sp,sp,-48
     800007b8:	f406                	sd	ra,40(sp)
     800007ba:	f022                	sd	s0,32(sp)
@@ -1280,8 +1280,6 @@ Disassembly of section .capability-matrix-reserved:
 	...
 
 0000000080300f20 <cap_matrix>:
-	...
-    80300f40:	0004                	0x4
 	...
 
 Disassembly of section .rodata:

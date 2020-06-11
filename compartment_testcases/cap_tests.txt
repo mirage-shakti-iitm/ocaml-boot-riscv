@@ -11,33 +11,37 @@ Total functions : 9
 
 Test Cases:
 I). Non-254/255 tests
-1). curr_cap -> curr_cap (1 -> 1) : Passed
-2). curr_cap -> valid_cap (1 -> 2) (mapping present) : Passed
-3). curr_cap -> invalid_cap (1 -> 2) (mapping not present) : Passed 
+1). curr_cap -> curr_cap (1 -> 1) / (output present) : Passed 
+2). curr_cap -> valid_cap (1 -> 2) (mapping present) / (output present) : Passed
+3). curr_cap -> invalid_cap (1 -> 2) (mapping not present) / (output not present) : Passed 
 
 II). 255 tests
-4). curr_cap -> 255 -> 255 (1 -> 255) : Passed 
-5). curr_cap -> 255 -> curr_cap (1 -> 255 -> 1) : Passed 
-6). curr_cap -> 255 -> valid_cap (1 -> 255 -> 2) (mapping present) : Passed
-7). curr_cap -> 255 -> invalid_cap (1 -> 255 -> 2) (mapping not present) : Passed
+4). curr_cap -> 255 -> 255 (1 -> 255) / (output present) : Passed 
+5). curr_cap -> 255 -> curr_cap (1 -> 255 -> 1) / (output present) : Passed 
+6)*. curr_cap -> 255 -> valid_cap (1 -> 255 -> 2) (mapping present) / (output present) : Passed
+7). curr_cap -> 255 -> invalid_cap (1 -> 255 -> 2) (mapping not present) / (output not present) : Passed
 
 III). 254 tests
-8). curr_cap -> 254 -> 254 (1 -> 254) : Passed
-9). curr_cap -> 254 -> curr_cap (1 -> 254 -> 1) : Passed
-10). curr_cap -> 254 -> valid_cap (1 -> 254 -> 2) (mapping present) : Passed
-11). curr_cap -> 254 -> invalid_cap (1 -> 254 -> 2) (mapping not present) : Passed
+8). curr_cap -> 254 -> 254 (1 -> 254) / (output present) : Passed
+9)*. curr_cap -> 254 -> curr_cap (1 -> 254 -> 1) / (output present) : Passed
+10). curr_cap -> 254 -> valid_cap (1 -> 254 -> 2) (mapping present) / (output not present) : Passed
+11). curr_cap -> 254 -> invalid_cap (1 -> 254 -> 2) (mapping not present) / (output not present) : Passed
 
-12). curr_cap -> 255 -> 254 -> curr_cap (1 -> 255 -> 254 -> 1) : Passed
-13). curr_cap -> 255 -> 254 -> valid_cap (1 -> 255 -> 254 -> 2) (mapping present) : Passed
-14). curr_cap -> 255 -> 254 -> invalid_cap (1 -> 255 -> 254 -> 2) (mapping not present) : Passed
+12)*. curr_cap -> 255 -> 254 -> curr_cap (1 -> 255 -> 254 -> 1) / (output present) : Passed
+13). curr_cap -> 255 -> 254 -> valid_cap (1 -> 255 -> 254 -> 2) (mapping present) (output not present) : Passed
+14). curr_cap -> 255 -> 254 -> invalid_cap (1 -> 255 -> 254 -> 2) (mapping not present) / (output not present) : Passed
 
-15). curr_cap -> 254 -> 255 -> curr_cap (1 -> 254 -> 255 -> 1) : Passed 
-16). curr_cap -> 254 -> 255 -> valid_cap (1 -> 254 -> 255 -> 2) (mapping present) : Passed
-17). curr_cap -> 254 -> 255 -> invalid_cap (1 -> 254 -> 255 -> 2) (mapping not present) : Passed
+15)*. curr_cap -> 254 -> 255 -> curr_cap (1 -> 254 -> 255 -> 1) / (output present) : Passed 
+16). curr_cap -> 254 -> 255 -> valid_cap (1 -> 254 -> 255 -> 2) (mapping present) / (output not present) : Passed
+17). curr_cap -> 254 -> 255 -> invalid_cap (1 -> 254 -> 255 -> 2) (mapping not present) / (output not present) : Passed
 
-18). curr_cap -> 254 -> curr_cap -> 255 -> curr_cap (1 -> 254 -> 1 -> 255 -> 1) : Passed
-19). curr_cap -> 254 -> curr_cap -> 255 -> valid_cap (1 -> 254 -> 1 -> 255 -> 2) (mapping present) : Passed
-20). curr_cap -> 254 -> curr_cap -> 255 -> invalid_cap (1 -> 254 -> 1 -> 255 -> 2) (mapping not present) : Passed
+18). curr_cap -> 254 -> curr_cap -> 255 -> curr_cap (1 -> 254 -> 1 -> 255 -> 1) / (output present) : Passed
+19)*. curr_cap -> 254 -> curr_cap -> 255 -> valid_cap (1 -> 254 -> 1 -> 255 -> 2) (mapping present) / (output present) : Passed
+20). curr_cap -> 254 -> curr_cap -> 255 -> invalid_cap (1 -> 254 -> 1 -> 255 -> 2) (mapping not present) / (output not present) : Passed
+
+IV).Miscellaneous tests
+21). curr_cap -> valid_cap -> curr_cap (1 -> 2 -> 1) (mapping present) / (output present) : Passed
+22). curr_cap -> valid_cap -> curr_cap (1 -> 2 -> 1) (mapping not present) / (output not present) : Passed
 
 ______________________________________________________________________________________________________________________________________________
 Plan:
@@ -79,3 +83,5 @@ Observations:
 
 ***************************************************************************************************************************************************
 Note: Compartment numbering usually starts from 0. Here for ease of use, we are starting with 1.
+
+6, 9, 12, 15, 19
