@@ -5,9 +5,9 @@
 #include "assert.h"
 #include <string.h>
 
-extern uint64_t __htif_base;
-volatile uint64_t tohost __attribute__((section(".htif")));
-volatile uint64_t fromhost __attribute__((section(".htif")));
+// extern uint64_t __htif_base;
+volatile uint64_t tohost_exception __attribute__((section(".htif")));
+volatile uint64_t fromhost_exception __attribute__((section(".htif")));
 volatile int htif_console_buf;
 
     
@@ -15,15 +15,15 @@ volatile int htif_console_buf;
 #define TOHOST(base_int)	(uint64_t *)(base_int + TOHOST_OFFSET)
 #define FROMHOST(base_int)	(uint64_t *)(base_int + FROMHOST_OFFSET)
 
-#define TOHOST_OFFSET		((uintptr_t)tohost - (uintptr_t)__htif_base)
-#define FROMHOST_OFFSET		((uintptr_t)fromhost - (uintptr_t)__htif_base)
+#define TOHOST_OFFSET		((uintptr_t)tohost_exception - (uintptr_t)__htif_base)
+#define FROMHOST_OFFSET		((uintptr_t)fromhost_exception - (uintptr_t)__htif_base)
 
     static void __check_fromhost_exception()
     {
-        uint64_t fh = fromhost;
+        uint64_t fh = fromhost_exception;
         if (!fh)
             return;
-        fromhost = 0;
+        fromhost_exception = 0;
 
         // this should be from the console
         assert(FROMHOST_DEV(fh) == 1);
@@ -40,9 +40,9 @@ volatile int htif_console_buf;
 
     static void __set_tohost_exception(uintptr_t dev, uintptr_t cmd, uintptr_t data)
     {
-        while (tohost)
+        while (tohost_exception)
             __check_fromhost_exception();
-        tohost = TOHOST_CMD(dev, cmd, data);
+        tohost_exception = TOHOST_CMD(dev, cmd, data);
     }
 
     int htif_console_getchar_exception()
@@ -57,7 +57,7 @@ volatile int htif_console_buf;
         int ch = htif_console_buf;
         if (ch >= 0) {
             htif_console_buf = -1;
-            __set_tohost(1, 0, 0);
+            __set_tohost_exception(1, 0, 0);
         }
         
 
@@ -70,10 +70,10 @@ volatile int htif_console_buf;
         __set_tohost_exception(dev, cmd, data);
 
         while (1) {
-            uint64_t fh = fromhost;
+            uint64_t fh = fromhost_exception;
             if (fh) {
                 if (FROMHOST_DEV(fh) == dev && FROMHOST_CMD(fh) == cmd) {
-                    fromhost = 0;
+                    fromhost_exception = 0;
                     break;
                 }
                 __check_fromhost_exception();
@@ -99,10 +99,10 @@ volatile int htif_console_buf;
 #endif
     }
 
-    void htif_poweroff()
-    {
-        while (1) {
-            fromhost = 0;
-            tohost = 1;
-        }
-    }
+    // void htif_poweroff()
+    // {
+    //     while (1) {
+    //         fromhost = 0;
+    //         tohost = 1;
+    //     }
+    // }
