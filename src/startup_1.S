@@ -1,6 +1,5 @@
 #include "defs.h"
 #include "encoding.h"
-#include "cap_matrix.h"
 
 
 .option norvc
@@ -27,7 +26,7 @@ do_reset:
         csrw mcapctl, t0
         csrw ucurrcap, t1
         csrw ucapmatrixbase, t2
-        csrw ucheckcapsp, t3
+        csrw mcheckcapsp, t3
         csrw unocrosscomp, t4
 
         li x1, 0
@@ -301,6 +300,10 @@ CHECKCAP_CROSS_COMP:
 
     #store CURRCAP
     sd t3, 0*8(t2)
+
+    # update CSR_MCHECKCAPSP
+    csrw mcheckcapsp, t2
+
 
     ##### Not doing this check for now
     #Step 2: Checking whether CSR_MCHECKCAPSP is within CSR_MCHECKCAPSPBASE and CSR_MCHECKCAPSPBOUND
