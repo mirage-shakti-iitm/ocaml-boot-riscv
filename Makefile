@@ -16,6 +16,6 @@ install: all
 	./install.sh
 
 uninstall:   
-	rm -r $(BUILD)
+	rm -rf $(BUILD)
 clean: 
-	rm -r $(BUILD)
+	rm -rf $(BUILD)
