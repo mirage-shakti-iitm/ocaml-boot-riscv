@@ -1,0 +1,4 @@
+riscv_poweroff:210
+riscv_write:210
+riscv_clock_monotonic:210
+riscv_wait:210

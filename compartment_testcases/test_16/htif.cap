@@ -1,0 +1,7 @@
+__check_fromhost:
+__set_tohost:
+htif_console_getchar:12
+do_tohost_fromhost:
+htif_syscall:8
+htif_console_putchar:
+htif_poweroff:255

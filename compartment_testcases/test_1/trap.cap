@@ -1,0 +1,3 @@
+trap_handler:255
+print_checkcap_all_cond_fail:255
+print_capability_fail:255

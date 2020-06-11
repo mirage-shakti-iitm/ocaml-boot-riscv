@@ -1,0 +1,65 @@
+primary_boot -> printf -> vprintf -> { putstring -> htif_console_putchar -> do_tohost_fromhost -> __set_tohost ->  __check_fromhost }(loop)
+	|
+	|
+	----------> htif_poweroff
+
+Total functions : 9
+
+Test Cases:
+I). Non-254/255 tests
+1). curr_cap -> curr_cap
+2). curr_cap -> valid_cap 
+3). curr_cap -> invalid_cap
+
+II). 255 tests
+4). curr_cap -> 255 -> 255 
+5). curr_cap -> 255 -> curr_cap
+6). curr_cap -> 255 -> valid_cap
+7). curr_cap -> 255 -> invalid_cap
+
+III). 254 tests
+8). curr_cap -> 254 -> 254
+9). curr_cap -> 254 -> curr_cap
+10). curr_cap -> 254 -> valid_cap
+11). curr_cap -> 254 -> invalid_cap
+
+12). curr_cap -> 255 -> 254 -> curr_cap
+13). curr_cap -> 255 -> 254 -> valid_cap
+14). curr_cap -> 255 -> 254 -> invalid_cap
+
+15). curr_cap -> 254 -> 255 -> curr_cap
+16). curr_cap -> 254 -> 255 -> valid_cap
+17). curr_cap -> 254 -> 255 -> invalid_cap
+
+18). curr_cap -> 254 -> curr_cap -> 255 -> curr_cap
+19). curr_cap -> 254 -> curr_cap -> 255 -> valid_cap
+20). curr_cap -> 254 -> curr_cap -> 255 -> invalid_cap
+
+______________________________________________________________________________________________________________________________________________
+Plan:
+For each case, we should have .cap files, cap_matrix files. The .cap file of the hello.c should be fixed.
+
+Compartment Values:
+1). compat.cc & timer.cc file functions in different isolated compartments, 210 & 253 respectively
+2). boot_primary in 1 always, fixed in all test cases. boot_secondary in 128 (some arbitrary compartment)
+3). All of the loop functions, i.e. from putstring to __check_fromhost in the same compartment, either all in 255 or 254 or non-255/254 compartment.
+4). htif_poweroff is fixed with compartment 255, htif_syscall is with 8 & htif_console_getchar is fixed with 12.
+5). string.cc is fixed with 254 & trap.cc is fixed with 255.
+6). dummy function in hello.c is fixed with compartment 34
+7). Main things to compartmentalize are the following functions: 
+	htif.cc:
+		__check_fromhost:
+		__set_tohost:
+		do_tohost_fromhost:
+		htif_console_putchar:
+	print.cc
+		vprintf:
+		printf:
+		putstring:
+
+
+
+
+
+***************************************************************************************************************************************************
+Note: Compartment numbering usually starts from 0. Here for ease of use, we are starting with 1.
