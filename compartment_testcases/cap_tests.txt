@@ -1,6 +1,10 @@
 primary_boot -> printf -> vprintf -> { putstring -> htif_console_putchar -> do_tohost_fromhost -> __set_tohost ->  __check_fromhost }(loop)
-	|
-	|
+	|                        |  
+	|                        |
+	|						 ------> vsnprintf
+	|						 |
+	|					     ------> strlen
+	|										
 	----------> htif_poweroff
 
 Total functions : 9
@@ -44,7 +48,8 @@ Compartment Values:
 2). boot_primary in 1 always, fixed in all test cases. boot_secondary in 128 (some arbitrary compartment)
 3). All of the loop functions, i.e. from putstring to __check_fromhost in the same compartment, either all in 255 or 254 or non-255/254 compartment.
 4). htif_poweroff is fixed with compartment 255, htif_syscall is with 8 & htif_console_getchar is fixed with 12.
-5). string.cc is fixed with 254 & trap.cc is fixed with 255.
+5). string.cc is fixed with 254. So both strlen & vsnprintf are 254. 
+6). trap.cc is fixed with 255.
 6). dummy function in hello.c is fixed with compartment 34
 7). Main things to compartmentalize are the following functions: 
 	htif.cc:
