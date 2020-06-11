@@ -11,33 +11,33 @@ Total functions : 9
 
 Test Cases:
 I). Non-254/255 tests
-1). curr_cap -> curr_cap
-2). curr_cap -> valid_cap 
-3). curr_cap -> invalid_cap
+1). curr_cap -> curr_cap (1 -> 1) : Passed
+2). curr_cap -> valid_cap (1 -> 2) (mapping present) : Passed
+3). curr_cap -> invalid_cap (1 -> 2) (mapping not present) : Passed 
 
 II). 255 tests
-4). curr_cap -> 255 -> 255 
-5). curr_cap -> 255 -> curr_cap
-6). curr_cap -> 255 -> valid_cap
-7). curr_cap -> 255 -> invalid_cap
+4). curr_cap -> 255 -> 255 (1 -> 255) : Passed 
+5). curr_cap -> 255 -> curr_cap (1 -> 255 -> 1) : Passed 
+6). curr_cap -> 255 -> valid_cap (1 -> 255 -> 2) (mapping present) : Passed
+7). curr_cap -> 255 -> invalid_cap (1 -> 255 -> 2) (mapping not present) : Passed
 
 III). 254 tests
-8). curr_cap -> 254 -> 254
-9). curr_cap -> 254 -> curr_cap
-10). curr_cap -> 254 -> valid_cap
-11). curr_cap -> 254 -> invalid_cap
+8). curr_cap -> 254 -> 254 (1 -> 254) : Passed
+9). curr_cap -> 254 -> curr_cap (1 -> 254 -> 1) : Passed
+10). curr_cap -> 254 -> valid_cap (1 -> 254 -> 2) (mapping present) : Passed
+11). curr_cap -> 254 -> invalid_cap (1 -> 254 -> 2) (mapping not present) : Passed
 
-12). curr_cap -> 255 -> 254 -> curr_cap
-13). curr_cap -> 255 -> 254 -> valid_cap
-14). curr_cap -> 255 -> 254 -> invalid_cap
+12). curr_cap -> 255 -> 254 -> curr_cap (1 -> 255 -> 254 -> 1) : Passed
+13). curr_cap -> 255 -> 254 -> valid_cap (1 -> 255 -> 254 -> 2) (mapping present) : Passed
+14). curr_cap -> 255 -> 254 -> invalid_cap (1 -> 255 -> 254 -> 2) (mapping not present) : Passed
 
-15). curr_cap -> 254 -> 255 -> curr_cap
-16). curr_cap -> 254 -> 255 -> valid_cap
-17). curr_cap -> 254 -> 255 -> invalid_cap
+15). curr_cap -> 254 -> 255 -> curr_cap (1 -> 254 -> 255 -> 1) : Passed 
+16). curr_cap -> 254 -> 255 -> valid_cap (1 -> 254 -> 255 -> 2) (mapping present) : Passed
+17). curr_cap -> 254 -> 255 -> invalid_cap (1 -> 254 -> 255 -> 2) (mapping not present) : Passed
 
-18). curr_cap -> 254 -> curr_cap -> 255 -> curr_cap
-19). curr_cap -> 254 -> curr_cap -> 255 -> valid_cap
-20). curr_cap -> 254 -> curr_cap -> 255 -> invalid_cap
+18). curr_cap -> 254 -> curr_cap -> 255 -> curr_cap (1 -> 254 -> 1 -> 255 -> 1) : Passed
+19). curr_cap -> 254 -> curr_cap -> 255 -> valid_cap (1 -> 254 -> 1 -> 255 -> 2) (mapping present) : Passed
+20). curr_cap -> 254 -> curr_cap -> 255 -> invalid_cap (1 -> 254 -> 1 -> 255 -> 2) (mapping not present) : Passed
 
 ______________________________________________________________________________________________________________________________________________
 Plan:
@@ -63,6 +63,17 @@ Compartment Values:
 		putstring:
 
 
+
+Observations:
+1). In Test 9:
+		Debug_Checkcap: 1 / 1 @ 0x800006c2 
+
+		Debug_Checkcap: 1 / 0 @ 0x800006c2 
+
+		So once if it is crossing 254 to curr_cap or changing compartments, the same checkcap instruction executes twice. Why should we again execute checkcap 
+		instruction? Any reason?
+2). In Test 10: 
+		jumping from 254 to valid_comp triggers exception CHECKCAP_ALL_COND_FAIL. 
 
 
 
