@@ -1,0 +1,136 @@
+<package-name> : <dependencies>
+
+astring : (231)
+
+bheap :
+
+result-1.4 :
+
+sexplib0-v0.12.0 : (Isolated: 231)
+
+uchar-0.0.2 : 
+
+cstruct-v5.0.0 :
+
+macaddr-v4.0.0 : (Isolated: 231)
+
+cmdliner-v1.0.2 : result
+
+parse-argv-v0.2.0 : astring (Isolated: 231)
+
+duration-riscv-0.1.2 : 
+
+ptime-0.8.5 : result
+
+fmt-0.8.5 : result, uchar, cmdliner(optional)
+
+functoria-runtimev2.2.4 : cmdliner, fmt
+
+ipaddr-v4.0.0 : macaddr, sexplib0, domain-name : (Isolated: 231)
+
+domain-name-v0.3.0 : fmt, astring : (Isolated: 231)
+
+logs-0.6.3 : fmt, cmdliner, lwt
+
+lwt-4.2.1 : result, mmap(not sure)
+
+lwt-dllist-v1.0.0 : lwt 
+
+mirage-bootvar-riscv-master : parse-argv, lwt, mirage-riscv (Isolated: 231)
+
+mirage-clock-v2.0.0 : mirage-device
+
+mirage-console-impl-riscv: mirage-console, mirage-riscv, cstruct, lwt (Isolated: 231)
+
+mirage-console-v2.4.3 : mirage-device, mirage-flow (Isolated: 231)
+
+mirage-logs-v1.1.0 : ptime, logs, lwt, mirage-clock
+
+mirage-riscv : bheap, cstruct, lwt, lwt-dllist, ocaml-freestanding, logs, ocaml-boot-riscv
+
+mirage-time-v1.3.0 : mirage-device
+
+mirage-runtime-v3.5.0 : ipaddr, functoria-runtime, fmt, logs
+
+***********************************************************************************************************************************************************************************
+
+Important note: If the function, f, that is being passed to the higher order function does not use any non-254 function, then we can very well place that in 254 itself.
+
+Higher Order Function List
+
+Astring:
+	module Map & Set: dump, pp
+	module String: v, find, iter, iteri, map, mapi, fold_left, fold_right, filter, filter_map,  
+		module Sub: for_all, exists, trim, find, map, mapi, fold_left, fold_right, filter, filter_map
+
+	Notes: All these higher order functions use Bytes other than f(passed to it). So no problem placing it in 254. 
+	Doubts: try_no_alloc, with_buf are some functions which are defined within another function. Where to place them, in 254? For now 254 is ok(in this case). 
+
+Bheap:
+	iter, fold
+	Notes: Can be placed in 254
+
+Result:
+	No functions at all
+
+Sexplib0:
+	For now not being analyzed properly, because ipaddr type packages use sexplib0. Since we are not doing any network related operations, so not a problem now.
+	The higher order functions over here use some other non-higher-order functions present in the same package, which in turn call Bytes, String functions. So should place all 
+	those used functions in the package also in 254
+	
+Uchar:
+	Part of compiler from 4.03 and above
+
+Cstruct:
+	of_string, of_bytes, iter, fold
+
+	Notes:
+	(i). Some higher_order functions not present in .mli file, might be internal functions. So those also should be placed in 254.
+	(ii). of_string, of_bytes uses some internal higher order functions which in turn invoke couple of non-higher functions in the same package. So they should also be placed in 
+			254. Similarly, it occurs for iter. Moreover those non-higher-functions that re being used, actually doesn't do anything great, instead it calls Bytes, Strings in 
+			this case. So placing them in 254, is the best choice. For of_hex, it is not a higher-order function but it uses Format.ksprintf. So should see how to place of_hex.
+			For now of_hex is part of Cstruct compartment itself. (Not 254).
+
+Macaddr:
+	Not analyzing now.
+
+Eqaf:
+	No higher order functions
+
+Cmdliner:
+	Tricky ones: eval_choice, eval_peek_opts in cmdliner.ml and app in cmdliner_term.ml
+	Because all these functions use Cmdliner_info functions. But the Cmdliner_info functions use Set, Map, List functions and nested functions. So we can place them in 254.
+	Lets see.
+
+Ptime:
+	No higher order functions. It requires Time capability(C6). 
+
+Hex:
+	No higher order funtions.
+
+Fmt:
+	
+
+Hacl-Sha256:
+
+Lwt:
+
+Lwt-dllist:
+
+Logs:
+	Lwt: kmsg
+	Logs.ml: def, printer, fold, format_reporter, report
+
+Functoria-runtime:
+	No higher order functions
+	
+
+Mirage-runtime:
+	No higher order functions
+
+Parse-argv:
+	No higher order functions	
+
+Domain-name
+	Not analyzing now.
+

@@ -1,0 +1,76 @@
+C231 : 
+	astring - finished
+	sexplib0-v0.12.0 - finished
+	macaddr-v4.0.0 - finished
+	parse-argv-v0.2.0 - finished
+	ipaddr-v4.0.0 - finished
+	domain-name-v0.3.0
+	
+	mirage-console-v2.4.3
+	mirage-bootvar-riscv-master
+	mirage-console-impl-riscv
+	mirage-riscv/bindings/mm_stubs.c
+	mirage-riscv/bindings/alloc_pages_stubs.c
+	mirage-riscv/bindings/atomic_stubs.c
+	mirage-riscv/bindings/barrier_stubs.c
+	mirage-riscv/bindings/checksum_stubs.c
+	mirage-riscv/bindings/riscv_console_stubs.c
+	mirage-riscv/lifecycle.ml
+
+	mirage-riscv/bindings/main.c/mirage_riscv_get_cmdline
+
+C0 :
+	mirage-riscv/bindings/main.c/riscv_boot_finished
+
+C11 : C8
+	cmdliner-v1.0.2 - finished (all "fun" functions also part of the C11)
+	fmt-0.8.5 - finished (all "fun" functions also part of the C11)
+
+C12 : C6
+	ptime-0.8.5 - finished (all "fun" functions also part of the C11)
+
+C13 : C14, C18, C19, C20, C21
+	lwt-4.2.1 - finished (all "fun" functions also part of the C11)
+	lwt-dllist-v1.0.0 - finished (all "fun" functions also part of the C11)
+
+C14 : C11, C13, C8
+	logs-0.6.3 - finished (all "fun" functions also part of the C11)
+
+C15 : C11, C14
+	functoria-runtimev2.2.4 - finished (all "fun" functions also part of the C11)
+	mirage-runtime - finished (all "fun" functions also part of the C11)
+
+C16 : C5
+	mirage-riscv/bindings/main.c/mirage_riscv_yield
+
+C17 : C6
+	mirage-riscv/bindings/clock_stubs.c
+
+C18 : C13, C15, C16, C17
+	mirage-riscv/main.ml
+	mirage-riscv/time.ml/* (except sleep_ns)
+
+C19 : C12, C13, C17
+	mirage-clock - finished
+	mirage-clock-lwt - finished
+	mirage-clock-freestanding - finished
+
+C20 : C12, C13, C14, C19
+	mirage-logs-v1.1.0 - finished (all "fun" functions also part of the C11)
+
+C21 : C13, C17
+	mirage-time - not generating explicit cap_tee files. Only "__entry" function present which would be assigned 254
+	mirage-time-lwt - not generating explicit cap_tee files. Only "__entry" function present which would be assigned 254
+	mirage-riscv/time.ml/sleep_ns
+
+C254 :
+	bheap - finished
+	result-1.4 - finished (no function other than __entry, so no cap_tee files generated. By default __entry will lbe placed in 254)
+	uchar-0.0.2 - finished (no .s files generated. Uchar is present in ocaml/stdlib. Only if ocaml <= 4.0.3 then only Uchar package is compiled, else empty 
+				  package)
+	cstruct-v5.0.0 - finished
+
+	mirage-riscv/bindings/cstruct_stubs.c
+	
+	duration-riscv-0.1.2 - finished
+

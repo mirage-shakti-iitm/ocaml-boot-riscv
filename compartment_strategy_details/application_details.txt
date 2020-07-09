@@ -1,0 +1,1 @@
+Hello World Mirage application that prints Logs hello every 1 second.
