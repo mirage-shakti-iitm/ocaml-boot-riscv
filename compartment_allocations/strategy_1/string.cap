@@ -1,0 +1,7 @@
+strcmp:255
+strcpy:255
+strlen:255
+isstring:255
+memset:255
+vsnprintf:255
+snprintf:255
