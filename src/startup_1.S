@@ -209,7 +209,13 @@ CHECKCAP_254:
     csrw unocrosscomp, t2
 
     #Step 4: Zero out the register t2
+    li t0, 0
+    li t1, 0
     li t2, 0
+    li t3, 0
+    li t4, 0
+    li t5, 0
+    li t6, 0
 
     #Step 5: setting the ra to point to CHECKCAP_254_RETURN
     la ra, CHECKCAP_254_RETURN
@@ -229,7 +235,13 @@ CHECKCAP_254_RETURN:
     csrw mcheckcapsp, t2
 
     # Step 3: Zero out the register t2
+    li t0, 0
+    li t1, 0
     li t2, 0
+    li t3, 0
+    li t4, 0
+    li t5, 0
+    li t6, 0
 
     #Step 4: Disabling the CSR_UNOCROSSCOMP
     csrw unocrosscomp, t2
@@ -250,7 +262,13 @@ CHECKCAP_NON_254:
     csrw mcheckcapsp, t2
 
     # Step 3: Zero out the register t2
+    li t0, 0
+    li t1, 0
     li t2, 0
+    li t3, 0
+    li t4, 0
+    li t5, 0
+    li t6, 0
 
     #Step 4: Disabling the CSR_UNOCROSSCOMP
     csrw unocrosscomp, t2
@@ -277,7 +295,13 @@ CHECKCAP_NON_254_RETURN:
     csrw unocrosscomp, t2
 
     # Step 4: Zero out the register t2
+    li t0, 0
+    li t1, 0
     li t2, 0
+    li t3, 0
+    li t4, 0
+    li t5, 0
+    li t6, 0
 
     #Step 5: Return to caller function
     jr ra
@@ -290,7 +314,7 @@ CHECKCAP_CROSS_COMP:
 
     addi t2, t2, -5*8
 
-    # actual t0 stored in mscratch is saved later
+    # actual t0 stored in mscratch is saved later (neglect this comment for now, because no need to save/restore temporary registers as they are caller-saved)
     sd ra, 1*8(t2)
     sd sp, 2*8(t2)
     sd gp, 3*8(t2)
@@ -371,7 +395,7 @@ Found_index:
     li t4, 0
     li t5, 0
     li t6, 0
-    csrw mscratch, x0
+    
 
     #Step 6: setting the ra to point to CHECKCAP_CROSS_COMP_RETURN
     la ra, CHECKCAP_CROSS_COMP_RETURN
@@ -385,7 +409,7 @@ CHECKCAP_CROSS_COMP_RETURN:
 
     #Step 2: Popping the registers first itself
 
-    # actual t0, t1 restored later
+    # actual t0, t1 restored later (neglect this comment for now, because no need to save/restore temporary registers as they are caller-saved)
     ld ra, 1*8(t2)
     ld sp, 2*8(t2)
     ld gp, 3*8(t2)
@@ -399,9 +423,14 @@ CHECKCAP_CROSS_COMP_RETURN:
     addi t2, t2, 5*8
     csrw mcheckcapsp, t2
 
-    # Step 3: Zero out the registers t2 and t1 
+    # Step 3: Zero out the t0-t6 registers 
+    li t0, 0
     li t1, 0
     li t2, 0
+    li t3, 0
+    li t4, 0
+    li t5, 0
+    li t6, 0
 
     #Step 4: Return to caller function
     jr ra
