@@ -461,10 +461,12 @@ CHECKCAP_CROSS_COMP_RETURN:
 CAPABILITY_CHECK_FAIL:
     # If we follow the idea where we store the registers before the actual checking is done, then we need to remove them before we exit. And next, what 
     # should we do, poweroff!! ?
+    csrw mcapctl, x0 # Disable Capability checks
     j print_capability_fail
 
 CHECKCAP_ALL_COND_FAIL:
     # None of conditions in the checkcap instruction are not satisfied, then possibly some condition missed out
+    csrw mcapctl, x0 # Disable Capability checks
     j print_checkcap_all_cond_fail
 
 
