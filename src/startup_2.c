@@ -30,7 +30,7 @@ void boot_primary() {
     // init nolibc of ocaml_freestanding
     uintptr_t start = (uintptr_t) &__KERNEL_END;
 
-    printf("\nGanesha\n");
+    // printf("\nGanesha\n");
 
     // printf("ocaml-boot: heap@0x%x stack@0x%x\n",start, &stack[stack_size]);
     /*  
