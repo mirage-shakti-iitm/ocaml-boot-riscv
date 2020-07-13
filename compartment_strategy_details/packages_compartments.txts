@@ -2,25 +2,22 @@ C231 :
 	astring - finished
 	sexplib0-v0.12.0 - finished
 	macaddr-v4.0.0 - finished
-	parse-argv-v0.2.0 - finished
 	ipaddr-v4.0.0 - finished
 	domain-name-v0.3.0
 	
-	mirage-console-v2.4.3
-	mirage-bootvar-riscv-master
-	mirage-console-impl-riscv
-	mirage-riscv/bindings/mm_stubs.c
-	mirage-riscv/bindings/alloc_pages_stubs.c
-	mirage-riscv/bindings/atomic_stubs.c
-	mirage-riscv/bindings/barrier_stubs.c
-	mirage-riscv/bindings/checksum_stubs.c
-	mirage-riscv/bindings/riscv_console_stubs.c
-	mirage-riscv/lifecycle.ml
+	mirage-console-v2.4.3 not generating explicit cap_tee files. Only "__entry" function present which would be assigned 254
+	mirage-console-impl-riscv - not used now
+	mirage-riscv/bindings/mm_stubs.c - finished
+	mirage-riscv/bindings/alloc_pages_stubs.c - finished
+	mirage-riscv/bindings/atomic_stubs.c - finished
+	mirage-riscv/bindings/barrier_stubs.c - finished
+	mirage-riscv/bindings/checksum_stubs.c - finished
+	mirage-riscv/bindings/riscv_console_stubs.c - finished
+	mirage-riscv/lifecycle.ml - finished
 
-	mirage-riscv/bindings/main.c/mirage_riscv_get_cmdline
 
-C0 :
-	mirage-riscv/bindings/main.c/riscv_boot_finished
+C0 : C22
+	mirage-riscv/bindings/main.c/riscv_boot_finished - finished
 
 C11 : C8
 	cmdliner-v1.0.2 - finished (all "fun" functions also part of the C11)
@@ -29,7 +26,7 @@ C11 : C8
 C12 : C6
 	ptime-0.8.5 - finished (all "fun" functions also part of the C11)
 
-C13 : C14, C18, C19, C20, C21
+C13 : C14, C18, C19, C20, C21, C22, C23, C26
 	lwt-4.2.1 - finished (all "fun" functions also part of the C11)
 	lwt-dllist-v1.0.0 - finished (all "fun" functions also part of the C11)
 
@@ -41,14 +38,14 @@ C15 : C11, C14
 	mirage-runtime - finished (all "fun" functions also part of the C11)
 
 C16 : C5
-	mirage-riscv/bindings/main.c/mirage_riscv_yield
+	mirage-riscv/bindings/main.c/mirage_riscv_yield -finished
 
 C17 : C6
-	mirage-riscv/bindings/clock_stubs.c
+	mirage-riscv/bindings/clock_stubs.c - finished
 
 C18 : C13, C15, C16, C17
-	mirage-riscv/main.ml
-	mirage-riscv/time.ml/* (except sleep_ns)
+	mirage-riscv/main.ml - finished
+	mirage-riscv/time.ml/* (except sleep_ns) - finished
 
 C19 : C12, C13, C17
 	mirage-clock - finished
@@ -61,7 +58,7 @@ C20 : C12, C13, C14, C19
 C21 : C13, C17
 	mirage-time - not generating explicit cap_tee files. Only "__entry" function present which would be assigned 254
 	mirage-time-lwt - not generating explicit cap_tee files. Only "__entry" function present which would be assigned 254
-	mirage-riscv/time.ml/sleep_ns
+	mirage-riscv/time.ml/sleep_ns - finished
 
 C254 :
 	bheap - finished
@@ -70,7 +67,26 @@ C254 :
 				  package)
 	cstruct-v5.0.0 - finished
 
-	mirage-riscv/bindings/cstruct_stubs.c
+	mirage-riscv/bindings/cstruct_stubs.c - finished
 	
 	duration-riscv-0.1.2 - finished
 
+	parse-argv-v0.2.0 - finished
+
+
+Unikernel:
+C22 : C13, C18, C19, C20, C23, C26
+	main.ml - finished
+
+C23 : C13, C21, C24
+	unikernel.ml/start - finished
+	last "fun" (this "fun" -> calls loop(n-1))
+
+C24 : C14
+	unikernel.ml/log_info - finished
+
+C25 : NONE
+	mirage-riscv/bindings/main.c/mirage_riscv_get_cmdline - finished
+
+C26 : C13, C25
+	mirage-bootvar-riscv-master - finished
