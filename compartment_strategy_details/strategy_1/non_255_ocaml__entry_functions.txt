@@ -10,10 +10,12 @@ camlCmdliner_arg__entry
 
 camlMirage_runtime__entry
 
-camlOS__Main__entry
+camlOS__Main__entry ==> {Lwt, Lwt-dllist}
 
-camlMirage_logs__entry
+camlMirage_logs__entry ==> {Stdlib/Format}
 
-camlKey_gen__entry
+camlKey_gen__entry 
 
 camlMain__entry
+
+camlStdlib__format__entry
