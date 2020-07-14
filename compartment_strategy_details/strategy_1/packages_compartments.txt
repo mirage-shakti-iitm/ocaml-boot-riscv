@@ -75,8 +75,9 @@ C254 :
 
 
 Unikernel:
-C22 : C13, C18, C19, C20, C23, C26
+C22 : C11, C13, C15, C18, C19, C20, C23, C26
 	main.ml - finished
+	key_gen.ml - finished
 
 C23 : C13, C21, C24
 	unikernel.ml/start - finished
@@ -90,3 +91,32 @@ C25 : NONE
 
 C26 : C13, C25
 	mirage-bootvar-riscv-master - finished
+
+
+Caml__entry functions:
+C113 : C13 
+	camlLwt__entry
+
+C114 : C14
+	camlLogs__entry
+
+C111 : C11
+	camlCmdliner__entry
+	camlCmdliner_arg__entry
+
+C115 : C15
+	camlMirage_runtime__entry
+
+C118 : C18
+	camlOS__Main__entry
+
+C120 : C20
+	camlMirage_logs__entry
+
+C122 : C22
+	camlMain__entry
+	camlKey_gen__entry
+
+C232 : C231
+	camlIpaddr__entry
+
