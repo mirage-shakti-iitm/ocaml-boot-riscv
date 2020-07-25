@@ -1,6 +1,0 @@
-1). CSR_UTAILCALL should be set only when cross-compartment tailcall done. For intra-calls, it should always be zero.
-	So, in the checkcap instruction itself, when no exception is raised then we should zero out the CSR_UTAILCALL. This is very bad solution 
-	because, for every intra-tailcall we will be setting CSR_UTAILCALL to 1 and also setting it to 0 the next-to-next instruction itself.
-
-2). When CSR_TAILCALL is set when jumping to C254, then while returning from C254, since the stub code is skipped, there is no way to set the 
-	CSR_UNOCROSSCOMP back to 0.

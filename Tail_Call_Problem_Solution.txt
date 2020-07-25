@@ -1,0 +1,47 @@
+1). CSR_UTAILCALL should be set only when cross-compartment tailcall done. For intra-compartment calls, it should always be zero. Setting CSR_UTAILCALL to 1 even on 
+    intra--compartment calls will lead errpneous behaviour. eg-> 1 taicalls 1 calls 2 , now the checking for tail-call would be when checkcap stub is reached, i.e. 
+    exception raised. The CSR_UTAILCALL bit is still 1, which should have been 0. On seeing the 1, the tail-call cross-compartment feature is used and 
+    the registers are not saved. But this is wrong as the CSR_UTAILCALL corressponds only to the cross-compartment tail-calls.
+	Trivial-Solution: in the checkcap instruction itself, when no exception is raised then we should zero out the CSR_UTAILCALL. This is very bad solution 
+	because, for every intra-tailcall we will be setting CSR_UTAILCALL to 1 and also setting it to 0 the next-to-next instruction itself.
+
+2). When CSR_UTAILCALL is set when jumping to C254, then while returning from C254, since the stub code is skipped, there is no way to set the 
+	CSR_UNOCROSSCOMP back to 0.
+    Occurs in Scenario 1 : 1 Calls 1 Tail-Calls 254
+
+    Does not occur in Scenario 2 : 1 Calls 2 Tail-Calls 3
+    
+    Scenario 3 : 1 Calls 2 Tail-Calls 254. The CSR_UNOCROSSCOMP is set to 1 on transitioning to 254, but while executing the stub w.r.t 1->2 transition,
+    the CSR_UNOCROSSCOMP is still 1, and should be set to 0. This scenario can be handled by setting the CSR_UNOCROSSCOMP to 0 always in 
+    CHECKCAP_CROSS_COMP_RETURN.
+
+An efficient way of detecting a tail-call is to look at the 'ra'. If the 'ra' is one of the Checkcap-Stubs return point, then a tail-call is occurring.
+If not, then it is not a tail-call and the normal logic follows. But 1 thing to note here is that in Scenario 1, the 'ra' won't be one of the Checkcap-Stubs 
+return points, because the 1st normal call doesn't go through any checkcap-stub(since it is intra-compartment). So the proposed logic doesn't flag the next
+call as tail-call. But even if it is a csross-compartment tail-call, the checkcap-stub return logic should be there when coming back from 254 to 1, because
+the CSR_UNOCROSSCOMP bit should be set accordingly. In that case our logic will work.
+So if the ra is one of Checkcap-Stubs return point then no need to to change 'ra'. Else, the 'ra' needs to be changed and the control-flow has to pass through
+the Checkcap-Stubs return logic.
+
+la t0, CHECKCAP_254_RETURN
+beq ra, t0, COMMON_254
+la t0, CHECKCAP_NON_254_RETURN
+beq ra, t0, COMMON_254
+la t0, CHECKCAP_CROSS_COMP_RETURN
+beq ra, t0, COMMON_254
+
+la t0, CHECKCAP_254_RETURN
+beq ra, t0, COMMON_NON_254
+la t0, CHECKCAP_NON_254_RETURN
+beq ra, t0, COMMON_NON_254
+la t0, CHECKCAP_CROSS_COMP_RETURN
+beq ra, t0, COMMON_NON_254
+
+la t0, CHECKCAP_254_RETURN
+beq ra, t0, COMMON_CROSS_COMP
+la t0, CHECKCAP_NON_254_RETURN
+beq ra, t0, COMMON_CROSS_COMP
+la t0, CHECKCAP_CROSS_COMP_RETURN
+beq ra, t0, COMMON_CROSS_COMP
+
+The above set of 6 instructions should replace the Steps 1 & 2 of CHECKCAP_254, CHECKCAP_NON_254, CHECKCAP_CROSS_COMP

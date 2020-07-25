@@ -194,17 +194,18 @@ trap_vector:
 .global print_checkcap_all_cond_fail
 
 CHECKCAP_254:
+    #Step 1: Check if it is a tail-call, if yes skip saving the return registers on the checkcap-stack and changing the return-address
+    la t0, CHECKCAP_254_RETURN
+    beq ra, t0, COMMON_254
+    la t0, CHECKCAP_NON_254_RETURN
+    beq ra, t0, COMMON_254
+    la t0, CHECKCAP_CROSS_COMP_RETURN
+    beq ra, t0, COMMON_254
     
-    #Step 1: Read CSR_UTAILCALL & zero the CSR
-    csrrw t2, utailcall, x0
-
-    #Step 2: Check if it is a tail-call, if yes skip saving the return registers on the checkcap-stack and changing the return-address
-    bnez t2, Common_254
-
-    #Step 3: Read CSR_MCHECKCAPSP
+    #Step 2: Read CSR_MCHECKCAPSP
     csrr t2, mcheckcapsp
 
-    #Step 4: Storing ra register
+    #Step 3: Storing ra register
 
     addi t2, t2, -1*8
     sd ra, 0*8(t2)
@@ -212,15 +213,15 @@ CHECKCAP_254:
     # update CSR_MCHECKCAPSP
     csrw mcheckcapsp, t2
 
-    #Step 5: setting the ra to point to CHECKCAP_254_RETURN
+    #Step 4: setting the ra to point to CHECKCAP_254_RETURN
     la ra, CHECKCAP_254_RETURN
 
-Common_254:
-    #Step 6: Enabling the CSR_UNOCROSSCOMP
+COMMON_254:
+    #Step 5: Enabling the CSR_UNOCROSSCOMP
     li t2, 0x1
     csrw unocrosscomp, t2
 
-    #Step 7: Zero out the register t2
+    #Step 6: Zero out the register t2
     li t0, 0
     li t1, 0
     li t2, 0
@@ -229,7 +230,7 @@ Common_254:
     li t5, 0
     li t6, 0
 
-    #Step 8: Call target function again
+    #Step 7: Call target function again
     mret
     
 CHECKCAP_254_RETURN:
@@ -259,28 +260,29 @@ CHECKCAP_254_RETURN:
     jr ra
 
 CHECKCAP_NON_254:
-    #Step 1: Read CSR_UTAILCALL & zero the CSR
-    csrrw t2, utailcall, x0
-
     #Step 2: Check if it is a tail-call, if yes skip saving the return registers on the checkcap-stack and changing the return-address
-    bnez t2, Common_Non_254
+    la t0, CHECKCAP_254_RETURN
+    beq ra, t0, COMMON_NON_254
+    la t0, CHECKCAP_NON_254_RETURN
+    beq ra, t0, COMMON_NON_254
+    la t0, CHECKCAP_CROSS_COMP_RETURN
+    beq ra, t0, COMMON_NON_254
 
-    #Step 3: Read CSR_MCHECKCAPSP
+    #Step 2: Read CSR_MCHECKCAPSP
     csrr t2, mcheckcapsp
 
-    #Step 4: Storing ra register
-
+    #Step 3: Storing ra register
     addi t2, t2, -1*8
     sd ra, 0*8(t2)
 
     # update CSR_MCHECKCAPSP
     csrw mcheckcapsp, t2
 
-    #Step 5: setting the ra to point to CHECKCAP_254_RETURN
+    #Step 4: setting the ra to point to CHECKCAP_254_RETURN
     la ra, CHECKCAP_NON_254_RETURN
 
-Common_Non_254:    
-    # Step 3: Zero out the register t2
+COMMON_NON_254:    
+    # Step 5: Zero out the register t2
     li t0, 0
     li t1, 0
     li t2, 0
@@ -289,10 +291,10 @@ Common_Non_254:
     li t5, 0
     li t6, 0
 
-    #Step 4: Disabling the CSR_UNOCROSSCOMP
+    #Step 6: Disabling the CSR_UNOCROSSCOMP
     csrw unocrosscomp, t2
 
-    #Step 6: Call target function again
+    #Step 7: Call target function again
     mret
 
 CHECKCAP_NON_254_RETURN:
@@ -324,17 +326,18 @@ CHECKCAP_NON_254_RETURN:
     
 
 CHECKCAP_CROSS_COMP:
-
-    #Step 1: Read CSR_UTAILCALL & zero the CSR
-    csrrw t2, utailcall, x0
-
     #Step 2: Check if it is a tail-call, if yes skip saving the return registers on the checkcap-stack and changing the return-address
-    bnez t2, Common_Cross_Comp
+    la t0, CHECKCAP_254_RETURN
+    beq ra, t0, COMMON_CROSS_COMP
+    la t0, CHECKCAP_NON_254_RETURN
+    beq ra, t0, COMMON_CROSS_COMP
+    la t0, CHECKCAP_CROSS_COMP_RETURN
+    beq ra, t0, COMMON_CROSS_COMP
 
-    #Step 3: Read CSR_MCHECKCAPSP
+    #Step 2: Read CSR_MCHECKCAPSP
     csrr t2, mcheckcapsp
 
-    #Step 4: Storing curr_cap, ra, sp, gp, tp register
+    #Step 3: Storing curr_cap, ra, sp, gp, tp register
 
     addi t2, t2, -5*8
 
@@ -352,19 +355,19 @@ CHECKCAP_CROSS_COMP:
     # update CSR_MCHECKCAPSP
     csrw mcheckcapsp, t2
 
-    #Step 5: setting the ra to point to CHECKCAP_CROSS_COMP_RETURN
+    #Step 4: setting the ra to point to CHECKCAP_CROSS_COMP_RETURN
     la ra, CHECKCAP_CROSS_COMP_RETURN
 
     ##### Not doing this check for now
-    #Step 6: Checking whether CSR_MCHECKCAPSP is within CSR_MCHECKCAPSPBASE and CSR_MCHECKCAPSPBOUND
+    #Step 5: Checking whether CSR_MCHECKCAPSP is within CSR_MCHECKCAPSPBASE and CSR_MCHECKCAPSPBOUND
     # (lower addr) Bound ---- SP ---- (higher addr) Base
     # csrr t1, mcheckcapspbase
     # csrr t2, mcheckcapspbound
     # blt t0, t1, Checkcap_SP_Out_Of_Bound
     # blt t1, t2, Checkcap_SP_Out_Of_Bound
 
-Common_Cross_Comp:
-    #Step 7: Checking for cross-compartment Capability condition
+COMMON_CROSS_COMP:
+    #Step 6: Checking for cross-compartment Capability condition
     # ucurrcap
     # utargetcap
     # ucapmatrixbase
@@ -410,10 +413,10 @@ Found_index:
     and t3, t3, t5
     beqz t3, CAPABILITY_CHECK_FAIL
 
-    #Step 8: Change current_cap to target_cap
+    #Step 7: Change current_cap to target_cap
     csrw ucurrcap, t2
 
-    #Step 9: zeroing out non-argument/return value registers. Not zeroing out sp, tp, gp, fp
+    #Step 8: zeroing out non-argument/return value registers. Not zeroing out sp, tp, gp, fp
     li t0, 0
     li t1, 0
     li t2, 0
@@ -422,7 +425,7 @@ Found_index:
     li t5, 0
     li t6, 0
 
-    #Step 10: Call target function again
+    #Step 9: Call target function again
     mret
 
 CHECKCAP_CROSS_COMP_RETURN:
@@ -454,7 +457,10 @@ CHECKCAP_CROSS_COMP_RETURN:
     li t5, 0
     li t6, 0
 
-    #Step 4: Return to caller function
+    #Step 4: Disabling the CSR_UNOCROSSCOMP. This is done, 
+    csrw unocrosscomp, t2
+
+    #Step 5: Return to caller function
     jr ra
 
 
