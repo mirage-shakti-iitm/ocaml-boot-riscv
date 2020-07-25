@@ -106,7 +106,7 @@ C111 : C11
 C113 : C13 
 	camlLwt__entry
 
-C114 : C14
+C114 : C10, C14
 	camlLogs__entry
 
 C115 : C15
