@@ -197,12 +197,12 @@ trap_vector:
 
 CHECKCAP_254:
     #Step 1: Check if it is a tail-call, if yes skip saving the return registers on the checkcap-stack and changing the return-address
-    la t0, CHECKCAP_254_RETURN
-    beq ra, t0, COMMON_254
-    la t0, CHECKCAP_NON_254_RETURN
-    beq ra, t0, COMMON_254
-    la t0, CHECKCAP_CROSS_COMP_RETURN
-    beq ra, t0, COMMON_254
+    # la t0, CHECKCAP_254_RETURN
+    # beq ra, t0, COMMON_254
+    # la t0, CHECKCAP_NON_254_RETURN
+    # beq ra, t0, COMMON_254
+    # la t0, CHECKCAP_CROSS_COMP_RETURN
+    # beq ra, t0, COMMON_254
     
     #Step 2: Read CSR_MCHECKCAPSP
     csrr t2, mcheckcapsp
@@ -263,12 +263,12 @@ CHECKCAP_254_RETURN:
 
 CHECKCAP_NON_254:
     #Step 2: Check if it is a tail-call, if yes skip saving the return registers on the checkcap-stack and changing the return-address
-    la t0, CHECKCAP_254_RETURN
-    beq ra, t0, COMMON_NON_254
-    la t0, CHECKCAP_NON_254_RETURN
-    beq ra, t0, COMMON_NON_254
-    la t0, CHECKCAP_CROSS_COMP_RETURN
-    beq ra, t0, COMMON_NON_254
+    # la t0, CHECKCAP_254_RETURN
+    # beq ra, t0, COMMON_NON_254
+    # la t0, CHECKCAP_NON_254_RETURN
+    # beq ra, t0, COMMON_NON_254
+    # la t0, CHECKCAP_CROSS_COMP_RETURN
+    # beq ra, t0, COMMON_NON_254
 
     #Step 2: Read CSR_MCHECKCAPSP
     csrr t2, mcheckcapsp
@@ -329,12 +329,12 @@ CHECKCAP_NON_254_RETURN:
 
 CHECKCAP_CROSS_COMP:
     #Step 2: Check if it is a tail-call, if yes skip saving the return registers on the checkcap-stack and changing the return-address
-    la t0, CHECKCAP_254_RETURN
-    beq ra, t0, COMMON_CROSS_COMP
-    la t0, CHECKCAP_NON_254_RETURN
-    beq ra, t0, COMMON_CROSS_COMP
-    la t0, CHECKCAP_CROSS_COMP_RETURN
-    beq ra, t0, COMMON_CROSS_COMP
+    # la t0, CHECKCAP_254_RETURN
+    # beq ra, t0, COMMON_CROSS_COMP
+    # la t0, CHECKCAP_NON_254_RETURN
+    # beq ra, t0, COMMON_CROSS_COMP
+    # la t0, CHECKCAP_CROSS_COMP_RETURN
+    # beq ra, t0, COMMON_CROSS_COMP
 
     #Step 2: Read CSR_MCHECKCAPSP
     csrr t2, mcheckcapsp
