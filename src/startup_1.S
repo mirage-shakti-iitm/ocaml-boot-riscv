@@ -102,6 +102,8 @@ trap_vector:
     li t3, CAUSE_TEE_COMP_ALL_COND_FAIL
     beq t3, t2, CHECKCAP_ALL_COND_FAIL
 
+    csrw mcapctl, x0 # Disable Capability checks
+    
     csrw mscratch, sp
     addi sp, sp, -32*8
 
