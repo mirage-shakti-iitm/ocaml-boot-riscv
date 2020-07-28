@@ -52,7 +52,7 @@ C19 : C12, C13, C17
 	mirage-clock-lwt - finished
 	mirage-clock-freestanding - finished
 
-C20 : C12, C13, C14, C19
+C20 : C8, C12, C13, C14, C19
 	mirage-logs-v1.1.0 - finished (all "fun" functions also part of the C11)
 
 C21 : C13, C17
