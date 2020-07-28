@@ -30,7 +30,7 @@ C13 : C14, C18, C19, C20, C21, C22, C23, C26, C118
 	lwt-4.2.1 - finished (all "fun" functions also part of the C11)
 	lwt-dllist-v1.0.0 - finished (all "fun" functions also part of the C11)
 
-C14 : C11, C13, C8
+C14 : C11, C13, C8, C20
 	logs-0.6.3 - finished (all "fun" functions also part of the C11)
 
 C15 : C11, C14
