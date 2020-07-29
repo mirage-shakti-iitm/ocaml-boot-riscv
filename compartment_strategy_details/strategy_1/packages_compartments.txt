@@ -114,6 +114,7 @@ C115 : C15
 
 C118 : C13, C18
 	camlOS__Main__entry
+	camlOS__Time__entry
 
 C120 : C8, C20
 	camlMirage_logs__entry
