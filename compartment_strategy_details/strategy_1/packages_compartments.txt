@@ -23,7 +23,7 @@ C11 : C8
 	cmdliner-v1.0.2 - finished (all "fun" functions also part of the C11)
 	fmt-0.8.5 - finished (all "fun" functions also part of the C11)
 
-C12 : C6
+C12 : C6, C8
 	ptime-0.8.5 - finished (all "fun" functions also part of the C11)
 
 C13 : C14, C18, C19, C20, C21, C22, C23, C26, C118
