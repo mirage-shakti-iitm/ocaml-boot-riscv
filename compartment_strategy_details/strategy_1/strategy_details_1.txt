@@ -256,7 +256,7 @@ C254:
 	marshal.ml 
 	stdlib.ml 
 
-C8 : {C7} ==> Access to Ocaml related print functions (part of stdlib)
+C8 : {C7, C20} ==> Access to Ocaml related print functions (part of stdlib). Also, C8 needs access to C20, callback mechanism. kfprintf calls Mirage_Logs__k
 	camlinternalFormatBasics.ml
 	camlinternalFormat.ml
 	printf.ml
