@@ -187,7 +187,7 @@ trap_vector:
 
 .size trap_vector, . - trap_vector
 
-.global print_capability_fail
+.global print_checkcap_cross_comp_matrix_fail
 .global print_checkcap_no_cross_comp_fail
 
 CHECKCAP_EXCEPTION:
@@ -482,7 +482,7 @@ CAPABILITY_CHECK_FAIL:
     # If we follow the idea where we store the registers before the actual checking is done, then we need to remove them before we exit. And next, what 
     # should we do, poweroff!! ?
     csrw mcapctl, x0 # Disable Capability checks
-    j print_capability_fail
+    j print_checkcap_cross_comp_matrix_fail
 
 CHECKCAP_NO_CROSS_COMP_FAIL:
     # Cross-Compartment jump attempted when CSR_UNOCROSSCOMP bit set

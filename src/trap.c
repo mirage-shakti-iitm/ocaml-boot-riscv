@@ -24,7 +24,7 @@ void print_checkcap_no_cross_comp_fail() {
     htif_poweroff();
 }
 
-void print_capability_fail() {
+void print_checkcap_cross_comp_matrix_fail() {
     printf("\ncross compartment fail : (%d) to (%d) at 0x%x\n", read_csr(ucurrcap), read_csr(utargetcap), read_csr(mepc)); 
     htif_poweroff();    
 }
