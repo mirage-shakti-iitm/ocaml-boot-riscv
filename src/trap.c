@@ -19,8 +19,8 @@ void trap_handler(uint64_t mcause, uintptr_t context) {
     htif_poweroff();
 }
 
-void print_checkcap_all_cond_fail() {
-    printf("\nCheckcap all condition fail fail : (%d) to (%d) at 0x%x\n", read_csr(ucurrcap), read_csr(utargetcap), read_csr(mepc)); 
+void print_checkcap_no_cross_comp_fail() {
+    printf("\nCheckcap no cross-comp fail : (%d) to (%d) at 0x%x\n", read_csr(ucurrcap), read_csr(utargetcap), read_csr(mepc)); 
     htif_poweroff();
 }
 

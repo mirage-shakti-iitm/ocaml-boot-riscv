@@ -93,14 +93,9 @@ do_reset:
 trap_vector:
     # csrw mscratch, t0
     csrr t2, mcause
-    li t3, CAUSE_TEE_CROSS_COMP_EXCEPTION
-    beq t3, t2, CHECKCAP_CROSS_COMP
-    li t3, CAUSE_TEE_254_EXCEPTION
-    beq t3, t2, CHECKCAP_254
-    li t3, CAUSE_TEE_NON_254_EXCEPTION
-    beq t3, t2, CHECKCAP_NON_254
-    li t3, CAUSE_TEE_COMP_ALL_COND_FAIL
-    beq t3, t2, CHECKCAP_ALL_COND_FAIL
+    li t3, CAUSE_TEE_COMPARTMENT_EXCEPTION
+    beq t3, t2, CHECKCAP_EXCEPTION
+
 
     csrw mcapctl, x0 # Disable Capability checks
     
@@ -193,7 +188,24 @@ trap_vector:
 .size trap_vector, . - trap_vector
 
 .global print_capability_fail
-.global print_checkcap_all_cond_fail
+.global print_checkcap_no_cross_comp_fail
+
+CHECKCAP_EXCEPTION:
+	#Find out the exact cause of checkcap exception
+	csrr t0, utargetcap
+    csrr t1, unocrosscomp
+    csrr t2, ucurrcap
+    li t3, 254
+
+    beq t0, t3, CHECKCAP_254
+
+    beq t0, t2, CHECKCAP_NON_254
+    
+    li t4, 1
+    beq t1, t4, CHECKCAP_NO_CROSS_COMP_FAIL
+
+    j CHECKCAP_CROSS_COMP
+
 
 CHECKCAP_254:
     #Step 1: Check if it is a tail-call, if yes skip saving the return registers on the checkcap-stack and changing the return-address
@@ -328,7 +340,7 @@ CHECKCAP_NON_254_RETURN:
     
 
 CHECKCAP_CROSS_COMP:
-    #Step 2: Check if it is a tail-call, if yes skip saving the return registers on the checkcap-stack and changing the return-address
+    #Step 1: Check if it is a tail-call, if yes skip saving the return registers on the checkcap-stack and changing the return-address
     # la t0, CHECKCAP_254_RETURN
     # beq ra, t0, COMMON_CROSS_COMP
     # la t0, CHECKCAP_NON_254_RETURN
@@ -472,9 +484,9 @@ CAPABILITY_CHECK_FAIL:
     csrw mcapctl, x0 # Disable Capability checks
     j print_capability_fail
 
-CHECKCAP_ALL_COND_FAIL:
-    # None of conditions in the checkcap instruction are not satisfied, then possibly some condition missed out
+CHECKCAP_NO_CROSS_COMP_FAIL:
+    # Cross-Compartment jump attempted when CSR_UNOCROSSCOMP bit set
     csrw mcapctl, x0 # Disable Capability checks
-    j print_checkcap_all_cond_fail
+    j print_checkcap_no_cross_comp_fail
 
 
