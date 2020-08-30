@@ -21,6 +21,8 @@ do_reset:
         la t3, checkcap_stack + CHECKCAP_STACK_SIZE
         # Disable no_cross_comp initially. Always fist compartment should not be 255/254
         li t4, 0x0
+        # Load checkcap_isr base
+        la t5, CHECKCAP_EXCEPTION
 
         # set corresponding CSRs
         csrw mcapctl, t0
@@ -30,6 +32,7 @@ do_reset:
         csrw unocrosscomp, t4
         # set utailcall to 0 initially
         csrw utailcall, t4
+        csrw mcrosscompexception, t5
 
         li x1, 0
         li x2, 0
@@ -91,12 +94,6 @@ do_reset:
 .global trap_handler
 .global trap_vector
 trap_vector:
-    # csrw mscratch, t0
-    csrr t2, mcause
-    li t3, CAUSE_TEE_COMPARTMENT_EXCEPTION
-    beq t3, t2, CHECKCAP_EXCEPTION
-
-
     csrw mcapctl, x0 # Disable Capability checks
     
     csrw mscratch, sp
