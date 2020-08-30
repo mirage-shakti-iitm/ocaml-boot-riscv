@@ -25,7 +25,7 @@ do_reset:
         # set corresponding CSRs
         csrw mcapctl, t0
         csrw ucurrcap, t1
-        csrw ucapmatrixbase, t2
+        csrw mcapmatrixbase, t2
         csrw mcheckcapsp, t3
         csrw unocrosscomp, t4
         # set utailcall to 0 initially
@@ -384,10 +384,10 @@ COMMON_CROSS_COMP:
     #Step 6: Checking for cross-compartment Capability condition
     # ucurrcap
     # utargetcap
-    # ucapmatrixbase
+    # mcapmatrixbase
     ## access capability matrix. 
     # Here I am assuming that the capability matrix base address is stored in CSR_BASE_CAP_MATRIX
-    csrr t0, ucapmatrixbase
+    csrr t0, mcapmatrixbase
     # Current Capability and Target Capability stored in CSRs CSR_UCURRCAP and CSR_UTARGETCAP respectively
     csrr t1, ucurrcap
     csrr t2, utargetcap
