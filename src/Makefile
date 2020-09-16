@@ -6,7 +6,7 @@ ASM_DEFINES=-DHTIF
 
 ASM_INCLUDES=-I/home/sai/Shakti_TEE_Practical/mirage-shakti/ocaml-boot-riscv/include -I/home/sai/Shakti_TEE_Practical/mirage-shakti/ocaml-boot-riscv/include/ocaml-boot-riscv -I/home/sai/Shakti_TEE_Practical/mirage-shakti/ocaml-boot-riscv/src 
 
-C_FLAGS=-mcmodel=medany  
+C_FLAGS=-mcmodel=medany -ffunction-sections
 
 C_DEFINES=-DHTIF
 
