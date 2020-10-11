@@ -9,7 +9,10 @@ reset_vector:
    j do_reset
 
 .global do_reset;
+.global intialize_pc_bounds;
+
 # .global run_constructors
+
 do_reset:
         # Enable Capability control
         li t0, ENABLE_CAP # ENABLE_CAP is 0x1 for now
@@ -21,9 +24,14 @@ do_reset:
         la t3, checkcap_stack + CHECKCAP_STACK_SIZE
         # Disable no_cross_comp initially. Always fist compartment should not be 255/254
         li t4, 0x0
+        # Initialize PC Base and Bounds
+        jal intialize_pc_bounds
+
+        # set 3 sets of pc base and bound
+        csrw upcbase_curr, 
 
         # set corresponding CSRs
-        csrw mcapctl, t0
+        # csrw mcapctl, t0
         csrw ucurrcap, t1
         csrw mcapmatrixbase, t2
         csrw mcheckcapsp, t3
