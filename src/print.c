@@ -15,7 +15,7 @@ void vprintf(const char* s, va_list vl)
   putstring(buf, len);
 }
 
-void printf(const char* s, ...)
+void printf_boot(const char* s, ...)
 {
   va_list vl;
 
