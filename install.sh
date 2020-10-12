@@ -16,7 +16,7 @@ cp build/src/libboot.a ${DESTLIB}/libboot.a
 
 # META: ocamlfind and other build utilities test for existance ${DESTLIB}/META
 # when figuring out whether a library is installed
-# touch ${DESTLIB}/META
+touch ${DESTLIB}/META
 
 # pkg-config
 mkdir -p ${prefix}/riscv-sysroot/lib/pkgconfig
