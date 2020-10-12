@@ -4,9 +4,9 @@
 # if [ "$prefix" = "" ]; then
     prefix=`opam config var prefix`
 # fi
-DESTINC=${prefix}/include
+DESTINC=${prefix}/riscv-sysroot/include/ocaml-boot-riscv
 # DESTLIB=${prefix}/lib/ocaml-boot-riscv
-DESTLIB=${prefix}/lib
+DESTLIB=${prefix}/riscv-sysroot/lib/ocaml-boot-riscv
 mkdir -p ${DESTINC} ${DESTLIB}
 # mkdir -p ${DESTINC}
 
@@ -19,5 +19,5 @@ cp build/src/libboot.a ${DESTLIB}/libboot.a
 # touch ${DESTLIB}/META
 
 # pkg-config
-mkdir -p ${prefix}/share/pkgconfig
-cp ocaml-boot-riscv.pc ${prefix}/share/pkgconfig/ocaml-boot-riscv.pc
+mkdir -p ${prefix}/riscv-sysroot/lib/pkgconfig
+cp ocaml-boot-riscv.pc ${prefix}/riscv-sysroot/lib/pkgconfig/ocaml-boot-riscv.pc

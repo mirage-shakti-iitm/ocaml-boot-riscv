@@ -16,6 +16,13 @@ build: [
 install: [make "install"]
 remove: []
 
+substs: [
+  "ocaml-boot-riscv.pc"
+]
+extra-files: [
+  ["ocaml-boot-riscv.pc.in" "md5=6115637b36e2d72c3d0136c2fd39229a"]
+]
+
 synopsis: "Core package for booting anything on riscv"
 description:
   "This package provides a bootlayer to the ocaml-freestanding runtime on the RISC-V/SHAKTI architecture"
