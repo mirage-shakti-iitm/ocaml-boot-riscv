@@ -28,3 +28,8 @@
         }
         clear_timer();
     }
+
+    time__t riscv_cycle_counter(){
+        volatile unsigned long* tmp = (volatile unsigned long*)mtime;
+        return (time__t) *tmp;
+    }

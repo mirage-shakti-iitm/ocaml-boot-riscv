@@ -9,6 +9,7 @@ extern "C" {
     void riscv_write(const char* s, unsigned int length);
     time__t riscv_clock_monotonic();
     void riscv_wait(time__t delay);
+    time__t riscv_cycle_counter();
 
 #ifdef __cplusplus
 }
