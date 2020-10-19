@@ -13,7 +13,7 @@ C_DEFINES=-DHTIF
 # C_INCLUDES=-I/home/sai/Shakti_TEE_Practical/mirage-shakti/ocaml-boot-riscv/include -I/home/sai/Shakti_TEE_Practical/mirage-shakti/ocaml-boot-riscv/include/ocaml-boot-riscv -I/home/sai/Shakti_TEE_Practical/mirage-shakti/ocaml-boot-riscv/src 
 C_INCLUDES=-I../include -I../include/ocaml-boot-riscv -I. 
 
-OBJS=config.o constructors.o htif.o print.o string.o trap.o uart.o timer.o compat.o startup.o
+OBJS=config.o htif.o print.o string.o trap.o uart.o timer.o compat.o startup.o
 
 $(OBJS):%.o: %.c
 	$(CC) $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o $@ -c $<
