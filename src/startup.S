@@ -8,7 +8,7 @@ reset_vector:
    j do_reset
 
 .global do_reset;
-.global run_constructors
+# .global run_constructors
 do_reset:
         li x1, 0
         li x2, 0
@@ -62,7 +62,7 @@ do_reset:
         j boot_secondary
 2:
         // run constructors on hart 0
-        jal run_constructors
+        # jal run_constructors
         // and then call c-land
         j boot_primary
 .size do_reset, . - do_reset
