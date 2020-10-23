@@ -556,7 +556,7 @@ void boot_primary() {
     printf("%x\n", (uint64_t)pc_base_7);
     printf("%x\n", (uint64_t)pc_base_8);
 
-    initialize_pc_bounds();
+    // initialize_pc_bounds();
     /*  
     _nolibc_init(start, mem_size);
 
@@ -586,7 +586,7 @@ void boot_secondary() {
 uint64_t pc_base_bound_array[512] = {0};
 
 // void initialize_pc_bounds (void) __attribute__ ((section (".text.init")));
-void initialize_pc_bounds (void){
+void initialize_pc_bounds(){
     printf("\npc_base_0 = %x\n", (uint64_t)pc_base_0);
     // pc_base_bound_array[0] = (uint64_t)(pc_base_0);
     // pc_base_bound_array[1] = (uint64_t)(pc_bound_0);
