@@ -555,6 +555,8 @@ void boot_primary() {
     printf("%x\n", (uint64_t)pc_base_6);
     printf("%x\n", (uint64_t)pc_base_7);
     printf("%x\n", (uint64_t)pc_base_8);
+
+    initialize_pc_bounds();
     /*  
     _nolibc_init(start, mem_size);
 
