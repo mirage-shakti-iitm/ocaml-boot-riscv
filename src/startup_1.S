@@ -47,7 +47,7 @@ do_reset:
 		# load cross-comp return ISR PC value
 		la t6, CHECKCAP_CROSS_COMP_RETURN
         # Initialize PC Base and Bounds.( sets 2.5 sets of PC base and bound)
-        # jal initialize_pc_bounds
+        jal initialize_pc_bounds
 
         # set corresponding CSRs
         csrw ucurrcap, t1
@@ -112,7 +112,7 @@ do_reset:
         // run constructors on hart 0
         # jal run_constructors
         // and then call c-land
-        jal initialize_pc_bounds
+        # jal initialize_pc_bounds
         j boot_primary
 .size do_reset, . - do_reset
 
