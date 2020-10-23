@@ -14,23 +14,29 @@ void trap_handler(uint64_t mcause, uintptr_t context) {
         static uint64_t mask =  ~((uint64_t)1 << 63);
         uint64_t masked = mcause & mask;
         // irq
-        printf("ocaml boot: irq (%d) @ 0x%x mtval=0x%x\n", masked, read_csr(mepc), read_csr(mtval));
+        printf("ocaml boot: irq (%x) @ 0x%x mtval=0x%x\n", masked, read_csr(mepc), read_csr(mtval));
     }
     htif_poweroff();
 }
 
 void print_checkcap_no_cross_comp_fail() {
-    printf("\nCheckcap no cross-comp fail : (%d) to (%d) at 0x%x", read_csr(ucurrcap), read_csr(utargetcap), read_csr(mepc));
-    printf("\nCurrcap_PC_Base = (%d)", read_csr(ucurrcappcbase));
-    printf("\nCurrcap_PC_Bound = (%d)\n", read_csr(ucurrcappcbound));
-    // printf("\n");
+    printf("\nCheckcap no cross-comp fail(Due to 254) : (%d) to (%d) at 0x%x", read_csr(ucurrcap), read_csr(utargetcap), read_csr(mepc));
+    printf("\nCurrcap_PC_Base = (%x)", read_csr(ucurrcappcbase));
+    printf("\nCurrcap_PC_Bound = (%x)", read_csr(ucurrcappcbound));
+    printf("\nParcap_PC_Base = (%x)", read_csr(uparcappcbase));
+    printf("\nAnycap_PC_Base = (%x)", read_csr(uanycappcbase));
+    printf("\nAnycap_PC_Bound = (%x)\n", read_csr(uanycappcbound));
+    
     htif_poweroff();
 }
 
 void print_checkcap_cap_matrix_fail() {
-    printf("\nCheckcap capability matrix fail : (%d) to (%d) at 0x%x", read_csr(ucurrcap), read_csr(utargetcap), read_csr(mepc));
-    printf("\nCurrcap_PC_Base = (%d)", read_csr(ucurrcappcbase));
-    printf("\nCurrcap_PC_Bound = (%d)\n", read_csr(ucurrcappcbound));
-    // printf("\n");
+    printf("\nCheckcap capability matrix fail(Due to invalid compartment jump) : (%d) to (%d) at 0x%x", read_csr(ucurrcap), read_csr(utargetcap), read_csr(mepc));
+    printf("\nCurrcap_PC_Base = (%x)", read_csr(ucurrcappcbase));
+    printf("\nCurrcap_PC_Bound = (%x)", read_csr(ucurrcappcbound));
+    printf("\nParcap_PC_Base = (%x)", read_csr(uparcappcbase));
+    printf("\nAnycap_PC_Base = (%x)", read_csr(uanycappcbase));
+    printf("\nAnycap_PC_Bound = (%x)\n", read_csr(uanycappcbound));
+    
     htif_poweroff();    
 }
