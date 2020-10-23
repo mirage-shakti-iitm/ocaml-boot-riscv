@@ -31,32 +31,6 @@ reset_vector:
 
 do_reset:
         
-        # jal trap_handler
-        # Enable Capability control
-        li t0, ENABLE_CAP # ENABLE_CAP is 0x1 for now
-        # Initial compartment i.e. starting compartment
-        li t1, INITIAL_COMPARTMENT
-        # Load cap_matrix_base 
-        la t2, cap_matrix
-        # Load checkcap_sp to save/restore registers etc...
-        la t3, checkcap_stack + CHECKCAP_STACK_SIZE
-        # Load pc base and bound array
-       	la t4, pc_base_bound_array
-       	# load cross-comp entry ISR PC value
-       	la t5, CHECKCAP_CROSS_COMP
-		# load cross-comp return ISR PC value
-		la t6, CHECKCAP_CROSS_COMP_RETURN
-        # Initialize PC Base and Bounds.( sets 2.5 sets of PC base and bound)
-        
-
-        # set corresponding CSRs
-        csrw ucurrcap, t1
-        csrw mcapmatrixbase, t2
-        csrw ucheckcapsp, t3
-        csrw mcappcbaseboundbase, t4
-        csrw mcapctl, t0
-
-
         li x1, 0
         li x2, 0
         li x3, 0
@@ -90,7 +64,6 @@ do_reset:
         li x31, 0
         csrw mscratch, x0
 
-        jal initialize_pc_bounds
 
         # write mtvec and make sure it sticks
         la t0, trap_vector
@@ -100,6 +73,62 @@ do_reset:
 
         // stacks grow backwards, set correct tos for hart 0
         la sp, stack + STACK_SIZE
+
+        # Enable Capability control
+        li t0, ENABLE_CAP # ENABLE_CAP is 0x1 for now
+        # Initial compartment i.e. starting compartment
+        li t1, INITIAL_COMPARTMENT
+        # Load cap_matrix_base 
+        la t2, cap_matrix
+        # Load checkcap_sp to save/restore registers etc...
+        la t3, checkcap_stack + CHECKCAP_STACK_SIZE
+        # Load pc base and bound array
+        la t4, pc_base_bound_array
+        # load cross-comp entry ISR PC value
+        la t5, CHECKCAP_CROSS_COMP
+        # load cross-comp return ISR PC value
+        la t6, CHECKCAP_CROSS_COMP_RETURN
+        # Initialize PC Base and Bounds.( sets 2.5 sets of PC base and bound)
+        jal initialize_pc_bounds
+
+        # set corresponding CSRs
+        csrw ucurrcap, t1
+        csrw mcapmatrixbase, t2
+        csrw ucheckcapsp, t3
+        csrw mcappcbaseboundbase, t4
+        csrw mcapctl, t0
+
+        # li x1, 0
+        # li x2, 0
+        # li x3, 0
+        # li x4, 0
+        li x5, 0
+        li x6, 0
+        li x7, 0
+        # li x8, 0
+        # li x9, 0
+        # li x10, 0
+        # li x11, 0
+        # li x12, 0
+        # li x13, 0
+        # li x14, 0
+        # li x15, 0
+        # li x16, 0
+        # li x17, 0
+        # li x18, 0
+        # li x19, 0
+        # li x20, 0
+        # li x21, 0
+        # li x22, 0
+        # li x23, 0
+        # li x24, 0
+        # li x25, 0
+        # li x26, 0
+        # li x27, 0
+        li x28, 0
+        li x29, 0
+        li x30, 0
+        li x31, 0
 
         // boot process is different for each hart
         csrr a3, mhartid
@@ -113,7 +142,7 @@ do_reset:
         // run constructors on hart 0
         # jal run_constructors
         // and then call c-land
-        # jal initialize_pc_bounds
+        
         j boot_primary
 .size do_reset, . - do_reset
 
