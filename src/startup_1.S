@@ -49,7 +49,7 @@ do_reset:
         # set corresponding CSRs
         csrw ucurrcap, t1
         csrw mcapmatrixbase, t2
-        csrw mcheckcapsp, t3
+        csrw ucheckcapsp, t3
         csrw mcappcbaseboundbase, t4
         csrw mcapctl, t0
 
@@ -222,8 +222,8 @@ CHECKCAP_CROSS_COMP:
     la t0, CHECKCAP_CROSS_COMP_RETURN
     beq ra, t0, COMMON_CROSS_COMP
 
-    #Step 2: Read CSR_MCHECKCAPSP
-    csrr t2, mcheckcapsp
+    #Step 2: Read CSR_UCHECKCAPSP
+    csrr t2, ucheckcapsp
 
     #Step 3: Storing curr_cap, ra, sp, gp, tp register
 
@@ -247,14 +247,14 @@ CHECKCAP_CROSS_COMP:
     #store CURRCAP
     sd t3, 0*8(t2)
 
-    # update CSR_MCHECKCAPSP
-    csrw mcheckcapsp, t2
+    # update CSR_UCHECKCAPSP
+    csrw ucheckcapsp, t2
 
     #Step 4: setting the ra to point to CHECKCAP_CROSS_COMP_RETURN
     la ra, CHECKCAP_CROSS_COMP_RETURN
 
     ##### Not doing this check for now
-    #Step 5: Checking whether CSR_MCHECKCAPSP is within CSR_MCHECKCAPSPBASE and CSR_MCHECKCAPSPBOUND
+    #Step 5: Checking whether CSR_UCHECKCAPSP is within CSR_MCHECKCAPSPBASE and CSR_MCHECKCAPSPBOUND
     # (lower addr) Bound ---- SP ---- (higher addr) Base
     # csrr t1, mcheckcapspbase
     # csrr t2, mcheckcapspbound
@@ -312,7 +312,7 @@ Found_index:
     csrw ucurrcap, t2
 
     #Step 8: Change CSR_UCURRCAP_PCBASE and CSR_UCURRCAP_PCBOUND
-    csrr mcappcbaseboundbase, t3
+    csrr t3, mcappcbaseboundbase
     # pc_base index
     sll t5, t2, 0x1
     sll t5, t2, 0x3
@@ -340,8 +340,8 @@ Found_index:
     mret
 
 CHECKCAP_CROSS_COMP_RETURN:
-    #Step 1: Read CSR_MCHECKCAPSP
-    csrr t2, mcheckcapsp
+    #Step 1: Read CSR_UCHECKCAPSP
+    csrr t2, ucheckcapsp
 
     #Step 2: Popping the registers first itself
 
@@ -363,9 +363,9 @@ CHECKCAP_CROSS_COMP_RETURN:
     ld t1, 0*8(t2)
     csrw ucurrcap, t1
 
-    # update CSR_MCHECKCAPSP
+    # update CSR_UCHECKCAPSP
     addi t2, t2, 7*8
-    csrw mcheckcapsp, t2
+    csrw ucheckcapsp, t2
 
     # Step 3: Zero out the t0-t6 registers 
     li t0, 0
