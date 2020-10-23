@@ -30,7 +30,7 @@ reset_vector:
 
 do_reset:
         
-        jal trap_handler
+        # jal trap_handler
         # Enable Capability control
         li t0, ENABLE_CAP # ENABLE_CAP is 0x1 for now
         # Initial compartment i.e. starting compartment
