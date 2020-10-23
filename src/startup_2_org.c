@@ -581,7 +581,7 @@ void boot_secondary() {
 uint64_t
 __attribute__((section (".pc-bounds-reserved") ))
 __attribute__(( aligned (16) ))
-uint64_t pc_base_bound_array[512] = {0};
+pc_base_bound_array[512] = {0};
 
 // void initialize_pc_bounds (void) __attribute__ ((section (".text.init")));
 void initialize_pc_bounds (void){
