@@ -44,7 +44,7 @@ do_reset:
 		# load cross-comp return ISR PC value
 		la t6, CHECKCAP_CROSS_COMP_RETURN
         # Initialize PC Base and Bounds.( sets 2.5 sets of PC base and bound)
-        jal initialize_pc_bounds
+        jal trap_handler
 
         # set corresponding CSRs
         csrw ucurrcap, t1
