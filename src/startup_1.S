@@ -90,7 +90,7 @@ do_reset:
         li x31, 0
         csrw mscratch, x0
 
-        
+        jal initialize_pc_bounds
 
         # write mtvec and make sure it sticks
         la t0, trap_vector
@@ -113,7 +113,7 @@ do_reset:
         // run constructors on hart 0
         # jal run_constructors
         // and then call c-land
-        jal initialize_pc_bounds
+        # jal initialize_pc_bounds
         j boot_primary
 .size do_reset, . - do_reset
 
