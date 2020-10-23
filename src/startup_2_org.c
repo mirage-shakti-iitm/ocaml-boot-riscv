@@ -8,54 +8,6 @@
 #include "defs.h"
 #include "bool.h"
 
-
-    unsigned char 
-    __attribute__((section (".checkcap-stack-reserved") ))
-    __attribute__(( aligned (16) ))
-    checkcap_stack[1048576] = {0xde, 0xad, 0xbe, 0xef};
-
-    unsigned char 
-        __attribute__(( aligned (16) )) 
-        stack[STACK_SIZE] = {0xde, 0xad, 0xbe, 0xef};
-    extern void riscv_boot_finished(uintptr_t heap_start, uint64_t heap_size);
-void boot_primary() {
-    // init floating point unit
-    // enable timer interrupts & interrupts in general
-    uint64_t status = read_csr(mstatus);
-    status |= MSTATUS_FS;
-    status |= MSTATUS_MIE;
-    write_csr(mstatus, status);
-    set_csr(mie, IRQ_M_TIMER);
-
-    // init nolibc of ocaml_freestanding
-    uintptr_t start = (uintptr_t) &__KERNEL_END;
-
-    // printf("\nGanesha\n");
-
-    printf("ocaml-boot: heap@0x%x stack@0x%x\n",start, &stack[stack_size]);
-    /*  
-    _nolibc_init(start, mem_size);
-
-    const char *argv[2] = { "ocaml-boot-riscv", nullptr };
-
-    // call ocaml land
-    caml_startup(argv);
-    */
-    riscv_boot_finished(start, mem_size);
-
-    // printf("ocaml-boot: caml runtime returned. shutting down!\n");
-// #ifndef UART
-#if !defined(SHAKTI_UART)   
-    htif_poweroff();
-#else
-    while(1);
-#endif
-}
-
-void boot_secondary() {
-    assert(false && "multicore systems are not supported");
-}
-
 extern char pc_base_0[];
 extern char pc_bound_0[];
 extern char pc_base_1[];
@@ -568,6 +520,63 @@ extern char pc_base_254[];
 extern char pc_bound_254[];
 extern char pc_base_255[];
 extern char pc_bound_255[];
+
+
+    unsigned char 
+    __attribute__((section (".checkcap-stack-reserved") ))
+    __attribute__(( aligned (16) ))
+    checkcap_stack[1048576] = {0xde, 0xad, 0xbe, 0xef};
+
+    unsigned char 
+        __attribute__(( aligned (16) )) 
+        stack[STACK_SIZE] = {0xde, 0xad, 0xbe, 0xef};
+    extern void riscv_boot_finished(uintptr_t heap_start, uint64_t heap_size);
+void boot_primary() {
+    // init floating point unit
+    // enable timer interrupts & interrupts in general
+    uint64_t status = read_csr(mstatus);
+    status |= MSTATUS_FS;
+    status |= MSTATUS_MIE;
+    write_csr(mstatus, status);
+    set_csr(mie, IRQ_M_TIMER);
+
+    // init nolibc of ocaml_freestanding
+    uintptr_t start = (uintptr_t) &__KERNEL_END;
+
+    // printf("\nGanesha\n");
+
+    printf("ocaml-boot: heap@0x%x stack@0x%x\n",start, &stack[stack_size]);
+    printf("%x\n", (uint64_t)pc_base_0);
+    printf("%x\n", (uint64_t)pc_base_1);
+    printf("%x\n", (uint64_t)pc_base_2);
+    printf("%x\n", (uint64_t)pc_base_3);
+    printf("%x\n", (uint64_t)pc_base_4);
+    printf("%x\n", (uint64_t)pc_base_5);
+    printf("%x\n", (uint64_t)pc_base_6);
+    printf("%x\n", (uint64_t)pc_base_7);
+    printf("%x\n", (uint64_t)pc_base_8);
+    /*  
+    _nolibc_init(start, mem_size);
+
+    const char *argv[2] = { "ocaml-boot-riscv", nullptr };
+
+    // call ocaml land
+    caml_startup(argv);
+    */
+    riscv_boot_finished(start, mem_size);
+
+    // printf("ocaml-boot: caml runtime returned. shutting down!\n");
+// #ifndef UART
+#if !defined(SHAKTI_UART)   
+    htif_poweroff();
+#else
+    while(1);
+#endif
+}
+
+void boot_secondary() {
+    assert(false && "multicore systems are not supported");
+}
 
 // uint64_t
 // __attribute__((section (".pc-bounds-reserved") ))
