@@ -25,7 +25,7 @@ reset_vector:
 
 .global do_reset;
 .global trap_handler
-# .global initialize_pc_bounds;
+.global initialize_pc_bounds;
 
 # .global run_constructors
 
