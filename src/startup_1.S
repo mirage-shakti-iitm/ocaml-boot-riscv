@@ -351,7 +351,7 @@ Found_index:
     csrr t3, mcappcbaseboundbase
     # pc_base index
     sll t5, t2, 0x1
-    sll t5, t2, 0x3
+    sll t5, t5, 0x3
     add t3, t3, t5
     # loading pc_base
     ld t4, 0(t3)
