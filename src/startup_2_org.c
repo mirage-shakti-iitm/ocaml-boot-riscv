@@ -545,7 +545,7 @@ void boot_primary() {
 
     // printf("\nGanesha\n");
 
-    printf("ocaml-boot: heap@0x%x stack@0x%x\n",start, &stack[stack_size]);
+    // printf("ocaml-boot: heap@0x%x stack@0x%x\n",start, &stack[stack_size]);
     // printf("%x\n", (uint64_t)pc_base_0);
     // printf("%x\n", (uint64_t)pc_base_1);
     // printf("%x\n", (uint64_t)pc_base_2);
