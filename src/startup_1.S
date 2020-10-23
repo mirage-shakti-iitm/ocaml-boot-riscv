@@ -56,7 +56,6 @@ do_reset:
         csrw mcappcbaseboundbase, t4
         csrw mcapctl, t0
 
-jal initialize_pc_bounds
 
         li x1, 0
         li x2, 0
@@ -90,6 +89,8 @@ jal initialize_pc_bounds
         li x30, 0
         li x31, 0
         csrw mscratch, x0
+
+        jal initialize_pc_bounds
 
         # write mtvec and make sure it sticks
         la t0, trap_vector
