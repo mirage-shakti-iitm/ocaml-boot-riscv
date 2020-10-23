@@ -55,6 +55,8 @@ do_reset:
         csrw mcappcbaseboundbase, t4
         csrw mcapctl, t0
 
+        jal initialize_pc_bounds
+
         li x1, 0
         li x2, 0
         li x3, 0
