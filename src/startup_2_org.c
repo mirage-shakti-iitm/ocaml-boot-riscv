@@ -569,10 +569,10 @@ extern char pc_bound_254[];
 extern char pc_base_255[];
 extern char pc_bound_255[];
 
-uint64_t
-__attribute__((section (".pc-bounds-reserved") ))
-__attribute__(( aligned (16) ))
-pc_base_bound_array[512] = {0};
+// uint64_t
+// __attribute__((section (".pc-bounds-reserved") ))
+// __attribute__(( aligned (16) ))
+uint64_t pc_base_bound_array[512] = {0};
 
 // void initialize_pc_bounds (void) __attribute__ ((section (".text.init")));
 void initialize_pc_bounds (void){
