@@ -1,2 +1,3 @@
 boot_primary:1
 boot_secondary:128
+initialize_pc_bounds:1

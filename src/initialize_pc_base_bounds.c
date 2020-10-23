@@ -1,5 +1,7 @@
 #include "defs.h"
 #include "encoding.h"
+#include "config.h"
+#include "bool.h"
 
 extern char[] pc_base_0;
 extern char[] pc_bound_0;
