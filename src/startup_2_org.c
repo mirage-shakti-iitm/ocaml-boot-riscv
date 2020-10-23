@@ -32,7 +32,7 @@ void boot_primary() {
 
     // printf("\nGanesha\n");
 
-    // printf("ocaml-boot: heap@0x%x stack@0x%x\n",start, &stack[stack_size]);
+    printf("ocaml-boot: heap@0x%x stack@0x%x\n",start, &stack[stack_size]);
     /*  
     _nolibc_init(start, mem_size);
 
