@@ -1,4 +1,5 @@
 #include "defs.h"
+#include "encoding.h"
 
 extern char[] pc_base_0;
 extern char[] pc_bound_0;
