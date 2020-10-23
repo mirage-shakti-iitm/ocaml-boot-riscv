@@ -1552,5 +1552,5 @@ void initialize_pc_bounds (void){
 	write_csr(uanycappcbase, pc_base_bound_array[Fully_Trusted_Compartment*2]);
 	write_csr(uanycappcbound, pc_base_bound_array[Fully_Trusted_Compartment*2+1]);
 
-	return 0;
+	// return 0;
 }
