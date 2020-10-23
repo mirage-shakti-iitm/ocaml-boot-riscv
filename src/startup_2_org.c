@@ -576,7 +576,7 @@ __attribute__((section (".pc-bounds-reserved") ))
 __attribute__(( aligned (16) ))
 pc_base_bound_array[512] = {0};
 
-void initialize_pc_bounds (void) __attribute__ ((section (".text.init")));
+// void initialize_pc_bounds (void) __attribute__ ((section (".text.init")));
 void initialize_pc_bounds (void){
     pc_base_bound_array[0] = (uint64_t)(pc_base_0);
     pc_base_bound_array[1] = (uint64_t)(pc_bound_0);
