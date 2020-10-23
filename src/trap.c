@@ -22,15 +22,15 @@ void trap_handler(uint64_t mcause, uintptr_t context) {
 void print_checkcap_no_cross_comp_fail() {
     printf("\nCheckcap no cross-comp fail : (%d) to (%d) at 0x%x", read_csr(ucurrcap), read_csr(utargetcap), read_csr(mepc));
     printf("\nCurrcap_PC_Base = (%d)", read_csr(ucurrcappcbase));
-    printf("\nCurrcap_PC_Bound = (%d)", read_csr(ucurrcappcbound));
-    printf("\n");
+    printf("\nCurrcap_PC_Bound = (%d)\n", read_csr(ucurrcappcbound));
+    // printf("\n");
     htif_poweroff();
 }
 
 void print_checkcap_cap_matrix_fail() {
     printf("\nCheckcap capability matrix fail : (%d) to (%d) at 0x%x", read_csr(ucurrcap), read_csr(utargetcap), read_csr(mepc));
     printf("\nCurrcap_PC_Base = (%d)", read_csr(ucurrcappcbase));
-    printf("\nCurrcap_PC_Bound = (%d)", read_csr(ucurrcappcbound));
-    printf("\n");
+    printf("\nCurrcap_PC_Bound = (%d)\n", read_csr(ucurrcappcbound));
+    // printf("\n");
     htif_poweroff();    
 }
