@@ -11,7 +11,7 @@
         htif_poweroff();
     }
     void riscv_write(const char* s, unsigned int length) {
-        putstring(s, length);
+        boot_putstring(s, length);
     }
     time__t riscv_clock_monotonic() {
         volatile unsigned long* tmp = (volatile unsigned long*)mtime;

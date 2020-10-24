@@ -7,24 +7,24 @@
 #include "htif.h"
 
 
-void vprintf(const char* s, va_list vl)
+void boot_vprintf(const char* s, va_list vl)
 {
   char buf[256];
-  vsnprintf(buf, sizeof buf, s, vl);
-  size_t len = strlen(buf);
-  putstring(buf, len);
+  boot_vsnprintf(buf, sizeof buf, s, vl);
+  size_t len = boot_strlen(buf);
+  boot_putstring(buf, len);
 }
 
-void printf(const char* s, ...)
+void boot_printf(const char* s, ...)
 {
   va_list vl;
 
   va_start(vl, s);
-  vprintf(s, vl);
+  boot_vprintf(s, vl);
   va_end(vl);
 }
 
-void putstring(const char* s,unsigned int len){
+void boot_putstring(const char* s,unsigned int len){
     for(size_t i = 0; i < len; ++i)
 #if defined(QEMU_UART) || defined(SHAKTI_UART)
             uart_putchar(s[i]);

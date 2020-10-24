@@ -1,7 +1,7 @@
-strcmp:255
-strcpy:255
-strlen:255
-isstring:255
-memset:255
-vsnprintf:255
-snprintf:255
+boot_strcmp:255
+boot_strcpy:255
+boot_strlen:255
+boot_isstring:255
+boot_memset:255
+boot_vsnprintf:255
+boot_snprintf:255

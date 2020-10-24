@@ -1,7 +1,7 @@
-strcmp:254
-strcpy:254
-strlen:254
-isstring:254
-memset:254
-vsnprintf:254
-snprintf:254
+boot_strcmp:254
+boot_strcpy:254
+boot_strlen:254
+boot_isstring:254
+boot_memset:254
+boot_vsnprintf:254
+boot_snprintf:254
