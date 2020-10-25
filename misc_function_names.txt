@@ -1,0 +1,88 @@
+Include missed directories.
+
+Anomalous Function names:
+	camlStdlib__bytes__.2b.2b:254  =>  camlStdlib__bytes__$2b$2b:254  =>  camlStdlib__bytes__++:254
+
+	camlIpaddr__.2b:231  =>  camlIpaddr__$2b:231  =>  camlIpaddr__+:231
+	camlIpaddr__.7e.7c:231  =>  camlIpaddr__$7e$7c:231  =>  camlIpaddr__~|:231
+	camlIpaddr__.7c.7e:231  =>  camlIpaddr__$7c$7e:231  =>  camlIpaddr__|~:231
+	camlIpaddr__.26.26.26:231  =>  camlIpaddr__$26$26$26:231  =>  camlIpaddr__&&&:231
+	camlIpaddr__.7c.7c.7c:231  =>  camlIpaddr__$7c$7c$7c:231  =>  camlIpaddr__|||:231
+	camlIpaddr__.3c.7c.3c:231  =>  camlIpaddr__$3c$7c$3c:231  =>  camlIpaddr__<|<:231
+	camlIpaddr__.3e.7c.3e:231  =>  camlIpaddr__$3e$7c$3e:231  =>  camlIpaddr__>|>:231
+	camlIpaddr__.3e.21:231  =>  camlIpaddr__$3e$21:231  =>  camlIpaddr__>!:231
+	camlIpaddr__.3c.21:231  => camlIpaddr__$3c$21:231  =>  camlIpaddr__<!:231
+
+
+Anomalous linker script text sections:
+	*(.text.caml.camlLwt_result__>|=*)
+	*(.text.caml.camlLwt__=<<*)
+	*(.text.caml.camlLwt__>|=*)
+	*(.text.caml.camlLwt__<&>*)
+	*(.text.caml.camlLwt__<?>*)
+	
+	*(.text.caml.camlIpaddr__~|*)
+	*(.text.caml.camlIpaddr__|~*)
+	*(.text.caml.camlIpaddr__&&&*)
+	*(.text.caml.camlIpaddr__|||*)
+	*(.text.caml.camlIpaddr__<|<*)
+	*(.text.caml.camlIpaddr__>|>*)
+	*(.text.caml.camlIpaddr__>!*)
+	*(.text.caml.camlIpaddr__<!*)
+
+	*(.text.caml.camlStdlib__@*)
+
+	*(.text.caml.camlCamlinternalFormat__k'*)
+
+	camlOS__Time__$2d_138
+	camlOS__fun_106
+	camlOS__entry
+	camlOS__Time__$2d_138
+	camlCmdliner_arg__$26_430
+	camlLwt__$3d$3c$3c_2224
+	camlLwt__$3e$7c$3d_2228
+	camlLwt__$3c$26$3e_2233
+	camlLwt__$3c$3f$3e_2237
+	camlIpaddr__$7e$7c_284
+	amlIpaddr__$7c$7e_324
+	camlIpaddr__$26$26$26_325
+	camlIpaddr__$7c$7c$7c
+	camlIpaddr__$3c$7c$3c_333
+	camlIpaddr__$3e$7c$3e_337
+	camlIpaddr__$3e$21_341
+	camlIpaddr__$2b_936
+	camlIpaddr__$3c$21_345
+	camlStdlib__$5e_136
+	camlStdlib__$40_193
+	camlStdlib__$5e$5e_440
+	camlStdlib__bytes__$2b$2b_126
+
+	camlStdlib__set__seq_of_enum__661
+	camlStdlib__map__seq_of_enum__617
+	camlStdlib__printf__k$27_196
+
+
+<camlUnikernel__log_info_94>
+<camlMirage_logs__report_542>
+<camlPclock__now_d_ps_99>:
+<unix_gettimeofday>
+
+
+&, <, >, |, *?*
+*(.text.caml.camlLwt__*?*) not working
+
+
+
+
+
+
+5 Gold gundu/beads
+2 black beads
+2 bottu - 1 big + 1 small
+1 lakshmi dollar
+1 coral
+1 chakra dollar
+1 link chain
+
+
+
