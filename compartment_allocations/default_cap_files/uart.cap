@@ -1,0 +1,3 @@
+uart_putchar:254
+uart_getchar:254
+init_uart:254
