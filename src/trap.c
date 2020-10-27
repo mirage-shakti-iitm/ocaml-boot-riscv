@@ -16,7 +16,14 @@ void trap_handler(uint64_t mcause, uintptr_t context) {
         // irq
         boot_printf("ocaml boot: irq (%x) @ 0x%x mtval=0x%x\n", masked, read_csr(mepc), read_csr(mtval));
     }
-    htif_poweroff();
+
+    #if defined(SHAKTI_UART)
+        while(1);
+    #endif /* SHAKTI_UART */
+    #if defined(HTIF)
+        htif_poweroff();
+    #endif /* HTIF */
+
 }
 
 void print_checkcap_no_cross_comp_fail() {
@@ -26,8 +33,14 @@ void print_checkcap_no_cross_comp_fail() {
     boot_printf("\nParcap_PC_Base = (%x)", read_csr(uparcappcbase));
     boot_printf("\nAnycap_PC_Base = (%x)", read_csr(uanycappcbase));
     boot_printf("\nAnycap_PC_Bound = (%x)\n", read_csr(uanycappcbound));
-    
-    htif_poweroff();
+
+    #if defined(SHAKTI_UART)
+        while(1);
+    #endif /* SHAKTI_UART */
+    #if defined(HTIF)
+        htif_poweroff();
+    #endif /* HTIF */    
+
 }
 
 void print_checkcap_cap_matrix_fail() {
@@ -38,5 +51,11 @@ void print_checkcap_cap_matrix_fail() {
     boot_printf("\nAnycap_PC_Base = (%x)", read_csr(uanycappcbase));
     boot_printf("\nAnycap_PC_Bound = (%x)\n", read_csr(uanycappcbound));
     
-    htif_poweroff();    
+    #if defined(SHAKTI_UART)
+        while(1);
+    #endif /* SHAKTI_UART */
+    #if defined(HTIF)
+        htif_poweroff();
+    #endif /* HTIF */
+
 }
