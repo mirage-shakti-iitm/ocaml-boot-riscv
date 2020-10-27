@@ -96,7 +96,10 @@ do_reset:
         csrw mcapmatrixbase, t2
         csrw ucheckcapsp, t3
         csrw mcappcbaseboundbase, t4
+        csrw mcrosscompexception, t5
+        csrw mcrosscompretexception, t6
         csrw mcapctl, t0
+
 
         # li x1, 0
         # li x2, 0
