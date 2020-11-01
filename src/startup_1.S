@@ -416,7 +416,7 @@ CHECKCAP_CROSS_COMP_RETURN:
     li t6, 0
 
     #Step 4: Change mepc. Originally it was pointing to CHECKCAP_CROSS_COMP_RETURN
-    csrw mepc, ra
+    csrw ucompepc, ra
 
     # Step 5: Return to ra(through mepc)
     mret
