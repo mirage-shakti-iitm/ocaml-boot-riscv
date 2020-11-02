@@ -556,7 +556,7 @@ void boot_primary() {
     */
     riscv_boot_finished(start, mem_size);
 
-    // boot_printf("ocaml-boot: caml runtime returned. shutting down!\n");
+    boot_printf("ocaml-boot: caml runtime returned. shutting down!\n");
 // #ifndef UART
 #if !defined(SHAKTI_UART)   
     htif_poweroff();
