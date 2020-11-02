@@ -27,7 +27,7 @@ void trap_handler(uint64_t mcause, uintptr_t context) {
 }
 
 void print_checkcap_no_cross_comp_fail() {
-    boot_printf("\nCheckcap no cross-comp fail(Due to 254) : (%d) to (%d) at 0x%x", read_csr(ucurrcap), read_csr(utargetcap), read_csr(mepc));
+    boot_printf("\nCheckcap no cross-comp fail(Due to 254) : (%d) to (%d) at 0x%x", read_csr(ucurrcap), read_csr(utargetcap), read_csr(ucompepc));
     boot_printf("\nCurrcap_PC_Base = (%x)", read_csr(ucurrcappcbase));
     boot_printf("\nCurrcap_PC_Bound = (%x)", read_csr(ucurrcappcbound));
     boot_printf("\nParcap_PC_Base = (%x)", read_csr(uparcappcbase));
@@ -44,7 +44,7 @@ void print_checkcap_no_cross_comp_fail() {
 }
 
 void print_checkcap_cap_matrix_fail() {
-    boot_printf("\nCheckcap capability matrix fail(Due to invalid compartment jump) : (%d) to (%d) at 0x%x", read_csr(ucurrcap), read_csr(utargetcap), read_csr(mepc));
+    boot_printf("\nCheckcap capability matrix fail(Due to invalid compartment jump) : (%d) to (%d) at 0x%x", read_csr(ucurrcap), read_csr(utargetcap), read_csr(ucompepc));
     boot_printf("\nCurrcap_PC_Base = (%x)", read_csr(ucurrcappcbase));
     boot_printf("\nCurrcap_PC_Bound = (%x)", read_csr(ucurrcappcbound));
     boot_printf("\nParcap_PC_Base = (%x)", read_csr(uparcappcbase));
