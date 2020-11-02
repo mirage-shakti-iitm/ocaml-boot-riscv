@@ -2,6 +2,6 @@
 #include <stdarg.h>
 
 
-    void vprintf(const char* s, va_list vl);
-    void printf(const char* s, ...);
-    void putstring(const char* s, unsigned int len);
+    void boot_vprintf(const char* s, va_list vl);
+    void boot_printf(const char* s, ...);
+    void boot_putstring(const char* s, unsigned int len);
