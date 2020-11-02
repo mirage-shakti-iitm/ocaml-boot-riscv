@@ -1319,8 +1319,10 @@ void initialize_pc_bounds (void){
 // boot_printf("pc_bound_111 : %x\n", pc_bound_111);
 // boot_printf("pc_base_112 : %x\n", pc_base_112);
 // boot_printf("pc_bound_112 : %x\n", pc_bound_112);
-// boot_printf("pc_base_113 : %x\n", pc_base_113);
-// boot_printf("pc_bound_113 : %x\n", pc_bound_113);
+boot_printf("pc_base_113 : %x\n", pc_base_113);
+boot_printf("pc_bound_113 : %x\n", pc_bound_113);
+boot_printf("pc_base_113 : %x\n", pc_base_bound_array[226]);
+boot_printf("pc_base_113 : %x\n", pc_base_bound_array[227]);
 // boot_printf("pc_base_114 : %x\n", pc_base_114);
 // boot_printf("pc_bound_114 : %x\n", pc_bound_114);
 // boot_printf("pc_base_115 : %x\n", pc_base_115);
