@@ -1,0 +1,3 @@
+uart_putchar:2
+uart_getchar:2
+init_uart:2

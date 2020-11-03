@@ -1,5 +1,7 @@
 // taken (and modified) from riscv-pk. See LICENSE.riscv-pk
 
+#if defined(HTIF)
+
 #include "htif.h"
 // #include "atomic.h"
 #include "assert.h"
@@ -111,3 +113,5 @@ volatile int htif_console_buf;
             tohost = 1;
         }
     }
+
+#endif
