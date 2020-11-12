@@ -74,8 +74,6 @@ do_reset:
         // stacks grow backwards, set correct tos for hart 0
         la sp, stack + STACK_SIZE
 
-        # Enable Capability control
-        li t0, ENABLE_CAP # ENABLE_CAP is 0x1 for now
         # Initial compartment i.e. starting compartment
         li t1, INITIAL_COMPARTMENT
         # Load cap_matrix_base 
@@ -98,7 +96,9 @@ do_reset:
         # Initialize PC Base and Bounds.( sets 2.5 sets of PC base and bound)
         jal initialize_pc_bounds
 
-        csrw mcapctl, x0
+        # Enable Capability control
+        li t0, ENABLE_CAP # ENABLE_CAP is 0x1 for now
+        csrw mcapctl, t0
 
         # li x1, 0
         # li x2, 0
