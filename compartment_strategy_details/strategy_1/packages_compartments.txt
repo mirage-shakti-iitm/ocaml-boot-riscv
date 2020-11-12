@@ -111,7 +111,7 @@ C32 : C30, C8
 C33 : C32
 	unikernel.ml/display_auth_table, unikernel.ml/init_hash_table
 
-C34 : C33, C8
+C34 : C8, C33?
 	camlUnikernel__create_db_table, camlUnikernel__insert_into_tables, camlUnikernel__perform_operations_app, camlUnikernel__perform_operations_admin, camlUnikernel__perform_none, camlUnikernel__init_database
 
 
