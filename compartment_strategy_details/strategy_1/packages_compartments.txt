@@ -95,16 +95,17 @@ C26 : C13, C25
 	mirage-bootvar-riscv-master - finished
 
 C27 : C28
-	sqlite
+	sqlite3
 
 C28 : C27, C29
-	ezsqlite-stubs
+	ezsqlite-c-stubs
 
 C29 : C28
-	ezsqlite
+	ezsqlite-ocaml
 
 C30 :
 	Hacl-Sha2-256
+
 
 
 

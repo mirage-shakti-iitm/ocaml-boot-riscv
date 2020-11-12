@@ -88,15 +88,17 @@ do_reset:
         la t5, CHECKCAP_CROSS_COMP
         # load cross-comp return ISR PC value
         la t6, CHECKCAP_CROSS_COMP_RETURN
-        # Initialize PC Base and Bounds.( sets 2.5 sets of PC base and bound)
-        jal initialize_pc_bounds
-
+        
         # set corresponding CSRs
         csrw ucurrcap, t1
         csrw mcapmatrixbase, t2
         csrw ucheckcapsp, t3
         csrw mcappcbaseboundbase, t4
-        csrw mcapctl, t0
+
+        # Initialize PC Base and Bounds.( sets 2.5 sets of PC base and bound)
+        jal initialize_pc_bounds
+
+        csrw mcapctl, x0
 
         # li x1, 0
         # li x2, 0
