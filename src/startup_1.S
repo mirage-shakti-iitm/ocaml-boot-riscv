@@ -25,7 +25,7 @@ reset_vector:
 
 .global do_reset;
 .global trap_handler
-.global initialize_pc_bounds;
+
 
 # .global run_constructors
 
@@ -80,8 +80,6 @@ do_reset:
         la t2, cap_matrix
         # Load checkcap_sp to save/restore registers etc...
         la t3, checkcap_stack + CHECKCAP_STACK_SIZE
-        # Load pc base and bound array
-        la t4, pc_base_bound_array
         # load cross-comp entry ISR PC value
         la t5, CHECKCAP_CROSS_COMP
         # load cross-comp return ISR PC value
@@ -92,9 +90,6 @@ do_reset:
         csrw mcapmatrixbase, t2
         csrw ucheckcapsp, t3
         csrw mcappcbaseboundbase, t4
-
-        # Initialize PC Base and Bounds.( sets 2.5 sets of PC base and bound)
-        jal initialize_pc_bounds
 
         # Enable Capability control
         li t0, ENABLE_CAP # ENABLE_CAP is 0x1 for now
