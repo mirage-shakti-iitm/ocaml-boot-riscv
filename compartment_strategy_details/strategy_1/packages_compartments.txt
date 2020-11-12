@@ -81,7 +81,7 @@ C22 : C11, C13, C15, C18, C19, C20, C23, C26
 	camlMain__entry
 	camlKey_gen__entry
 
-C23 : C13, C32, C34
+C23 : C13, C32, C34, C35
 	unikernel.ml/start
 
 C25 : NONE
@@ -102,7 +102,7 @@ C29 : C28, C31
 C30 : None
 	Hacl-Sha2-256
 
-C31 : C29, C8
+C31 : C29, C8, C7
 	dbApp, dbAdmin
 
 C32 : C30, C8
@@ -111,9 +111,11 @@ C32 : C30, C8
 C33 : C32
 	unikernel.ml/display_auth_table, unikernel.ml/init_hash_table
 
-C34 : C8, C33?
-	camlUnikernel__create_db_table, camlUnikernel__insert_into_tables, camlUnikernel__perform_operations_app, camlUnikernel__perform_operations_admin, camlUnikernel__perform_none, camlUnikernel__init_database
+C34 : C7, C8, C29, C31, C33?
+	camlUnikernel__perform_operations_app, camlUnikernel__perform_operations_admin, camlUnikernel__perform_none
 
+C35 : C29, C33
+	camlUnikernel__create_db_table, camlUnikernel__insert_into_tables, camlUnikernel__init_database
 
 
 Caml__entry functions:
@@ -146,4 +148,4 @@ C129 : C29
 C232 : C231
 	camlIpaddr__entry
 
-C0 : C108, C111, C113, C114, C115, C118, C120, C232
+C0 : C108, C111, C113, C114, C115, C118, C120, C129, C232, C31
