@@ -72,7 +72,7 @@ C254 :
 	duration-riscv-0.1.2 - finished
 
 	parse-argv-v0.2.0 - finished
-
+	eqaf
 
 Unikernel:
 C22 : C11, C13, C15, C18, C19, C20, C23, C26
@@ -93,6 +93,19 @@ C25 : NONE
 
 C26 : C13, C25
 	mirage-bootvar-riscv-master - finished
+
+C27 : C28
+	sqlite
+
+C28 : C27, C29
+	ezsqlite-stubs
+
+C29 : C28
+	ezsqlite
+
+C30 :
+	Hacl-Sha2-256
+
 
 
 Caml__entry functions:
@@ -118,6 +131,9 @@ C118 : C13, C18
 
 C120 : C8, C20
 	camlMirage_logs__entry
+
+C129 : C29
+	ezsqlite__entry
 
 C232 : C231
 	camlIpaddr__entry
