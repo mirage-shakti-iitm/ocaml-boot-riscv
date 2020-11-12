@@ -81,12 +81,8 @@ C22 : C11, C13, C15, C18, C19, C20, C23, C26
 	camlMain__entry
 	camlKey_gen__entry
 
-C23 : C13, C21, C24
-	unikernel.ml/start - finished
-	last "fun" (this "fun" -> calls loop(n-1))
-
-C24 : C14
-	unikernel.ml/log_info - finished
+C23 : C13, C32, C34
+	unikernel.ml/start
 
 C25 : NONE
 	mirage-riscv/bindings/main.c/mirage_riscv_get_cmdline - finished
@@ -100,12 +96,23 @@ C27 : C28
 C28 : C27, C29
 	ezsqlite-c-stubs
 
-C29 : C28
+C29 : C28, C31
 	ezsqlite-ocaml
 
-C30 :
+C30 : None
 	Hacl-Sha2-256
 
+C31 : C29, C8
+	dbApp, dbAdmin
+
+C32 : C30, C8
+	Authentication
+
+C33 : C32
+	unikernel.ml/display_auth_table, unikernel.ml/init_hash_table
+
+C34 : C33, C8
+	camlUnikernel__create_db_table, camlUnikernel__insert_into_tables, camlUnikernel__perform_operations_app, camlUnikernel__perform_operations_admin, camlUnikernel__perform_none, camlUnikernel__init_database
 
 
 
