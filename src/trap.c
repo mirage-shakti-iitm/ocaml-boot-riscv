@@ -25,7 +25,7 @@ void print_checkcap_no_cross_comp_fail() {
     boot_printf("\nCurrcap_PC_Bound = (%x)", read_csr(ucurrcappcbound));
     boot_printf("\nParcap_PC_Base = (%x)", read_csr(uparcappcbase));
     boot_printf("\nAnycap_PC_Base = (%x)", read_csr(uanycappcbase));
-    boot_printf("\nAnycap_PC_Bound = (%x)\n", read_csr(uanycappcbound));
+    boot_printf("\nAnycap_PC_Bound = (%x)\n\n", read_csr(uanycappcbound));
     
     htif_poweroff();
 }
@@ -36,7 +36,7 @@ void print_checkcap_cap_matrix_fail() {
     boot_printf("\nCurrcap_PC_Bound = (%x)", read_csr(ucurrcappcbound));
     boot_printf("\nParcap_PC_Base = (%x)", read_csr(uparcappcbase));
     boot_printf("\nAnycap_PC_Base = (%x)", read_csr(uanycappcbase));
-    boot_printf("\nAnycap_PC_Bound = (%x)\n", read_csr(uanycappcbound));
+    boot_printf("\nAnycap_PC_Bound = (%x)\n\n", read_csr(uanycappcbound));
     
     htif_poweroff();    
 }
