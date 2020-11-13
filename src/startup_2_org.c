@@ -558,11 +558,11 @@ void boot_primary() {
 
     boot_printf("ocaml-boot: caml runtime returned. shutting down!\n");
 // #ifndef UART
-#if !defined(SHAKTI_UART)   
+// #if !defined(SHAKTI_UART)   
     htif_poweroff();
-#else
-    while(1);
-#endif
+// #else
+    // while(1);
+// #endif
 }
 
 void boot_secondary() {
