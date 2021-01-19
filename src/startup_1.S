@@ -285,7 +285,7 @@ CHECKCAP_CROSS_COMP:
     csrw ucheckcapsp, t2
 
     #Step 4: setting the ra to point to CHECKCAP_CROSS_COMP_RETURN
-    la ra, CHECKCAP_CROSS_COMP_RETURN
+    # la ra, CHECKCAP_CROSS_COMP_RETURN
 
     ##### Not doing this check for now
     #Step 5: Checking whether CSR_UCHECKCAPSP is within CSR_MCHECKCAPSPBASE and CSR_MCHECKCAPSPBOUND
