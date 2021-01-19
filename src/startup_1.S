@@ -96,6 +96,8 @@ do_reset:
         csrw mcapmatrixbase, t2
         csrw ucheckcapsp, t3
         csrw mcappcbaseboundbase, t4
+        csrw mcrosscompexception, t5
+        csrw mcrosscompretexception, t6
         csrw mcapctl, t0
 
         # li x1, 0
@@ -152,10 +154,6 @@ trap_vector:
     
     # HWR Begin
     csrr t2, mcause
-    li t3, CAUSE_TEE_ENT_COMPARTMENT_EXCEPTION
-    beq t3, t2, CHECKCAP_CROSS_COMP
-    li t3, CAUSE_TEE_RET_COMPARTMENT_EXCEPTION
-    beq t3, t2, CHECKCAP_CROSS_COMP_RETURN
     li t3, CAUSE_TEE_PC_OUT_OF_BOUNDS_EXCEPTION
     beq t3, t2, CHECKCAP_NO_CROSS_COMP_FAIL
 
