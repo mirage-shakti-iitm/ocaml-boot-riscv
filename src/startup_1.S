@@ -410,8 +410,8 @@ CHECKCAP_CROSS_COMP_RETURN:
     li t5, 0
     li t6, 0
 
-    #Step 4: Change mepc. Originally it was pointing to CHECKCAP_CROSS_COMP_RETURN
-    csrw mepc, ra
+    #Step 4: Change ucompepc. Originally it was pointing to CHECKCAP_CROSS_COMP_RETURN
+    csrw ucompepc, ra
 
     # Step 5: Return to ra(through mepc)
     mret
