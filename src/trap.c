@@ -16,7 +16,7 @@ void trap_handler(uint64_t mcause, uintptr_t context) {
         // irq
         boot_printf("ocaml boot: irq (%x) @ 0x%x mtval=0x%x\n", masked, read_csr(mepc), read_csr(mtval));
     }
-    htif_poweroff();
+    // htif_poweroff();
 }
 
 void print_checkcap_no_cross_comp_fail() {
@@ -27,7 +27,7 @@ void print_checkcap_no_cross_comp_fail() {
     boot_printf("\nAnycap_PC_Base = (%x)", read_csr(uanycappcbase));
     boot_printf("\nAnycap_PC_Bound = (%x)\n", read_csr(uanycappcbound));
     
-    htif_poweroff();
+    // htif_poweroff();
 }
 
 void print_checkcap_cap_matrix_fail() {
@@ -38,5 +38,5 @@ void print_checkcap_cap_matrix_fail() {
     boot_printf("\nAnycap_PC_Base = (%x)", read_csr(uanycappcbase));
     boot_printf("\nAnycap_PC_Bound = (%x)\n", read_csr(uanycappcbound));
     
-    htif_poweroff();    
+    // htif_poweroff();    
 }
