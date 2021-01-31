@@ -10,7 +10,7 @@
     void uart_putchar(uint8_t ch);
     int uart_getchar();
     void init_uart();
-
+    void uart_exit();
 
 #endif
 #endif

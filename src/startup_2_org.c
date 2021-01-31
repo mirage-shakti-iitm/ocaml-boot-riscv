@@ -560,6 +560,8 @@ void boot_primary() {
 // #ifndef UART
 #if !defined(SHAKTI_UART)   
     htif_poweroff();
+#elif defined(SHAKTI_UART)
+    uart_exit();
 #else
     while(1);
 #endif
