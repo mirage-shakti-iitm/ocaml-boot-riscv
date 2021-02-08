@@ -119,7 +119,7 @@ C118 : C13, C18
 C120 : C8, C20
 	camlMirage_logs__entry
 
-C232 : C231
+C230 : C231
 	camlIpaddr__entry
 
-C0 : C108, C111, C113, C114, C115, C118, C120, C232
+C0 : C108, C111, C113, C114, C115, C118, C120, C230
