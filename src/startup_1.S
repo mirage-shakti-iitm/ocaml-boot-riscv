@@ -74,6 +74,10 @@ do_reset:
         // stacks grow backwards, set correct tos for hart 0
         la sp, stack + STACK_SIZE
 
+        # Initialize PC Base and Bounds.( sets 2.5 sets of PC base and bound)
+        jal initialize_pc_bounds
+
+
         # Enable Capability control
         li t0, ENABLE_CAP # ENABLE_CAP is 0x1 for now
         # Initial compartment i.e. starting compartment
@@ -88,9 +92,6 @@ do_reset:
         la t5, CHECKCAP_CROSS_COMP
         # load cross-comp return ISR PC value
         la t6, CHECKCAP_CROSS_COMP_RETURN
-        # Initialize PC Base and Bounds.( sets 2.5 sets of PC base and bound)
-        jal initialize_pc_bounds
-
         # set corresponding CSRs
         csrw ucurrcap, t1
         csrw mcapmatrixbase, t2
