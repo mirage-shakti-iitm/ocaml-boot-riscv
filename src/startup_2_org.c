@@ -1095,8 +1095,8 @@ void initialize_pc_bounds (void){
     write_csr(uparcappcbase, pc_base_bound_array[Restricted_Compartment*2]);
     write_csr(uanycappcbase, pc_base_bound_array[Fully_Trusted_Compartment*2]);
     write_csr(uanycappcbound, pc_base_bound_array[Fully_Trusted_Compartment*2+1]);
-// boot_printf("pc_base_0 : %x\n", pc_base_0);
-// boot_printf("pc_bound_0 : %x\n", pc_bound_0);
+boot_printf("pc_base_0 : %x\n", pc_base_0);
+boot_printf("pc_bound_0 : %x\n", pc_bound_0);
 // boot_printf("pc_base_1 : %x\n", pc_base_1);
 // boot_printf("pc_bound_1 : %x\n", pc_bound_1);
 // boot_printf("pc_base_2 : %x\n", pc_base_2);
