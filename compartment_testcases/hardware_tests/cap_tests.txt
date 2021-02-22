@@ -15,37 +15,37 @@ Functions to concentrate:
 
 Test Cases:
 I). Non-254/255 tests
-1). curr_cap -> curr_cap (1 -> 1) / (output present) : Passed 
-2). curr_cap -> valid_cap (1 -> 2) (mapping present) / (output present) : Passed
-3). curr_cap -> invalid_cap (1 -> 2) (mapping not present) / (output not present) : Passed 
+1). curr_cap -> curr_cap (1 -> 1) / (output present) :  
+2). curr_cap -> valid_cap (1 -> 2) (mapping present) / (output present) : 
+3). curr_cap -> invalid_cap (1 -> 2) (mapping not present) / (output not present) :  
 
 II). 255 tests
-4). curr_cap -> 255 -> 255 (1 -> 255) / (output present) : Passed 
-5). curr_cap -> 255 -> curr_cap (1 -> 255 -> 1) / (output present) : Passed 
-6)*. curr_cap -> 255 -> valid_cap (1 -> 255 -> 2) (mapping present) / (output present) : Passed
-7). curr_cap -> 255 -> invalid_cap (1 -> 255 -> 2) (mapping not present) / (output not present) : Passed
+4). curr_cap -> 255 -> 255 (1 -> 255) / (output present) :  
+5). curr_cap -> 255 -> curr_cap (1 -> 255 -> 1) / (output present) :  
+6)*. curr_cap -> 255 -> valid_cap (1 -> 255 -> 2) (mapping present) / (output present) : 
+7). curr_cap -> 255 -> invalid_cap (1 -> 255 -> 2) (mapping not present) / (output not present) : 
 
 III). 254 tests
-8). curr_cap -> 254 -> 254 (1 -> 254 -> 254) / (output present) : Passed
-9)*. curr_cap -> 254 -> curr_cap (1 -> 254 -> 1) / (output present) : Passed
-10). curr_cap -> 254 -> valid_cap (1 -> 254 -> 2) (mapping present) / (output not present) : Passed
-11). curr_cap -> 254 -> invalid_cap (1 -> 254 -> 2) (mapping not present) / (output not present) : Passed
+8). curr_cap -> 254 -> 254 (1 -> 254 -> 254) / (output present) : 
+9)*. curr_cap -> 254 -> curr_cap (1 -> 254 -> 1) / (output present) : 
+10). curr_cap -> 254 -> valid_cap (1 -> 254 -> 2) (mapping present) / (output not present) : 
+11). curr_cap -> 254 -> invalid_cap (1 -> 254 -> 2) (mapping not present) / (output not present) : 
 
-12)*. curr_cap -> 255 -> 254 -> curr_cap (0 -> 255 -> 254 -> 0) / (output present) : Passed
-13). curr_cap -> 255 -> 254 -> valid_cap (0 -> 255 -> 254 -> 2) (mapping present) (output not present) : Passed
-14). curr_cap -> 255 -> 254 -> invalid_cap (0 -> 255 -> 254 -> 2) (mapping not present) / (output not present) : Passed
+12)*. curr_cap -> 255 -> 254 -> curr_cap (0 -> 255 -> 254 -> 0) / (output present) : 
+13). curr_cap -> 255 -> 254 -> valid_cap (0 -> 255 -> 254 -> 2) (mapping present) (output not present) : 
+14). curr_cap -> 255 -> 254 -> invalid_cap (0 -> 255 -> 254 -> 2) (mapping not present) / (output not present) : 
 
-15)*. curr_cap -> 254 -> 255 -> curr_cap (0 -> 254 -> 255 -> 0) / (output present) : Passed 
-16). curr_cap -> 254 -> 255 -> valid_cap (0 -> 254 -> 255 -> 2) (mapping present) / (output not present) : Passed
-17). curr_cap -> 254 -> 255 -> invalid_cap (0 -> 254 -> 255 -> 2) (mapping not present) / (output not present) : Passed
+15)*. curr_cap -> 254 -> 255 -> curr_cap (0 -> 254 -> 255 -> 0) / (output present) :  
+16). curr_cap -> 254 -> 255 -> valid_cap (0 -> 254 -> 255 -> 2) (mapping present) / (output present) : 
+17). curr_cap -> 254 -> 255 -> invalid_cap (0 -> 254 -> 255 -> 2) (mapping not present) / (output present) : 
 
-18). curr_cap -> 254 -> curr_cap -> 255 -> curr_cap (0 -> 254 -> 0 -> 255 -> 0) / (output present) : Passed
-19)*. curr_cap -> 254 -> curr_cap -> 255 -> valid_cap (0 -> 254 -> 0 -> 255 -> 2) (mapping present) / (output present) : Passed
-20). curr_cap -> 254 -> curr_cap -> 255 -> invalid_cap (0 -> 254 -> 0 -> 255 -> 2) (mapping not present) / (output not present) : Passed
+18). curr_cap -> 254 -> curr_cap -> 255 -> curr_cap (0 -> 254 -> 0 -> 255 -> 0) / (output present) : 
+19)*. curr_cap -> 254 -> curr_cap -> 255 -> valid_cap (0 -> 254 -> 0 -> 255 -> 2) (mapping present) / (output present) : 
+20). curr_cap -> 254 -> curr_cap -> 255 -> invalid_cap (0 -> 254 -> 0 -> 255 -> 2) (mapping not present) / (output not present) : 
 
 IV).Miscellaneous tests
-21). curr_cap -> valid_cap -> curr_cap (1 -> 2 -> 1) (mapping present) / (output present) : Passed
-22). curr_cap -> valid_cap -> curr_cap (1 -> 2 -> 1) (mapping not present) / (output not present) : Passed
+21). curr_cap -> valid_cap -> curr_cap (1 -> 2 -> 1) (mapping present) / (output present) : 
+22). curr_cap -> valid_cap -> curr_cap (1 -> 2 -> 1) (mapping not present) / (output not present) : 
 
 ______________________________________________________________________________________________________________________________________________
 --**--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**
@@ -54,12 +54,14 @@ ________________________________________________________________________________
 
 Compartment Values:
 1). Main things to compartmentalize are the following functions: 
-	print.cc
-		vprintf:
-		printf:
-		putstring:
+	print.c
+		vprintf: print.cap
+		printf: print.cap
+		putstring: print.cap
+	uart.c
+		uart_putchar: uart.cap
 
-	C1/C2/C3/C255/C254
+	C0/C1/C2/C255/C254
 
-2). primary_boot : C0
+2). boot_primary : C0
 	vsnprintf/strlen/htif_poweroff/uart_putchar : C255
