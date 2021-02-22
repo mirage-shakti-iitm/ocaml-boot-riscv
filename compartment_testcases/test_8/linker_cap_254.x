@@ -1,0 +1,16 @@
+PROVIDE(pc_base_254 = . );
+*(.text.vprintf)
+*(.text.printf)
+*(.text.putstring)
+*(.text.strcmp)
+*(.text.strcpy)
+*(.text.strlen)
+*(.text.isstring)
+*(.text.memset)
+*(.text.vsnprintf)
+*(.text.snprintf)
+*(.text.__check_fromhost)
+*(.text.__set_tohost)
+*(.text.do_tohost_fromhost)
+*(.text.htif_console_putchar)
+PROVIDE(pc_bound_254 = . );

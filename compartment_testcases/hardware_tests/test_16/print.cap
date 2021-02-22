@@ -1,0 +1,3 @@
+boot_vprintf:255
+boot_printf:254
+boot_putstring:2

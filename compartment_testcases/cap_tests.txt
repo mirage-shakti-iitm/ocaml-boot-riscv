@@ -7,6 +7,7 @@ primary_boot -> printf -> vprintf -> { putstring -> htif_console_putchar -> do_t
 	|										
 	----------> htif_poweroff
 
+
 Total functions : 9
 
 Test Cases:
@@ -85,3 +86,31 @@ Observations:
 Note: Compartment numbering usually starts from 0. Here for ease of use, we are starting with 1.
 
 6, 9, 12, 15, 19
+
+
+
+--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**
+
+Hardware Test:
+
+primary_boot -> printf -> vprintf -> putstring -> { uart_putchar }(loop)
+	|                        |  
+	|                        |
+	|						 ------> vsnprintf
+	|						 |
+	|					     ------> strlen
+	|										
+	----------> htif_poweroff
+
+
+Compartment Values:
+1). Main things to compartmentalize are the following functions: 
+	htif.cc:
+		__check_fromhost:
+		__set_tohost:
+		do_tohost_fromhost:
+		htif_console_putchar:
+	print.cc
+		vprintf:
+		printf:
+		putstring:

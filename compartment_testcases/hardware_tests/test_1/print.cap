@@ -1,0 +1,3 @@
+boot_vprintf:1
+boot_printf:1
+boot_putstring:1
