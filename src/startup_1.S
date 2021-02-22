@@ -374,10 +374,11 @@ Found_index:
     #Step 10: Call target function again
     mret
 
-CHECKCAP_CROSS_COMP_RETURN:
+
     #Step 0: Adding Checkcap instruction
     checkcap 0
-
+    
+CHECKCAP_CROSS_COMP_RETURN:
     #Step 1: Read CSR_UCHECKCAPSP
     csrr t2, ucheckcapsp
 
