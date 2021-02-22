@@ -40,6 +40,6 @@ cp build/src/libboot.a ${output_dir}/${libboot_name}
 # generate hello executable
 # riscv64-unknown-elf-gcc -static -nostdlib -nostartfiles ${test_program_dir}/hello.s -o ${test_program_dir}/hello
 # generate kernel_cap
-riscv64-unknown-elf-gcc -mcmodel=medany ${test_program_dir}/hello -o ${output_dir}/${kernel_name} -static -nostdlib -nostartfiles -Wl,-L$(LINKER_PATH) -Wl,-T${LINKER_PATH}/linker.x -Wl,--start-group ${output_dir}/${libboot_name} -Wl,--end-group
+riscv64-unknown-elf-gcc -mcmodel=medany ${test_program_dir}/hello -o ${output_dir}/${kernel_name} -static -nostdlib -nostartfiles -Wl,-L${LINKER_PATH} -Wl,-T${LINKER_PATH}/linker.x -Wl,--start-group ${output_dir}/${libboot_name} -Wl,--end-group
 # simulate in spike and store the output file in output.txt
 # spike ${output_dir}/${kernel_name} > ${output_dir}/${output_file}

@@ -568,7 +568,7 @@ void boot_primary() {
 }
 
 void boot_secondary() {
-    assert(false && "multicore systems are not supported");
+    // assert(false && "multicore systems are not supported");
 }
 
 uint64_t

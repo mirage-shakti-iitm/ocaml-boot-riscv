@@ -1,2 +1,0 @@
-/home/sai/Shakti-TEE-Practical/mirage-shakti/ocaml-boot-riscv/compartment_testcases/test_5
-/home/sai/Shakti-TEE-Practical/mirage-shakti/ocaml-boot-riscv/compartment_testcases/test_program
