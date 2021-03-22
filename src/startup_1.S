@@ -99,6 +99,11 @@ do_reset:
         csrw mcappcbaseboundbase, t4
         csrw mcrosscompexception, t5
         csrw mcrosscompretexception, t6
+        csrw 0xb03, 0x0   ## MHPMCOUNTER_3
+        csrw 0x323, 0x1f  ## MHPMEVENT_3 - Number of cross compartment exceptions
+        csrw 0xb04, 0x0   ## MHPMCOUNTER_4
+        li t6, 0x20
+        csrw 0x324, t6    ## MHPMEVENT_4 - Number of cycles spent in cross compartment ISR
         csrw mcapctl, t0
 
         # li x1, 0
