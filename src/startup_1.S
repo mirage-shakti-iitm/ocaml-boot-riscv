@@ -91,7 +91,7 @@ do_reset:
         # load cross-comp entry ISR PC value
         la t5, CHECKCAP_CROSS_COMP
         # load cross-comp return ISR PC value
-        la t6, CHECKCAP_CROSS_COMP_RETURN
+        la t6, CHECKCAP_CROSS_COMP_RETURN_ISR
         # set corresponding CSRs
         csrw ucurrcap, t1
         csrw mcapmatrixbase, t2
@@ -379,6 +379,7 @@ CHECKCAP_CROSS_COMP_RETURN:
     #Step 0: Adding Checkcap instruction
     checkcap 0
     
+CHECKCAP_CROSS_COMP_RETURN_ISR:
     #Step 1: Read CSR_UCHECKCAPSP
     csrr t2, ucheckcapsp
 
