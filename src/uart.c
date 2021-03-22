@@ -72,6 +72,9 @@
 void uart_exit()
 {
    asm volatile (
+        "csrr t5, 0xb03" "\n\t"
+        "csrr t6, 0xb04" "\n\t"
+        "csrr t4, 0xb00" "\n\t"
         "uart_end: li t1, 0x11300" "\n\t"	//The base address of UART config registers
         "lb a0, 12(t1)" "\n\t"
         "andi a0, a0, 0x1" "\n\t"
