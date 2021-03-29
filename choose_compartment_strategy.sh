@@ -3,7 +3,7 @@
 option=$1
 chosen_dir="compartment_allocations/strategy_${option}"
 cap_matrix_dir="compartment_strategy_details/strategy_${option}"
-src_dir="src/"
+src_dir="src"
 
 # chosen_dir will contain the *(.cap/cap_tee.ml) files
 cp ${chosen_dir}/* ${src_dir}/
