@@ -22,3 +22,6 @@ uninstall:
 	rm -rf $(BUILD)
 clean: 
 	rm -rf $(BUILD)
+	rm -f src/*.cap
+	rm -f src/startup_2.c
+	rm cap_matrix.h
