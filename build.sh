@@ -5,3 +5,4 @@ STRATEGY=1
 make all
 DESTLIB=/home/sai/Shakti-TEE-Practical/benchmarks/linked_list/strategy_${STRATEGY}
 cp build/src/libboot.a ${DESTLIB}/libboot.a
+make clean
