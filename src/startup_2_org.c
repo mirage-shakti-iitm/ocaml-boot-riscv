@@ -530,7 +530,7 @@ extern char pc_bound_255[];
     unsigned char 
         __attribute__(( aligned (16) )) 
         stack[STACK_SIZE] = {0xde, 0xad, 0xbe, 0xef};
-    extern void riscv_boot_finished(uintptr_t heap_start, uint64_t heap_size);
+    // extern void riscv_boot_finished(uintptr_t heap_start, uint64_t heap_size);
 void boot_primary() {
     // init floating point unit
     // enable timer interrupts & interrupts in general
