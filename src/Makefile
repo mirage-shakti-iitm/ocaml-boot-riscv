@@ -41,6 +41,10 @@ libboot.a: generate-asm add-checkcap $(OBJS) # startup_asm.o
 	riscv64-unknown-elf-ar qc libboot.a $(OBJS) # startup_asm.o
 	riscv64-unknown-elf-ranlib libboot.a
 
+libboot_normal.a: generate-asm $(OBJS)
+	riscv64-unknown-elf-ar qc libboot_normal.a $(OBJS)
+	riscv64-unknown-elf-ranlib libboot_normal.a
+
 generate-asm: $(SRCS)
 	$(CC) $(C_FLAGS) $(C_DEFINES) $(C_INCLUDES) $(SRCS) -S
 	$(CC) $(C_FLAGS) $(C_DEFINES) $(C_INCLUDES) startup_1.S -S > startup_1.s
