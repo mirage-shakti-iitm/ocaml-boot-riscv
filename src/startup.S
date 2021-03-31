@@ -8,7 +8,6 @@ reset_vector:
    j do_reset
 
 .global do_reset;
-.global run_constructors
 do_reset:
         li x1, 0
         li x2, 0
