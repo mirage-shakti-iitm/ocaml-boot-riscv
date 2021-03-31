@@ -59,7 +59,7 @@ do_reset:
         beqz a3, 2f
 
         // otherwise jump to arch_startup_secondary
-        # j boot_secondary
+        j boot_secondary
 2:
         // run constructors on hart 0
         jal run_constructors
