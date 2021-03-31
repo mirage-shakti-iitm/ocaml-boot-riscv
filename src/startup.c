@@ -44,7 +44,7 @@ void boot_primary() {
 #endif
 }
 
-void boot_secondary() {
-    assert(false && "multicore systems are not supported");
-}
+// void boot_secondary() {
+//     assert(false && "multicore systems are not supported");
+// }
 
