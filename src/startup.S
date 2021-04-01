@@ -58,12 +58,12 @@ do_reset:
         beqz a3, 2f
 
         // otherwise jump to arch_startup_secondary
-        j boot_secondary
+        # j boot_secondary
 2:
         // run constructors on hart 0
-        jal run_constructors
+        # jal run_constructors
         // and then call c-land
-        j boot_primary
+        # j boot_primary
 .size do_reset, . - do_reset
 
 .global trap_handler
@@ -114,7 +114,7 @@ trap_vector:
     csrr a0, mcause
     mv a1, sp
     
-    jal trap_handler
+    # jal trap_handler
 
     # Restore exception pointer
     ld a0, 0*8(sp)
