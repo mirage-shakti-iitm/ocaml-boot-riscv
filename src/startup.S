@@ -2,7 +2,7 @@
 #include "encoding.h"
 
 .option norvc
-.section .text.init,"ax",@progbits
+.section .text,"ax",@progbits
 .globl reset_vector
 reset_vector:
    j do_reset
@@ -63,8 +63,9 @@ do_reset:
         // run constructors on hart 0
         # jal run_constructors
         // and then call c-land
-        la x2, boot_primary
-        jr x2
+        j boot_primary
+        # la x2, boot_primary
+        # jr x2
 .size do_reset, . - do_reset
 
 .global trap_handler
@@ -115,8 +116,9 @@ trap_vector:
     csrr a0, mcause
     mv a1, sp
     
-    la x2, trap_handler
-    jr x2
+    jal trap_handler
+    # la x2, trap_handler
+    # jr x2
 
     # Restore exception pointer
     ld a0, 0*8(sp)
