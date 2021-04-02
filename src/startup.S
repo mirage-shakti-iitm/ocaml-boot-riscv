@@ -64,8 +64,8 @@ do_reset:
         # jal run_constructors
         // and then call c-land
         # j boot_primary
-        # la x2, boot_primary
-        # jr x2
+        la x2, boot_primary
+        jr x2
 .size do_reset, . - do_reset
 
 .global trap_handler
