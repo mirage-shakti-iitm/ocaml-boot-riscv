@@ -118,7 +118,7 @@ trap_vector:
     
     # jal trap_handler
     la x2, trap_handler
-    jr x2
+    jalr x2
 
     # Restore exception pointer
     ld a0, 0*8(sp)
