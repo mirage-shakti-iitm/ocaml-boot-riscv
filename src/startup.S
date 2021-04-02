@@ -64,8 +64,8 @@ do_reset:
         # jal run_constructors
         // and then call c-land
         # j boot_primary
-        la x2, boot_primary
-        jr x2
+        la t3, boot_primary
+        jr t3
 .size do_reset, . - do_reset
 
 .global trap_handler
@@ -117,8 +117,8 @@ trap_vector:
     mv a1, sp
     
     # jal trap_handler
-    la x2, trap_handler
-    jalr x2
+    la t3, trap_handler
+    jalr t3
 
     # Restore exception pointer
     ld a0, 0*8(sp)
