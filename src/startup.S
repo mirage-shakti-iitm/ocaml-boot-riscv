@@ -116,9 +116,9 @@ trap_vector:
     csrr a0, mcause
     mv a1, sp
     
-    jal trap_handler
-    # la x2, trap_handler
-    # jr x2
+    # jal trap_handler
+    la x2, trap_handler
+    jr x2
 
     # Restore exception pointer
     ld a0, 0*8(sp)
