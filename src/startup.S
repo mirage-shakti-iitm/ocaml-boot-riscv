@@ -2,7 +2,7 @@
 #include "encoding.h"
 
 .option norvc
-.section .text.init,"ax",@progbits
+.section .text,"ax",@progbits
 .globl reset_vector
 reset_vector:
    j do_reset
