@@ -12,6 +12,7 @@
         __attribute__(( aligned (16) )) 
         stack[STACK_SIZE] = {0xde, 0xad, 0xbe, 0xef};
     extern void riscv_boot_finished(uintptr_t heap_start, uint64_t heap_size);
+    extern void main();
 void boot_primary() {
     // init floating point unit
     // enable timer interrupts & interrupts in general
@@ -25,16 +26,16 @@ void boot_primary() {
     uintptr_t start = (uintptr_t) &__KERNEL_END;
 
     printf_boot("ocaml-boot: heap@0x%x stack@0x%x\n",start, &stack[stack_size]);
-    /*  
+  
     _nolibc_init(start, mem_size);
 
-    const char *argv[2] = { "ocaml-boot-riscv", nullptr };
+    // const char *argv[2] = { "ocaml-boot-riscv", nullptr };
 
     // call ocaml land
-    caml_startup(argv);
-    */
-    riscv_boot_finished(start, mem_size);
-
+    // caml_startup(argv);
+    
+    // riscv_boot_finished(start, mem_size);
+    main();
     printf_boot("ocaml-boot: caml runtime returned. shutting down!\n");
 // #ifndef UART
 #if !defined(SHAKTI_UART)   
