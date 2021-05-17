@@ -42,7 +42,7 @@ int isstring(char c)
   return 0;
 }
 
-void memset(void *x, int c, uint32_t n) {
+void memset_boot(void *x, int c, uint32_t n) {
     for (uint32_t i = 0; i < n; i++) {
         ((volatile char *)x)[i] = c;
     }
