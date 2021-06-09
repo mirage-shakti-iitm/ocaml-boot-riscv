@@ -1,2 +1,2 @@
-#define STACK_SIZE 8192*10
-#define STACK_SHIFT 13
+#define STACK_SIZE 32768
+#define STACK_SHIFT 15
