@@ -34,8 +34,8 @@ void boot_primary() {
     // call ocaml land
     // caml_startup(argv);
     
-    // riscv_boot_finished(start, mem_size);
-    main();
+    riscv_boot_finished(start, mem_size);
+    // main();
     printf_boot("ocaml-boot: caml runtime returned. shutting down!\n");
 // #ifndef UART
 #if !defined(SHAKTI_UART)   
