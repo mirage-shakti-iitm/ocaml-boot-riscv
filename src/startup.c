@@ -27,7 +27,7 @@ void boot_primary() {
 
     printf_boot("ocaml-boot: heap@0x%x stack@0x%x\n",start, &stack[stack_size]);
   
-    _nolibc_init(start, mem_size);
+    // _nolibc_init(start, mem_size);
 
     // const char *argv[2] = { "ocaml-boot-riscv", nullptr };
 
@@ -38,7 +38,7 @@ void boot_primary() {
     // main();
     printf_boot("ocaml-boot: caml runtime returned. shutting down!\n");
 // #ifndef UART
-#if !defined(SHAKTI_UART)   
+#if defined(HTIF)   
     htif_poweroff();
 #else
     while(1);
