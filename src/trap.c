@@ -15,5 +15,12 @@ void trap_handler(uint64_t mcause, uintptr_t context) {
         // irq
         printf_boot("ocaml boot: irq (%d) @ 0x%x mtval=0x%x\n", masked, read_csr(mepc), read_csr(mtval));
     }
-    htif_poweroff();
+    #if defined(HTIF)   
+        htif_poweroff();
+    #endif
+    #if defined(SHAKTI_UART)
+        uart_poweroff();
+    #else
+        while(1);
+    #endif
 }

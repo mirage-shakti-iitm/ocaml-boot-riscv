@@ -40,6 +40,9 @@ void boot_primary() {
 // #ifndef UART
 #if defined(HTIF)   
     htif_poweroff();
+#endif
+#if defined(SHAKTI_UART)
+    uart_poweroff();
 #else
     while(1);
 #endif

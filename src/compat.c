@@ -8,7 +8,14 @@
     typedef unsigned long long time__t;
 
     void riscv_poweroff(int status){
-        htif_poweroff();
+        #if defined(HTIF)   
+            htif_poweroff();
+        #endif
+        #if defined(SHAKTI_UART)
+            uart_poweroff();
+        #else
+            while(1);
+        #endif
     }
     void riscv_write(const char* s, unsigned int length) {
         putstring(s, length);

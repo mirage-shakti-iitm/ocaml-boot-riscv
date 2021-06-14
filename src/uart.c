@@ -58,6 +58,23 @@
         return ch;
     }
 
+
+    void uart_poweroff()
+    {
+    
+       asm volatile (
+            "uart_end: li t1, 0x11300" "\n\t"   //The base address of UART config registers
+            "lb a0, 12(t1)" "\n\t"
+            "andi a0, a0, 0x1" "\n\t"
+            "beqz a0, uart_end" "\n\t"
+            "li a0,  0x20000" "\n\t"
+            "sw a0,  12(a0)" "\n\t"
+                    :
+                    :
+                    :"a0","t1","cc","memory"); 
+    }
+
+
     void init_uart()
     {
 #ifdef QEMU_UART
