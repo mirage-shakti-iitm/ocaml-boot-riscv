@@ -11,7 +11,7 @@ void vprintf(const char* s, va_list vl)
 {
   char buf[256];
   vsnprintf(buf, sizeof buf, s, vl);
-  size_t len = strlen(buf);
+  size_t len = strlen_boot(buf);
   putstring(buf, len);
 }
 

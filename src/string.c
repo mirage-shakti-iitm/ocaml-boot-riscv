@@ -21,7 +21,7 @@ char* strcpy(char *dst, const char *src) {
     }
 }
 
-int strlen(const char *a) {
+int strlen_boot(const char *a) {
     unsigned ret = 0;
     for (; *a != '\0'; ret ++) {
         a++;

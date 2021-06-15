@@ -10,7 +10,7 @@
 
     int strcmp(const char * a, const char* b);
     char* strcpy(char* dst, const char* src);
-    int strlen(const char* a);
+    int strlen_boot(const char* a);
     int isstring(char c);
     void memset_boot(void *x, int c, uint32_t n);
     int vsnprintf(char* out, size_t n, const char* s, va_list vl);
