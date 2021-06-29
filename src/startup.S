@@ -43,6 +43,13 @@ do_reset:
         csrw mscratch, x0
 
         # write mtvec and make sure it sticks
+        csrw 0xb03, 0x0   ## MHPMCOUNTER_3
+        li t6, 0x21
+        csrw 0x323, t6    ## MHPMEVENT_3
+        csrw 0xb04, 0x0   ## MHPMCOUNTER_4
+        li t6, 0x22
+        csrw 0x324, t6    ## MHPMEVENT_4
+        li t6, 0x0
         la t0, trap_vector
         csrw mtvec, t0
         csrr t1, mtvec
