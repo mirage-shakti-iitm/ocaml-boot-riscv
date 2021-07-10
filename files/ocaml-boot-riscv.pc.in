@@ -1,0 +1,12 @@
+prefix_dir=%{prefix}%/riscv-sysroot
+exec_prefix=%{prefix}%/riscv-sysroot
+libdir=${exec_prefix}/lib/ocaml-boot-riscv
+includedir=${prefix_dir}/include/ocaml-boot-riscv
+
+Name: ocaml-boot-riscv
+Description: 
+Version: 0.1
+
+Requires:
+Libs: -L${libdir} -lboot
+Cflags: -I${includedir}

@@ -11,11 +11,18 @@ license: "MIT"
 tags: "org:mirage"
 dev-repo: "git+https://gitlab.com/shaktiproject/tools/shakti-tee/ocaml-boot-riscv.git#mirage"
 build: [
-	[make "add-cap-files"]
-	[make "all"]
+				[make "add-cap-files"]
+        [make "all"]
 ]
 install: [make "install"]
 remove: []
+
+substs: [
+  "ocaml-boot-riscv.pc"
+]
+extra-files: [
+  ["ocaml-boot-riscv.pc.in" "md5=6115637b36e2d72c3d0136c2fd39229a"]
+]
 
 synopsis: "Core package for booting anything on riscv"
 description:
