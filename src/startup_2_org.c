@@ -546,15 +546,15 @@ void boot_primary() {
     // boot_printf("\nGanesha\n");
 
     // boot_printf("ocaml-boot: heap@0x%x stack@0x%x\n",start, &stack[stack_size]);
-    /*  
+      
     _nolibc_init(start, mem_size);
 
-    const char *argv[2] = { "ocaml-boot-riscv", nullptr };
+    // const char *argv[2] = { "ocaml-boot-riscv", nullptr };
 
     // call ocaml land
-    caml_startup(argv);
-    */
-    riscv_boot_finished(start, mem_size);
+    // caml_startup(argv);
+    main();
+    // riscv_boot_finished(start, mem_size);
 
     // boot_printf("ocaml-boot: caml runtime returned. shutting down!\n");
 // #ifndef UART

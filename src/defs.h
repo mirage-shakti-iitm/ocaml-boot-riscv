@@ -1,5 +1,5 @@
-#define STACK_SIZE 4096
-#define STACK_SHIFT 12
+#define STACK_SIZE 16384
+#define STACK_SHIFT 14
 
 // Compartment specific macros that should be set on entry.
 #define CHECKCAP_STACK_SIZE 4096
