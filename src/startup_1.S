@@ -104,6 +104,12 @@ do_reset:
         csrw 0xb04, 0x0   ## MHPMCOUNTER_4
         li t6, 0x20
         csrw 0x324, t6    ## MHPMEVENT_4 - Number of cycles spent in cross compartment ISR
+        csrw 0xb05, 0x0   ## MHPMCOUNTER_5
+        li t6, 0x21
+        csrw 0x325, t6  ## MHPMEVENT_5 - Number of cycles spent in hash instructions
+        csrw 0xb06, 0x0   ## MHPMCOUNTER_6
+        li t6, 0x22
+        csrw 0x326, t6    ## MHPMEVENT_6 - Number of cycles spent in val instructions
         csrw mcapctl, t0
 
         # li x1, 0
