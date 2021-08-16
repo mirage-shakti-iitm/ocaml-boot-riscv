@@ -561,7 +561,6 @@ void boot_primary() {
 #if !defined(SHAKTI_UART)   
     htif_poweroff();
 #elif defined(SHAKTI_UART)
-    boot_printf("Performance numbers : \n compartment Exceptions 0x%x ; \n cycles spent in compartments exceptions 0x%x ; \n cycles spent in hash instruction 0x%x ; \n cycles spent in val instruction 0x%x \n", read_csr(mhpmcounter3), read_csr(mhpmcounter4), read_csr(mhpmcounter5), read_csr(mhpmcounter6)); 
     uart_exit();
 #else
     while(1);
