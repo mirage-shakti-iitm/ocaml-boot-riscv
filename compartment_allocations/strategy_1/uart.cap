@@ -1,4 +1,4 @@
-uart_putchar:2
-uart_getchar:2
-init_uart:2
-uart_exit:3
+uart_putchar:255
+uart_getchar:255
+init_uart:255
+uart_exit:255
