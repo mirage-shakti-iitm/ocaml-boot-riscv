@@ -554,7 +554,7 @@ void boot_primary() {
     // call ocaml land
     // caml_startup(argv);
     main();
-    boot_printf("\n \n Performance numbers : \n compartment Exceptions : 0x%x ; \n cycles spent in compartments exceptions : 0x%x ; \n cycles spent in hash instruction : 0x%x ; \n cycles spent in val instruction : 0x%x \n", read_csr(mhpmcounter3), read_csr(mhpmcounter4), read_csr(mhpmcounter5), read_csr(mhpmcounter6)); 
+    boot_printf("\n \n Performance numbers : \n compartment Exceptions : 0x%x ; \n cycles spent in compartments exceptions : 0x%x ; \n cycles spent in hash instruction : 0x%x ; \n cycles spent in val instruction : 0x%x \n ; \n Total cycles spent : 0x%x \n", read_csr(mhpmcounter3), read_csr(mhpmcounter4), read_csr(mhpmcounter5), read_csr(mhpmcounter6), read_csr(mcycle));
 
     // riscv_boot_finished(start, mem_size);
 
