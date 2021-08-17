@@ -110,7 +110,7 @@ do_reset:
         csrw 0xb06, 0x0   ## MHPMCOUNTER_6
         li t6, 0x22
         csrw 0x326, t6    ## MHPMEVENT_6 - Number of cycles spent in val instructions
-        csrw mcapctl, x0
+        csrw mcapctl, t0
 
         # li x1, 0
         # li x2, 0
