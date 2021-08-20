@@ -554,7 +554,7 @@ void boot_primary() {
     // call ocaml land
     // caml_startup(argv);
     main();
-    boot_printf("\n \n Performance numbers : \n mcycle: 0x%016lx ; \n comp_exceptions : 0x%016lx ; \n cycles_comp_exceptions : 0x%016lx ; \n cycles_hash : 0x%016lx ; \n cycles_val : 0x%016lx ;", read_csr(mcycle), read_csr(mhpmcounter3), read_csr(mhpmcounter4), read_csr(mhpmcounter5), read_csr(mhpmcounter6));
+    boot_printf("\n \n Performance numbers : \n mcycle: 0x%lx ; \n comp_exceptions : 0x%lx ; \n cycles_comp_exceptions : 0x%lx ; \n cycles_hash : 0x%lx ; \n cycles_val : 0x%lx ;", read_csr(mcycle), read_csr(mhpmcounter3), read_csr(mhpmcounter4), read_csr(mhpmcounter5), read_csr(mhpmcounter6));
     // riscv_boot_finished(start, mem_size);
 
     // boot_printf("ocaml-boot: caml runtime returned. shutting down!\n");
