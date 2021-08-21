@@ -11,7 +11,6 @@ license: "MIT"
 tags: "org:mirage"
 dev-repo: "git+https://gitlab.com/shaktiproject/tools/shakti-tee/ocaml-boot-riscv.git#mirage"
 build: [
-				[make "add-cap-files"]
         [make "all"]
 ]
 install: [make "install"]

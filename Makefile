@@ -1,4 +1,4 @@
-.PHONY: all clean install add-cap-files
+.PHONY: all clean install
 
 BUILD = $(shell pwd)/build
 
@@ -11,9 +11,6 @@ $(BUILD)/src/libboot.a: $(BUILD)/src/Makefile
 	$(MAKE) -C $(BUILD)/src libboot.a
 
 all: $(BUILD)/src/libboot.a
-
-add-cap-files:
-	./choose_compartment_strategy.sh $(COMPARTMENT_STRATEGY_CHOICE)
 
 install: all
 	./install.sh

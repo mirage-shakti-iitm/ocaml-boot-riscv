@@ -6,14 +6,14 @@ ASM_DEFINES=-DSHAKTI_UART
 
 ASM_INCLUDES=-I/home/sai/Shakti_TEE_Practical/mirage-shakti/ocaml-boot-riscv/include -I/home/sai/Shakti_TEE_Practical/mirage-shakti/ocaml-boot-riscv/include/ocaml-boot-riscv -I/home/sai/Shakti_TEE_Practical/mirage-shakti/ocaml-boot-riscv/src 
 
-C_FLAGS=-mcmodel=medany -ffunction-sections
+C_FLAGS=-mcmodel=medany
 
 C_DEFINES=-DSHAKTI_UART
 
 # C_INCLUDES=-I/home/sai/Shakti_TEE_Practical/mirage-shakti/ocaml-boot-riscv/include -I/home/sai/Shakti_TEE_Practical/mirage-shakti/ocaml-boot-riscv/include/ocaml-boot-riscv -I/home/sai/Shakti_TEE_Practical/mirage-shakti/ocaml-boot-riscv/src 
 C_INCLUDES=-I../include -I../include/ocaml-boot-riscv -I. 
 
-OBJS=config.o htif.o print.o string.o trap.o uart.o timer.o compat.o startup_2.o startup_1.o # initialize_pc_base_bounds.o# htif_exception.o print_exception.o
+OBJS=config.o htif.o print.o string.o trap.o uart.o timer.o compat.o startup_2.o # initialize_pc_base_bounds.o# htif_exception.o print_exception.o
 
 SRCS=config.c htif.c print.c string.c trap.c uart.c timer.c compat.c startup_2.c startup_1.S # initialize_pc_base_bounds.c # htif_exception.c print_exception.c
 
@@ -21,7 +21,7 @@ ASMS=config.s htif.s print.s string.s trap.s uart.s timer.s compat.s startup_2.s
 
 CAPS=config.cap htif.cap print.cap string.cap trap.cap uart.cap timer.cap compat.cap startup_2.cap startup_1.cap # initialize_pc_base_bounds.cap # htif_exception.cap print_exception.cap
 
-$(OBJS):%.o: %.s
+$(OBJS):%.o: %.c
 	$(CC) $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o $@ -c $<
 
 # $(ASMS):%.s: %.c
@@ -30,24 +30,13 @@ $(OBJS):%.o: %.s
 
 .phony: generate-asm generate-initial-cap-tee add-checkap
 
-add-checkcap: $(ASMS)
-	for f in $^; do postProcessing.py ./$$f; done
-
 startup_asm.o:
 	$(CC) $(ASM_DEFINES) $(ASM_INCLUDES) $(C_FLAGS) -o startup_asm.o -c startup_1.S
 # 	$(CC) $(ASM_DEFINES) $(ASM_INCLUDES) $(C_FLAGS) -o startup_asm.o -c startup.S  
 
-libboot.a: generate-asm add-checkcap $(OBJS) # startup_asm.o
-	riscv64-unknown-elf-ar qc libboot.a $(OBJS) # startup_asm.o
+libboot.a: $(OBJS) startup_asm.o
+	riscv64-unknown-elf-ar qc libboot.a $(OBJS) startup_asm.o
 	riscv64-unknown-elf-ranlib libboot.a
-
-generate-asm: $(SRCS)
-	$(CC) $(C_FLAGS) $(C_DEFINES) $(C_INCLUDES) $(SRCS) -S
-	$(CC) $(C_FLAGS) $(C_DEFINES) $(C_INCLUDES) startup_1.S -S > startup_1.s
-
-generate-initial-cap-tee: generate-asm $(ASMS)
-	initial_cap_file_generator c 254 $(ASMS)
-# 	python postProcessing.py passParams.s passParams_out.s
 
 
 # config.o:
