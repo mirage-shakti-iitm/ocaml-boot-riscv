@@ -545,7 +545,7 @@ void boot_primary() {
 
     // boot_printf("\nGanesha\n");
 
-    // boot_printf("ocaml-boot: heap@0x%x stack@0x%x\n",start, &stack[stack_size]);
+    boot_printf("ocaml-boot: heap@0x%x stack@0x%x\n",start, &stack[stack_size]);
       
     _nolibc_init(start, mem_size);
 
