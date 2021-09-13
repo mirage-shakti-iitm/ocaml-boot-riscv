@@ -5,9 +5,9 @@
 extern char __KERNEL_END;
 
 
-//provided by libasmrun.a
+// provided by libasmrun.a
 // extern "C" {
-//     extern void caml_startup(const char** argv);
+    extern void caml_startup(const char** argv);
 // }
 
 //provided by libnolibc.a

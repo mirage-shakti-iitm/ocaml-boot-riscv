@@ -551,10 +551,10 @@ void boot_primary() {
 
     // const char *argv[2] = { "ocaml-boot-riscv", nullptr };
 
-    // call ocaml land
-    // caml_startup(argv);
     main();
     boot_printf("\n \n Performance numbers : \n mcycle: 0x%lx ; \n comp_exceptions : 0x%lx ; \n cycles_comp_exceptions : 0x%lx ; \n cycles_hash : 0x%lx ; \n cycles_val : 0x%lx ;", read_csr(mcycle), read_csr(mhpmcounter3), read_csr(mhpmcounter4), read_csr(mhpmcounter5), read_csr(mhpmcounter6));
+        // call ocaml land
+    // caml_startup(argv);
     // riscv_boot_finished(start, mem_size);
 
     // boot_printf("ocaml-boot: caml runtime returned. shutting down!\n");
