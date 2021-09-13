@@ -13,9 +13,12 @@
         stack[STACK_SIZE] = {0xde, 0xad, 0xbe, 0xef};
     extern void riscv_boot_finished(uintptr_t heap_start, uint64_t heap_size);
 void boot_primary() {
+    
     // init floating point unit
-    // enable timer interrupts & interrupts in general
+    // enable timer interrupts & interrupts in general    
     uint64_t status = read_csr(mstatus);
+    const char *argv[2] = { "ocaml-boot-riscv", 0};
+    
     status |= MSTATUS_FS;
     status |= MSTATUS_MIE;
     write_csr(mstatus, status);
@@ -24,22 +27,19 @@ void boot_primary() {
     // init nolibc of ocaml_freestanding
     uintptr_t start = (uintptr_t) &__KERNEL_END;
 
-    // boot_printf("\nGanesha\n");
-
     boot_printf("ocaml-boot: heap@0x%x stack@0x%x\n",start, &stack[stack_size]);
       
-    _nolibc_init(start, mem_size);
-
-    const char *argv[2] = { "ocaml-boot-riscv", 0};
     boot_printf("\n \n Performance numbers : \n mcycle: 0x%lx \n", read_csr(mcycle));
+
+    _nolibc_init(start, mem_size);
 
     // call ocaml land
     caml_startup(argv);
-    // main();
-    boot_printf("\n \n Performance numbers : \n mcycle: 0x%lx ; \n comp_exceptions : 0x%lx ; \n cycles_comp_exceptions : 0x%lx ; \n cycles_hash : 0x%lx ; \n cycles_val : 0x%lx ;", read_csr(mcycle), read_csr(mhpmcounter3), read_csr(mhpmcounter4), read_csr(mhpmcounter5), read_csr(mhpmcounter6));
-    // riscv_boot_finished(start, mem_size);
 
-    // boot_printf("ocaml-boot: caml runtime returned. shutting down!\n");
+    boot_printf("\n \n Performance numbers : \n mcycle: 0x%lx ; \n comp_exceptions : 0x%lx ; \n cycles_comp_exceptions : 0x%lx ; \n cycles_hash : 0x%lx ; \n cycles_val : 0x%lx ;", read_csr(mcycle), read_csr(mhpmcounter3), read_csr(mhpmcounter4), read_csr(mhpmcounter5), read_csr(mhpmcounter6));
+
+    boot_printf("ocaml-boot: caml runtime returned. shutting down!\n");
+
 // #ifndef UART
 #if !defined(SHAKTI_UART)   
     htif_poweroff();

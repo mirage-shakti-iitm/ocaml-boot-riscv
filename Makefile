@@ -1,4 +1,4 @@
-.PHONY: all clean install
+.PHONY: all clean install libboot
 
 BUILD = $(shell pwd)/build
 
@@ -7,10 +7,19 @@ $(BUILD)/src/Makefile:
 	cp -r src $(BUILD)
 	cp -r include $(BUILD)
 
-$(BUILD)/src/libboot.a: $(BUILD)/src/Makefile
-	$(MAKE) -C $(BUILD)/src libboot.a
+# $(BUILD)/src/libboot_c.a: $(BUILD)/src/Makefile
+libboot: $(BUILD)/src/Makefile
+	$(MAKE) -C $(BUILD)/src libboot_c.a
+	$(MAKE) -C $(BUILD)/src libboot_ocaml.a
+	$(MAKE) -C $(BUILD)/src libboot_mirage.a
 
-all: $(BUILD)/src/libboot.a
+# $(BUILD)/src/libboot_ocaml.a: $(BUILD)/src/Makefile
+# 	$(MAKE) -C $(BUILD)/src libboot_ocaml.a
+
+# $(BUILD)/src/libboot_mirage.a: $(BUILD)/src/Makefile
+# 	$(MAKE) -C $(BUILD)/src libboot_mirage.a
+
+all: libboot # $(BUILD)/src/libboot_c.a $(BUILD)/src/libboot_ocaml.a $(BUILD)/src/libboot_mirage.a
 
 install: all
 	./install.sh
