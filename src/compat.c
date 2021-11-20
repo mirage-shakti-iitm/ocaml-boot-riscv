@@ -18,6 +18,11 @@
         return (time__t) *tmp;
     }
 
+    time__t riscv_cycle_counter() {
+        volatile unsigned long* tmp = (volatile unsigned long*)mtime;
+        return (time__t) *tmp;
+    }
+
     void riscv_wait(time__t delay) {
         // time__t curr = riscv_clock_monotonic();
         // time__t next = curr+delay;
