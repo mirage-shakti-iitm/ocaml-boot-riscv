@@ -467,8 +467,8 @@ CAPABILITY_CHECK_FAIL:
     # HWR Begin
     csrw mcapctl, x0 # Disable Capability checks
     # HWR End
-    
-    j print_checkcap_cap_matrix_fail
+    la t1, print_checkcap_cap_matrix_fail
+    jr t1
 
 CHECKCAP_NO_CROSS_COMP_FAIL:
     # Cross-Compartment jump attempted when CSR_UNOCROSSCOMP bit set
@@ -476,5 +476,5 @@ CHECKCAP_NO_CROSS_COMP_FAIL:
     # HWR Begin
     csrw mcapctl, x0 # Disable Capability checks
     # HWR End
-
-    j print_checkcap_no_cross_comp_fail
+    la t1, print_checkcap_no_cross_comp_fail
+    jr t1
