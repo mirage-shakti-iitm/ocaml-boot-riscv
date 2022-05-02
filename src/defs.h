@@ -2,7 +2,7 @@
 #define STACK_SHIFT 20
 
 // Compartment specific macros that should be set on entry.
-#define CHECKCAP_STACK_SIZE 4096*2
+#define CHECKCAP_STACK_SIZE 4096*6
 #define ENABLE_CAP 0x1
 #define INITIAL_COMPARTMENT 0x0
 #define Total_Compartments 256
