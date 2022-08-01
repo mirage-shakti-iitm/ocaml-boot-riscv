@@ -160,7 +160,7 @@ do_reset:
         j boot_primary
 .size do_reset, . - do_reset
 
-# .section .text.trap_vector,"ax",@progbits
+.section .text.trap_vector,"ax",@progbits
 .global trap_vector
 trap_vector:
     # checkcap 255  
