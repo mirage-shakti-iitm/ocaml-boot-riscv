@@ -160,10 +160,10 @@ do_reset:
         j boot_primary
 .size do_reset, . - do_reset
 
-
+# .section .text.trap_vector,"ax",@progbits
 .global trap_vector
 trap_vector:
-    
+    # checkcap 255  
     # HWR Begin
     csrr t2, mcause
     li t3, CAUSE_TEE_PC_OUT_OF_BOUNDS_EXCEPTION
