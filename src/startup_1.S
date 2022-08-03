@@ -69,7 +69,7 @@ do_reset:
         la t0, trap_vector
         csrw mtvec, t0
         csrr t1, mtvec
-1:      bne t0, t1, 1b
+#1:      bne t0, t1, 1b
 
         // stacks grow backwards, set correct tos for hart 0
         la sp, stack + STACK_SIZE
@@ -160,7 +160,7 @@ do_reset:
         j boot_primary
 .size do_reset, . - do_reset
 
-.section .text.trap_vector,"ax",@progbits
+# .section .text.trap_vector,"ax",@progbits
 .global trap_vector
 trap_vector:
     # checkcap 255  
