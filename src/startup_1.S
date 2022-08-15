@@ -265,44 +265,36 @@ trap_vector:
 .global print_checkcap_no_cross_comp_fail
 
 CHECKCAP_CROSS_COMP:
+    
+    #Step 0: Saving t2
+    # csrw mscratch, t2
+
+
     #Step 1: Check if it is a tail-call, if yes skip saving the return registers on the checkcap-stack and changing the return-address
-    la t0, CHECKCAP_CROSS_COMP_RETURN
-    beq ra, t0, COMMON_CROSS_COMP
+    la t2, CHECKCAP_CROSS_COMP_RETURN
+    beq ra, t2, COMMON_CROSS_COMP
 
     #Step 2: Read CSR_UCHECKCAPSP
     csrr t2, ucheckcapsp
 
     #Step 3: Storing curr_cap, ra, sp, gp, tp register
 
-    addi t2, t2, -19*8
+    addi t2, t2, -7*8
 
     # actual t0 stored in mscratch is saved later (neglect this comment for now, because no need to save/restore temporary registers as they are caller-saved)
+    # mepc is saved later
     sd ra, 1*8(t2)
     sd sp, 2*8(t2)
     sd gp, 3*8(t2)
     sd tp, 4*8(t2)
-    sd s0, 5*8(t2)
-    sd s1, 6*8(t2)
-    sd s2, 7*8(t2)
-    sd s3, 8*8(t2)
-    sd s4, 9*8(t2)
-    sd s5, 10*8(t2)
-    sd s6, 11*8(t2)
-    sd s7, 12*8(t2)
-    sd s8, 13*8(t2)
-    sd s9, 14*8(t2)
-    sd s10,15*8(t2)
-    sd s11,16*8(t2)
-
-
 
     csrr t3, ucurrcappcbase
     #store CURRCAPPCBASE
-    sd t3, 17*8(t2)
+    sd t3, 5*8(t2)
 
     csrr t3, ucurrcappcbound
     #store CURRCAPPCBOUND
-    sd t3, 18*8(t2)
+    sd t3, 6*8(t2)
 
     csrr t3, ucurrcap
     #store CURRCAP
@@ -416,25 +408,13 @@ CHECKCAP_CROSS_COMP_RETURN_ISR:
     ld sp, 2*8(t2)
     ld gp, 3*8(t2)
     ld tp, 4*8(t2)
-    ld s0, 5*8(t2)
-    ld s1, 6*8(t2)
-    ld s2, 7*8(t2)
-    ld s3, 8*8(t2)
-    ld s4, 9*8(t2)
-    ld s5, 10*8(t2)
-    ld s6, 11*8(t2)
-    ld s7, 12*8(t2)
-    ld s8, 13*8(t2)
-    ld s9, 14*8(t2)
-    ld s10,15*8(t2)
-    ld s11,16*8(t2)
 
     # restore CSR_UCURRCAP_PCBASE
-    ld t1, 17*8(t2)
+    ld t1, 5*8(t2)
     csrw ucurrcappcbase, t1
 
     # restore CSR_UCURRCAP_PCBOUND
-    ld t1, 18*8(t2)
+    ld t1, 6*8(t2)
     csrw ucurrcappcbound, t1
     
     # restore CSR_UCURRCAP
@@ -442,7 +422,7 @@ CHECKCAP_CROSS_COMP_RETURN_ISR:
     csrw ucurrcap, t1
 
     # update CSR_UCHECKCAPSP
-    addi t2, t2, 19*8
+    addi t2, t2, 7*8
     csrw ucheckcapsp, t2
 
     # Step 3: Zero out the t0-t6 registers 
