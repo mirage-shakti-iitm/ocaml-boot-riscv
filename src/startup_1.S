@@ -306,8 +306,27 @@ CHECKCAP_CROSS_COMP:
     # update CSR_UCHECKCAPSP
     csrw ucheckcapsp, t2
 
+    # Pushing actual ra to separate stack for ocaml root scanning
+    csrr t1, ucurrcap
+    sll t1, t1, 0x3
+    la t0, ocaml_pc_end
+    add t0, t1, t0
+    ld t1, 0(t0)
+    bltu t1, ra, NOT_OCAML
+    la t0, ocaml_gc_cross_compartment_stack_position
+    ld t2, 0(t0)
+    la t1, ocaml_gc_cross_compartment_stack
+    sll t2, t2, 0x3 
+    add t1, t1, t2
+    sd ra, 0(t1)
+    addi t2, t2, 1
+    sd t2, 0(t0)
+
+NOT_OCAML:
     #Step 4: setting the ra to point to CHECKCAP_CROSS_COMP_RETURN
     la ra, CHECKCAP_CROSS_COMP_RETURN
+
+
 
     ##### Not doing this check for now
     #Step 5: Checking whether CSR_UCHECKCAPSP is within CSR_MCHECKCAPSPBASE and CSR_MCHECKCAPSPBOUND
@@ -428,6 +447,24 @@ CHECKCAP_CROSS_COMP_RETURN_ISR:
     addi t2, t2, 7*8
     csrw ucheckcapsp, t2
 
+    # Removing actual ra from separate stack if returning to ocaml land
+    # csrr t1, ucurrcap
+    sll t1, t1, 0x3
+    la t0, ocaml_pc_end
+    add t0, t1, t0
+    ld t1, 0(t0)
+    bltu t1, ra, NOT_OCAML_R
+    la t0, ocaml_gc_cross_compartment_stack_position
+    ld t2, 0(t0)
+    beq t2, x0, NOT_OCAML_R
+    addi t2, t2, -1
+    la t1, ocaml_gc_cross_compartment_stack
+    sll t2, t2, 0x3
+    add t1, t1, t2
+    sd x0, 0(t1)
+    sd t2, 0(t0)
+
+NOT_OCAML_R:
     # Step 3: Zero out the t0-t6 registers 
     li t0, 0
     li t1, 0
