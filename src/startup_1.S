@@ -77,6 +77,10 @@ do_reset:
         # Initialize PC Base and Bounds.( sets 2.5 sets of PC base and bound)
         jal initialize_pc_bounds
 
+        # Initialize setu_return_compartment_handler_pc
+        la t0, setu_return_compartment_handler_pc
+        la t1, CHECKCAP_CROSS_COMP_RETURN
+        sd t1, 0(t0)
 
         # Enable Capability control
         li t0, ENABLE_CAP # ENABLE_CAP is 0x1 for now
