@@ -855,7 +855,9 @@ uint64_t setu_return_compartment_handler_pc;
 // void initialize_pc_bounds (void) __attribute__ ((section (".text.init")));
 void initialize_pc_bounds (void){
 
-
+	printf("Address of ocaml_gc_cross_compartment_stack_position => %x\n", &ocaml_gc_cross_compartment_stack_position);
+	printf("Address of ocaml_gc_cross_compartment_stack => %x\n", ocaml_gc_cross_compartment_stack);
+	
 
     pc_base_bound_array[0] = (uint64_t)(pc_base_0);
     pc_base_bound_array[1] = (uint64_t)(pc_bound_0);
