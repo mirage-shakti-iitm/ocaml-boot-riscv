@@ -73,9 +73,9 @@ do_reset:
 
         // stacks grow backwards, set correct tos for hart 0
         la sp, stack + STACK_SIZE
-
+        la t1, initialize_pc_bounds
         # Initialize PC Base and Bounds.( sets 2.5 sets of PC base and bound)
-        jal initialize_pc_bounds
+        jalr t1 
 
         # Initialize setu_return_compartment_handler_pc
         la t0, setu_return_compartment_handler_pc
@@ -155,13 +155,13 @@ do_reset:
         beqz a3, 2f
 
         // otherwise jump to arch_startup_secondary
-        j boot_secondary
+        # j boot_secondary
 2:
         // run constructors on hart 0
         # jal run_constructors
         // and then call c-land
-        
-        j boot_primary
+        la x5, boot_primary
+        jr x5
 .size do_reset, . - do_reset
 
 # .section .text.trap_vector,"ax",@progbits
