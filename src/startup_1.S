@@ -315,12 +315,13 @@ CHECKCAP_CROSS_COMP:
     bltu t1, ra, NOT_OCAML
     la t0, ocaml_gc_cross_compartment_stack_position
     ld t2, 0(t0)
+    addi t3, t2, 1
+    sd t3, 0(t0)
     la t1, ocaml_gc_cross_compartment_stack
     sll t2, t2, 0x3 
     add t1, t1, t2
     sd ra, 0(t1)
-    addi t2, t2, 1
-    sd t2, 0(t0)
+
 
 NOT_OCAML:
     #Step 4: setting the ra to point to CHECKCAP_CROSS_COMP_RETURN
@@ -458,11 +459,12 @@ CHECKCAP_CROSS_COMP_RETURN_ISR:
     ld t2, 0(t0)
     beq t2, x0, NOT_OCAML_R
     addi t2, t2, -1
+    sd t2, 0(t0)
     la t1, ocaml_gc_cross_compartment_stack
     sll t2, t2, 0x3
     add t1, t1, t2
     sd x0, 0(t1)
-    sd t2, 0(t0)
+    
 
 NOT_OCAML_R:
     # Step 3: Zero out the t0-t6 registers 
