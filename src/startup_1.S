@@ -307,12 +307,23 @@ CHECKCAP_CROSS_COMP:
     csrw ucheckcapsp, t2
 
     # Pushing actual ra to separate stack for ocaml root scanning
+OCAML_CURRENT_COMPARTMENT_CHECK:
     csrr t1, ucurrcap
     sll t1, t1, 0x3
     la t0, ocaml_pc_end
     add t0, t1, t0
     ld t1, 0(t0)
+    bgeu t1, ra, IN_OCAML
+OCAML_255_CHECK:
+#   Removing the lower bound check since cross-compartment calls can only take place from 255 and not 254. 
+#   csrr t1, uanycappcbase
+    addi t1, x0, 0xff
+    sll t1, t1, 0x3
+    la t0, ocaml_pc_end
+    add t0, t1, t0
+    ld t1, 0(t0)
     bltu t1, ra, NOT_OCAML
+IN_OCAML:
     la t0, ocaml_gc_cross_compartment_stack_position
     ld t2, 0(t0)
     addi t3, t2, 1
@@ -449,22 +460,32 @@ CHECKCAP_CROSS_COMP_RETURN_ISR:
     csrw ucheckcapsp, t2
 
     # Removing actual ra from separate stack if returning to ocaml land
+OCAML_CURRENT_COMPARTMENT_CHECK_R:
     # csrr t1, ucurrcap
     sll t1, t1, 0x3
     la t0, ocaml_pc_end
     add t0, t1, t0
     ld t1, 0(t0)
+    bgeu t1, ra, IN_OCAML_R
+OCAML_255_CHECK_R:
+#   Removing the lower bound check since cross-compartment calls can only take place from 255 and not 254. 
+#   csrr t1, uanycappcbase
+    addi t1, x0, 0xff
+    sll t1, t1, 0x3
+    la t0, ocaml_pc_end
+    add t0, t1, t0
+    ld t1, 0(t0)
     bltu t1, ra, NOT_OCAML_R
+IN_OCAML_R:
     la t0, ocaml_gc_cross_compartment_stack_position
     ld t2, 0(t0)
     beq t2, x0, NOT_OCAML_R
     addi t2, t2, -1
     sd t2, 0(t0)
     la t1, ocaml_gc_cross_compartment_stack
-    sll t2, t2, 0x3
+    sll t2, t2, 0x3 
     add t1, t1, t2
     sd x0, 0(t1)
-    
 
 NOT_OCAML_R:
     # Step 3: Zero out the t0-t6 registers 
