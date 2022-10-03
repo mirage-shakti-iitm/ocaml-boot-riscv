@@ -2,13 +2,13 @@ CC=riscv64-unknown-elf-gcc
 
 ASM_FLAGS= 
 
-ASM_DEFINES=$(UART_BACKEND)
+ASM_DEFINES=$(UART_BACKEND) $(BOOT_BACKEND)
 
 ASM_INCLUDES=-I/home/sai/Shakti_TEE_Practical/mirage-shakti/ocaml-boot-riscv/include -I/home/sai/Shakti_TEE_Practical/mirage-shakti/ocaml-boot-riscv/include/ocaml-boot-riscv -I/home/sai/Shakti_TEE_Practical/mirage-shakti/ocaml-boot-riscv/src 
 
 C_FLAGS=-mcmodel=medany -ffunction-sections
 
-C_DEFINES=$(UART_BACKEND) $(COMPARTMENT_STATUS)
+C_DEFINES=$(UART_BACKEND) $(COMPARTMENT_STATUS) $(BOOT_BACKEND)
 
 # C_INCLUDES=-I/home/sai/Shakti_TEE_Practical/mirage-shakti/ocaml-boot-riscv/include -I/home/sai/Shakti_TEE_Practical/mirage-shakti/ocaml-boot-riscv/include/ocaml-boot-riscv -I/home/sai/Shakti_TEE_Practical/mirage-shakti/ocaml-boot-riscv/src 
 C_INCLUDES=-I../include -I../include/ocaml-boot-riscv -I. 

@@ -816,21 +816,32 @@ void boot_primary() {
     // init nolibc of ocaml_freestanding
     uintptr_t start = (uintptr_t) &__KERNEL_END;
 
-    // boot_printf("\nGanesha\n");
-
     boot_printf("ocaml-boot: heap@0x%x stack@0x%x\n",start, &stack[stack_size]);
-      
-    // _nolibc_init(start, mem_size);
+    boot_printf("\n \n Performance numbers : \n mcycle: 0x%lx \n", read_csr(mcycle));
 
-    // const char *argv[2] = { "ocaml-boot-riscv", nullptr };
+    #if defined(C_BACKEND)
+    	_nolibc_init(start, mem_size);
+    	main();
+    #endif
 
-    // main();
-    boot_printf("\n \n Performance numbers : \n mcycle: 0x%lx ; \n comp_exceptions : 0x%lx ; \n cycles_comp_exceptions : 0x%lx ; \n cycles_hash : 0x%lx ; \n cycles_val : 0x%lx ;", read_csr(mcycle), read_csr(mhpmcounter3), read_csr(mhpmcounter4), read_csr(mhpmcounter5), read_csr(mhpmcounter6));
-        // call ocaml land
-    // caml_startup(argv);
-    riscv_boot_finished(start, mem_size);
+    #if defined(OCAML_BACKEND)
+    	const char *argv[2] = { "ocaml-boot-riscv", 0};
+    	_nolibc_init(start, mem_size);
+    	caml_startup(argv);
+    #endif
 
-    // boot_printf("ocaml-boot: caml runtime returned. shutting down!\n");
+    #if defined(MIRAGE_BACKEND)
+		riscv_boot_finished(start, mem_size);
+    #endif
+
+	boot_printf("\n \n Performance numbers : \n mcycle: 0x%lx ;", read_csr(mcycle));
+	boot_printf(" \n comp_exceptions : 0x%lx ; \n cycles_comp_exceptions : 0x%lx ; \n cycles_hash : 0x%lx ; \n cycles_val : 0x%lx ;", read_csr(mhpmcounter3), read_csr(mhpmcounter4), read_csr(mhpmcounter5), read_csr(mhpmcounter6));
+    #if defined(SHAKTI_UART)
+    	boot_printf("\nLeast sp : 0x%x \n ",read_csr(0x80a));
+    #endif
+
+    boot_printf("ocaml-boot: caml runtime returned. shutting down!\n");
+
 // #ifndef UART
 #if !defined(SHAKTI_UART)   
     htif_poweroff();
