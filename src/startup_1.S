@@ -17,6 +17,8 @@
 
 # C1 -> C1 -> C3
 
+
+
 .option norvc
 .section .text.init,"ax",@progbits
 .globl reset_vector
@@ -262,16 +264,22 @@ trap_vector:
     ld sp, 2*8(sp) # restore user sp
     mret
 
+
+# CHECKCAP_NO_CROSS_COMP_FAIL_TRAMPOLINE:
+#    la t0, CHECKCAP_NO_CROSS_COMP_FAIL
+#    jr t0
+
 .size trap_vector, . - trap_vector
+
+
 
 .global print_checkcap_cap_matrix_fail
 .global print_checkcap_no_cross_comp_fail
 
 CHECKCAP_CROSS_COMP:
-    
+
     #Step 0: Saving t2
     # csrw mscratch, t2
-
 
     #Step 1: Check if it is a tail-call, if yes skip saving the return registers on the checkcap-stack and changing the return-address
     la t2, CHECKCAP_CROSS_COMP_RETURN
@@ -282,7 +290,7 @@ CHECKCAP_CROSS_COMP:
 
     #Step 3: Storing curr_cap, ra, sp, gp, tp register
 
-    addi t2, t2, -7*8
+    addi t2, t2, -15*8
 
     # actual t0 stored in mscratch is saved later (neglect this comment for now, because no need to save/restore temporary registers as they are caller-saved)
     # mepc is saved later
@@ -290,26 +298,26 @@ CHECKCAP_CROSS_COMP:
     sd sp, 2*8(t2)
     sd gp, 3*8(t2)
     sd tp, 4*8(t2)
-    # sd s0, 5*8(t2)
-    # sd s1, 6*8(t2)
-    # sd s2, 7*8(t2)
-    # sd s3, 8*8(t2)
-    # sd s4, 9*8(t2)
-    # sd s5, 10*8(t2)
-    # sd s6, 11*8(t2)
-    # sd s7, 12*8(t2)
-    # sd s8, 13*8(t2)
-    # sd s9, 14*8(t2)
+    # sd s0, x*8(t2)
+    # sd s1, x*8(t2)
+    sd s2, 5*8(t2)
+    sd s3, 6*8(t2)
+    sd s4, 7*8(t2)
+    sd s5, 8*8(t2)
+    sd s6, 9*8(t2)
+    sd s7, 10*8(t2)
+    sd s8, 11*8(t2)
+    sd s9, 12*8(t2)
     # sd s10,5*8(t2)
     # sd s11,15*8(t2)
 
     csrr t3, ucurrcappcbase
     #store CURRCAPPCBASE
-    sd t3, 5*8(t2)
+    sd t3, 13*8(t2)
 
     csrr t3, ucurrcappcbound
     #store CURRCAPPCBOUND
-    sd t3, 6*8(t2)
+    sd t3, 14*8(t2)
 
     csrr t3, ucurrcap
     #store CURRCAP
@@ -454,25 +462,25 @@ CHECKCAP_CROSS_COMP_RETURN_ISR:
     ld sp, 2*8(t2)
     ld gp, 3*8(t2)
     ld tp, 4*8(t2)
-    # ld s0, 5*8(t2)
-    # ld s1, 6*8(t2)
-    # ld s2, 7*8(t2)
-    # ld s3, 8*8(t2)
-    # ld s4, 9*8(t2)
-    # ld s5, 10*8(t2)
-    # ld s6, 11*8(t2)
-    # ld s7, 12*8(t2)
-    # ld s8, 13*8(t2)
-    # ld s9, 14*8(t2)
-    # ld s10,5*8(t2)
-    # ld s11,15*8(t2)
+    # ld s0, x*8(t2)
+    # ld s1, x*8(t2)
+    ld s2, 5*8(t2)
+    ld s3, 6*8(t2)
+    ld s4, 7*8(t2)
+    ld s5, 8*8(t2)
+    ld s6, 9*8(t2)
+    ld s7, 10*8(t2)
+    ld s8, 11*8(t2)
+    ld s9, 12*8(t2)
+    # ld s10,x*8(t2)
+    # ld s11,x*8(t2)
 
     # restore CSR_UCURRCAP_PCBASE
-    ld t1, 5*8(t2)
+    ld t1, 13*8(t2)
     csrw ucurrcappcbase, t1
 
     # restore CSR_UCURRCAP_PCBOUND
-    ld t1, 6*8(t2)
+    ld t1, 14*8(t2)
     csrw ucurrcappcbound, t1
     
     # restore CSR_UCURRCAP
@@ -480,7 +488,7 @@ CHECKCAP_CROSS_COMP_RETURN_ISR:
     csrw ucurrcap, t1
 
     # update CSR_UCHECKCAPSP
-    addi t2, t2, 7*8
+    addi t2, t2, 15*8
     csrw ucheckcapsp, t2
 
     # Removing actual ra from separate stack if returning to ocaml land
@@ -546,3 +554,5 @@ CHECKCAP_NO_CROSS_COMP_FAIL:
     # HWR End
     la t1, print_checkcap_no_cross_comp_fail
     jr t1
+
+
