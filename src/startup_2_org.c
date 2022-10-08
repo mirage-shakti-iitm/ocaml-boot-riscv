@@ -866,8 +866,8 @@ uint64_t setu_return_compartment_handler_pc;
 // void initialize_pc_bounds (void) __attribute__ ((section (".text.init")));
 void initialize_pc_bounds (void){
 
-	printf("Address of ocaml_gc_cross_compartment_stack_position => %x\n", &ocaml_gc_cross_compartment_stack_position);
-	printf("Address of ocaml_gc_cross_compartment_stack => %x\n", ocaml_gc_cross_compartment_stack);
+	// printf("Address of ocaml_gc_cross_compartment_stack_position => %x\n", &ocaml_gc_cross_compartment_stack_position);
+	// printf("Address of ocaml_gc_cross_compartment_stack => %x\n", ocaml_gc_cross_compartment_stack);
 	
 
     pc_base_bound_array[0] = (uint64_t)(pc_base_0);
@@ -1387,8 +1387,8 @@ void initialize_pc_bounds (void){
     write_csr(uparcappcbase, pc_base_bound_array[Restricted_Compartment*2]);
     write_csr(uanycappcbase, pc_base_bound_array[Fully_Trusted_Compartment*2]);
     write_csr(uanycappcbound, pc_base_bound_array[Fully_Trusted_Compartment*2+1]);
-// boot_printf("pc_base_0 : %x\n", pc_base_0);
-// boot_printf("pc_bound_0 : %x\n", pc_bound_0);
+boot_printf("pc_base_0 : %x\n", pc_base_0);
+boot_printf("pc_bound_0 : %x\n", pc_bound_0);
 // boot_printf("pc_base_1 : %x\n", pc_base_1);
 // boot_printf("pc_bound_1 : %x\n", pc_bound_1);
 // boot_printf("pc_base_2 : %x\n", pc_base_2);
