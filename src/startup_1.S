@@ -18,6 +18,111 @@
 # C1 -> C1 -> C3
 
 
+.section .text.trap_vector,"ax",@progbits
+.global trap_vector
+trap_vector:
+    # HWR Begin
+    csrr t2, mcause
+    li t3, CAUSE_TEE_PC_OUT_OF_BOUNDS_EXCEPTION
+    beq t3, t2, CHECKCAP_NO_CROSS_COMP_FAIL_TRAMPOLINE #CHECKCAP_NO_CROSS_COMP_FAIL
+
+    csrw mcapctl, x0 # Disable Capability checks
+    # HWR End
+
+    csrw mscratch, sp
+    addi sp, sp, -32*8
+
+    # mepc is saved later
+    sd ra, 1*8(sp)
+    sd gp, 3*8(sp)
+    sd tp, 4*8(sp)
+    sd t0, 5*8(sp)
+    sd t1, 6*8(sp)
+    sd t2, 7*8(sp)
+    sd s0, 8*8(sp)
+    sd s1, 9*8(sp)
+    sd a0, 10*8(sp)
+    sd a1, 11*8(sp)
+    sd a2, 12*8(sp)
+    sd a3, 13*8(sp)
+    sd a4, 14*8(sp)
+    sd a5, 15*8(sp)
+    sd a6, 16*8(sp)
+    sd a7, 17*8(sp)
+    sd s2, 18*8(sp)
+    sd s3, 19*8(sp)
+    sd s4, 20*8(sp)
+    sd s5, 21*8(sp)
+    sd s6, 22*8(sp)
+    sd s7, 23*8(sp)
+    sd s8, 24*8(sp)
+    sd s9, 25*8(sp)
+    sd s10, 26*8(sp)
+    sd s11, 27*8(sp)
+    sd t3,  28*8(sp)
+    sd t4,  29*8(sp)
+    sd t5,  30*8(sp)
+    sd t6,  31*8(sp)
+
+    # Store the exception return address
+    csrr a0, mepc
+    sd a0,  0*8(sp)
+
+    # Arguments for our interrupt handler
+    csrr a1, mscratch         # ra <- user sp
+    sd a1, 2*8(sp)            # store user sp on stack
+    csrr a0, mcause
+    mv a1, sp
+    
+    la t1, trap_handler
+    jalr t1
+
+    # Restore exception pointer
+    ld a0, 0*8(sp)
+    csrw mepc, a0
+
+    ld ra, 1*8(sp)
+    # sp is restored at end
+    ld gp, 3*8(sp)
+    ld tp, 4*8(sp)
+    ld t0, 5*8(sp)
+    ld t1, 6*8(sp)
+    ld t2, 7*8(sp)
+    ld s0, 8*8(sp)
+    ld s1, 9*8(sp)
+    ld a0, 10*8(sp)
+    ld a1, 11*8(sp)
+    ld a2, 12*8(sp)
+    ld a3, 13*8(sp)
+    ld a4, 14*8(sp)
+    ld a5, 15*8(sp)
+    ld a6, 16*8(sp)
+    ld a7, 17*8(sp)
+    ld s2, 18*8(sp)
+    ld s3, 19*8(sp)
+    ld s4, 20*8(sp)
+    ld s5, 21*8(sp)
+    ld s6, 22*8(sp)
+    ld s7, 23*8(sp)
+    ld s8, 24*8(sp)
+    ld s9, 25*8(sp)
+    ld s10, 26*8(sp)
+    ld s11, 27*8(sp)
+    ld t3,  28*8(sp)
+    ld t4,  29*8(sp)
+    ld t5,  30*8(sp)
+    ld t6,  31*8(sp)
+
+    ld sp, 2*8(sp) # restore user sp
+    mret
+
+
+CHECKCAP_NO_CROSS_COMP_FAIL_TRAMPOLINE:
+    la t0, CHECKCAP_NO_CROSS_COMP_FAIL
+    jr t0
+
+.size trap_vector, . - trap_vector
+
 
 .option norvc
 .section .text.init,"ax",@progbits
@@ -166,110 +271,6 @@ do_reset:
         jr x5
 .size do_reset, . - do_reset
 
-# .section .text.trap_vector,"ax",@progbits
-.global trap_vector
-trap_vector:
-    # HWR Begin
-    csrr t2, mcause
-    li t3, CAUSE_TEE_PC_OUT_OF_BOUNDS_EXCEPTION
-    beq t3, t2, CHECKCAP_NO_CROSS_COMP_FAIL
-
-    csrw mcapctl, x0 # Disable Capability checks
-    # HWR End
-
-    csrw mscratch, sp
-    addi sp, sp, -32*8
-
-    # mepc is saved later
-    sd ra, 1*8(sp)
-    sd gp, 3*8(sp)
-    sd tp, 4*8(sp)
-    sd t0, 5*8(sp)
-    sd t1, 6*8(sp)
-    sd t2, 7*8(sp)
-    sd s0, 8*8(sp)
-    sd s1, 9*8(sp)
-    sd a0, 10*8(sp)
-    sd a1, 11*8(sp)
-    sd a2, 12*8(sp)
-    sd a3, 13*8(sp)
-    sd a4, 14*8(sp)
-    sd a5, 15*8(sp)
-    sd a6, 16*8(sp)
-    sd a7, 17*8(sp)
-    sd s2, 18*8(sp)
-    sd s3, 19*8(sp)
-    sd s4, 20*8(sp)
-    sd s5, 21*8(sp)
-    sd s6, 22*8(sp)
-    sd s7, 23*8(sp)
-    sd s8, 24*8(sp)
-    sd s9, 25*8(sp)
-    sd s10, 26*8(sp)
-    sd s11, 27*8(sp)
-    sd t3,  28*8(sp)
-    sd t4,  29*8(sp)
-    sd t5,  30*8(sp)
-    sd t6,  31*8(sp)
-
-    # Store the exception return address
-    csrr a0, mepc
-    sd a0,  0*8(sp)
-
-    # Arguments for our interrupt handler
-    csrr a1, mscratch         # ra <- user sp
-    sd a1, 2*8(sp)            # store user sp on stack
-    csrr a0, mcause
-    mv a1, sp
-    
-    la t1, trap_handler
-    jalr t1
-
-    # Restore exception pointer
-    ld a0, 0*8(sp)
-    csrw mepc, a0
-
-    ld ra, 1*8(sp)
-    # sp is restored at end
-    ld gp, 3*8(sp)
-    ld tp, 4*8(sp)
-    ld t0, 5*8(sp)
-    ld t1, 6*8(sp)
-    ld t2, 7*8(sp)
-    ld s0, 8*8(sp)
-    ld s1, 9*8(sp)
-    ld a0, 10*8(sp)
-    ld a1, 11*8(sp)
-    ld a2, 12*8(sp)
-    ld a3, 13*8(sp)
-    ld a4, 14*8(sp)
-    ld a5, 15*8(sp)
-    ld a6, 16*8(sp)
-    ld a7, 17*8(sp)
-    ld s2, 18*8(sp)
-    ld s3, 19*8(sp)
-    ld s4, 20*8(sp)
-    ld s5, 21*8(sp)
-    ld s6, 22*8(sp)
-    ld s7, 23*8(sp)
-    ld s8, 24*8(sp)
-    ld s9, 25*8(sp)
-    ld s10, 26*8(sp)
-    ld s11, 27*8(sp)
-    ld t3,  28*8(sp)
-    ld t4,  29*8(sp)
-    ld t5,  30*8(sp)
-    ld t6,  31*8(sp)
-
-    ld sp, 2*8(sp) # restore user sp
-    mret
-
-
-# CHECKCAP_NO_CROSS_COMP_FAIL_TRAMPOLINE:
-#    la t0, CHECKCAP_NO_CROSS_COMP_FAIL
-#    jr t0
-
-.size trap_vector, . - trap_vector
 
 
 
