@@ -816,8 +816,12 @@ void boot_primary() {
     // init nolibc of ocaml_freestanding
     uintptr_t start = (uintptr_t) &__KERNEL_END;
 
-    boot_printf("ocaml-boot: heap@0x%x stack@0x%x\n",start, &stack[stack_size]);
-    boot_printf("\n \n Performance numbers : \n mcycle: 0x%lx \n", read_csr(mcycle));
+    // boot_printf("ocaml-boot: heap@0x%x stack@0x%x\n",start, &stack[stack_size]);
+    // boot_printf("\nPerformance numbers : \n mcycle: 0x%lx \n", read_csr(mcycle));
+
+    if(!ENABLE_CAP){
+    	boot_printf("\nStart => mcycle: 0x%lx\n", read_csr(mcycle));
+    }
 
     #if defined(C_BACKEND)
     	_nolibc_init(start, mem_size);
@@ -834,7 +838,8 @@ void boot_primary() {
 		riscv_boot_finished(start, mem_size);
     #endif
 
-	boot_printf("\n \n Performance numbers : \n mcycle: 0x%lx ;", read_csr(mcycle));
+	boot_printf("\nEnd => mcycle: 0x%lx\n", read_csr(mcycle));
+	// boot_printf("\nPerformance numbers : \n mcycle: 0x%lx ;", read_csr(mcycle));
 	// boot_printf(" \n comp_exceptions : 0x%lx ; \n cycles_comp_exceptions : 0x%lx ; \n cycles_hash : 0x%lx ; \n cycles_val : 0x%lx ;", read_csr(mhpmcounter3), read_csr(mhpmcounter4), read_csr(mhpmcounter5), read_csr(mhpmcounter6));
     #if defined(SHAKTI_UART)
     	// boot_printf("\nLeast sp : 0x%x \n ",read_csr(0x80a));
@@ -868,7 +873,9 @@ void initialize_pc_bounds (void){
 
 	// printf("Address of ocaml_gc_cross_compartment_stack_position => %x\n", &ocaml_gc_cross_compartment_stack_position);
 	// printf("Address of ocaml_gc_cross_compartment_stack => %x\n", ocaml_gc_cross_compartment_stack);
-	
+	if(ENABLE_CAP){
+			boot_printf("\nStart => mcycle: 0x%lx\n", read_csr(mcycle));
+	}
 
     pc_base_bound_array[0] = (uint64_t)(pc_base_0);
     pc_base_bound_array[1] = (uint64_t)(pc_bound_0);
@@ -1387,8 +1394,8 @@ void initialize_pc_bounds (void){
     write_csr(uparcappcbase, pc_base_bound_array[Restricted_Compartment*2]);
     write_csr(uanycappcbase, pc_base_bound_array[Fully_Trusted_Compartment*2]);
     write_csr(uanycappcbound, pc_base_bound_array[Fully_Trusted_Compartment*2+1]);
-boot_printf("pc_base_0 : %x\n", pc_base_0);
-boot_printf("pc_bound_0 : %x\n", pc_bound_0);
+// boot_printf("pc_base_0 : %x\n", pc_base_0);
+// boot_printf("pc_bound_0 : %x\n", pc_bound_0);
 // boot_printf("pc_base_1 : %x\n", pc_base_1);
 // boot_printf("pc_bound_1 : %x\n", pc_bound_1);
 // boot_printf("pc_base_2 : %x\n", pc_base_2);
