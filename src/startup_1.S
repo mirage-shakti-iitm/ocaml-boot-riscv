@@ -290,7 +290,7 @@ CHECKCAP_CROSS_COMP:
 
     #Step 3: Storing curr_cap, ra, sp, gp, tp register
 
-    addi t2, t2, -15*8
+    addi t2, t2, -16*8
 
     # actual t0 stored in mscratch is saved later (neglect this comment for now, because no need to save/restore temporary registers as they are caller-saved)
     # mepc is saved later
@@ -323,8 +323,6 @@ CHECKCAP_CROSS_COMP:
     #store CURRCAP
     sd t3, 0*8(t2)
 
-    # update CSR_UCHECKCAPSP
-    csrw ucheckcapsp, t2
 
     # Pushing actual ra to separate stack for ocaml root scanning
 OCAML_CURRENT_COMPARTMENT_CHECK:
@@ -347,6 +345,12 @@ OCAML_255_CHECK:
     ld t1, 0(t0)
     bltu t1, ra, NOT_OCAML
 IN_OCAML:
+    li t4, 1
+    #store STATUS present in t4
+    sd t4, 15*8(t2)
+    # update CSR_UCHECKCAPSP
+    csrw ucheckcapsp, t2
+
     la t0, ocaml_gc_cross_compartment_stack_position
     ld t2, 0(t0)
     addi t3, t2, 1
@@ -355,9 +359,16 @@ IN_OCAML:
     sll t2, t2, 0x3 
     add t1, t1, t2
     sd ra, 0(t1)
-
+    j COMMON_C_OCAML
 
 NOT_OCAML:
+    li t4, 0
+    #store STATUS present in t4
+    sd t4, 15*8(t2)
+    # update CSR_UCHECKCAPSP
+    csrw ucheckcapsp, t2
+        
+COMMON_C_OCAML:
     #Step 4: setting the ra to point to CHECKCAP_CROSS_COMP_RETURN
     la ra, CHECKCAP_CROSS_COMP_RETURN
 
@@ -490,30 +501,15 @@ CHECKCAP_CROSS_COMP_RETURN_ISR:
     ld t1, 0*8(t2)
     csrw ucurrcap, t1
 
-    # update CSR_UCHECKCAPSP
-    addi t2, t2, 15*8
-    csrw ucheckcapsp, t2
+    # Check status to pop ra from GC stack
+    ld t1, 15*8(t2)
 
-    # Removing actual ra from separate stack if returning to ocaml land
-OCAML_CURRENT_COMPARTMENT_CHECK_R:
-    # csrr t1, ucurrcap
-    sll t1, t1, 0x3
-    la t0, ocaml_pc_end
-    add t0, t1, t0
-    ld t1, 0(t0)
-    bgeu t1, ra, IN_OCAML_R
-CALLER_C_CURR_CAP_CHECK_R:
-    csrr t1, uanycappcbase
-    bltu ra, t1, NOT_OCAML_R
-OCAML_255_CHECK_R:
-#   Removing the lower bound check since cross-compartment calls can only take place from 255 and not 254. 
-#   csrr t1, uanycappcbase
-    addi t1, x0, 0xff
-    sll t1, t1, 0x3
-    la t0, ocaml_pc_end
-    add t0, t1, t0
-    ld t1, 0(t0)
-    bltu t1, ra, NOT_OCAML_R
+    # update CSR_UCHECKCAPSP
+    addi t2, t2, 16*8
+    csrw ucheckcapsp, t2
+    
+    beq t1, x0, NOT_OCAML_R
+
 IN_OCAML_R:
     la t0, ocaml_gc_cross_compartment_stack_position
     ld t2, 0(t0)
@@ -524,6 +520,7 @@ IN_OCAML_R:
     sll t2, t2, 0x3 
     add t1, t1, t2
     sd x0, 0(t1)
+
 
 NOT_OCAML_R:
     # Step 3: Zero out the t0-t6 registers 
