@@ -334,6 +334,9 @@ OCAML_CURRENT_COMPARTMENT_CHECK:
     add t0, t1, t0
     ld t1, 0(t0)
     bgeu t1, ra, IN_OCAML
+CALLER_C_CURR_CAP_CHECK:
+    csrr t1, uanycappcbase
+    bltu ra, t1, NOT_OCAML
 OCAML_255_CHECK:
 #   Removing the lower bound check since cross-compartment calls can only take place from 255 and not 254. 
 #   csrr t1, uanycappcbase
@@ -499,6 +502,9 @@ OCAML_CURRENT_COMPARTMENT_CHECK_R:
     add t0, t1, t0
     ld t1, 0(t0)
     bgeu t1, ra, IN_OCAML_R
+CALLER_C_CURR_CAP_CHECK_R:
+    csrr t1, uanycappcbase
+    bltu ra, t1, NOT_OCAML_R
 OCAML_255_CHECK_R:
 #   Removing the lower bound check since cross-compartment calls can only take place from 255 and not 254. 
 #   csrr t1, uanycappcbase
