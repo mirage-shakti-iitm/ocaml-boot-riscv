@@ -276,6 +276,26 @@ trap_vector:
 .global print_checkcap_cap_matrix_fail
 .global print_checkcap_no_cross_comp_fail
 
+
+#SM_STACK_PUSH_0 => either one is OCaml compartment
+#SM_STACK_PUSH_1 => both are C compartments
+
+#CALLER_OCAML_CHECK:
+#    t5 is ra
+#    3 regions:
+#    region 1 if(t1 >= t5) IN_OCMAL_CURR_CAP # t1 is ocaml_pc_end[curr_cap] # TARGET => SM_STACK_PUSH_0
+#    region 2 if(t5 < t1) IN_C_CURR_CAP # t1 is uanycappcbase               # TARGET => CALLEE_OCAML_TARGET_CAP_CHECK
+#    region 3 if(t5 < t1) IN_OCAML_ANY_CAP # t1 is ocaml_pc_end[255]        # TARGET => SM_STACK_PUSH_0
+
+#CALLEE_OCAML_TARGET_CAP_CHECK:
+#    t5 is mepc
+#    2 regions:
+#    region 1 if(t1 >= t5) IN_OCAML_TARGET_CAP # t1 is ocaml_pc_end[target_cap] # TARGET => SM_STACK_PUSH_0
+
+# SM_STACK_PUSH_1:
+    
+# SM_STACK_PUSH_0:
+
 CHECKCAP_CROSS_COMP:
 
     #Step 0: Saving t2
@@ -285,57 +305,19 @@ CHECKCAP_CROSS_COMP:
     la t2, CHECKCAP_CROSS_COMP_RETURN
     beq ra, t2, COMMON_CROSS_COMP
 
-    #Step 2: Read CSR_UCHECKCAPSP
-    csrr t2, ucheckcapsp
-
-    #Step 3: Storing curr_cap, ra, sp, gp, tp register
-
-    addi t2, t2, -16*8
-
-    # actual t0 stored in mscratch is saved later (neglect this comment for now, because no need to save/restore temporary registers as they are caller-saved)
-    # mepc is saved later
-    sd ra, 1*8(t2)
-    sd sp, 2*8(t2)
-    sd gp, 3*8(t2)
-    sd tp, 4*8(t2)
-    # sd s0, x*8(t2)
-    # sd s1, x*8(t2)
-    sd s2, 5*8(t2)
-    sd s3, 6*8(t2)
-    sd s4, 7*8(t2)
-    sd s5, 8*8(t2)
-    sd s6, 9*8(t2)
-    sd s7, 10*8(t2)
-    sd s8, 11*8(t2)
-    sd s9, 12*8(t2)
-    # sd s10,5*8(t2)
-    # sd s11,15*8(t2)
-
-    csrr t3, ucurrcappcbase
-    #store CURRCAPPCBASE
-    sd t3, 13*8(t2)
-
-    csrr t3, ucurrcappcbound
-    #store CURRCAPPCBOUND
-    sd t3, 14*8(t2)
-
-    csrr t3, ucurrcap
-    #store CURRCAP
-    sd t3, 0*8(t2)
-
 
     # Pushing actual ra to separate stack for ocaml root scanning
-OCAML_CURRENT_COMPARTMENT_CHECK:
+CALLER_OCAML_CURR_CAP_CHECK:
     csrr t1, ucurrcap
     sll t1, t1, 0x3
     la t0, ocaml_pc_end
     add t0, t1, t0
     ld t1, 0(t0)
-    bgeu t1, ra, IN_OCAML
+    bgeu t1, ra, SM_STACK_PUSH_0
 CALLER_C_CURR_CAP_CHECK:
     csrr t1, uanycappcbase
-    bltu ra, t1, NOT_OCAML
-OCAML_255_CHECK:
+    bltu ra, t1, CALLEE_OCAML_TARGET_CAP_CHECK
+CALLER_OCAML_255_CHECK:
 #   Removing the lower bound check since cross-compartment calls can only take place from 255 and not 254. 
 #   csrr t1, uanycappcbase
     addi t1, x0, 0xff
@@ -343,14 +325,70 @@ OCAML_255_CHECK:
     la t0, ocaml_pc_end
     add t0, t1, t0
     ld t1, 0(t0)
-    bltu t1, ra, NOT_OCAML
-IN_OCAML:
-    li t4, 1
-    #store STATUS present in t4
-    sd t4, 15*8(t2)
+    bltu ra, t1, SM_STACK_PUSH_0
+
+CALLEE_OCAML_TARGET_CAP_CHECK:
+    csrr t1, utargetcap
+    csrr t5, mepc
+    sll t1, t1, 0x3
+    la t0, ocaml_pc_end
+    add t0, t1, t0
+    ld t1, 0(t0)
+    bgeu t1, t5, SM_STACK_PUSH_0
+
+
+SM_STACK_PUSH_1:
+    #Step 2: Read CSR_UCHECKCAPSP
+    csrr t2, ucheckcapsp
+
+    #Step 3: Storing curr_cap, ra, sp, gp, tp register, all callee-saved registers
+
+    addi t2, t2, -20*8
+
+    # actual t0 stored in mscratch is saved later (neglect this comment for now, because no need to save/restore temporary registers as they are caller-saved)
+    # mepc is saved later
+    
+    # Store status 1, to be used while returning from compartment
+    li t3, 1 
+    sd t3, 0*8(t2)
+
+    csrr t3, ucurrcap
+    # Store CURRCAP
+    sd t3, 1*8(t2)
+
+    sd ra, 2*8(t2)
+    sd sp, 3*8(t2)
+    sd gp, 4*8(t2)
+    sd tp, 5*8(t2)
+
+    csrr t3, ucurrcappcbase
+    # Store CURRCAPPCBASE
+    sd t3, 6*8(t2)
+
+    csrr t3, ucurrcappcbound
+    # Store CURRCAPPCBOUND
+    sd t3, 7*8(t2)
+
+    sd s0, 8*8(t2)
+    sd s1, 9*8(t2)
+    sd s2, 10*8(t2)
+    sd s3, 11*8(t2)
+    sd s4, 12*8(t2)
+    sd s5, 13*8(t2)
+    sd s6, 14*8(t2)
+    sd s7, 15*8(t2)
+    sd s8, 16*8(t2)
+    sd s9, 17*8(t2)
+    sd s10,18*8(t2)
+    sd s11,19*8(t2)
+
     # update CSR_UCHECKCAPSP
     csrw ucheckcapsp, t2
 
+    j COMMON_C_OCAML_PUSH
+
+SM_STACK_PUSH_0:
+    # Pushing actual ra to separate stack for ocaml root scanning
     la t0, ocaml_gc_cross_compartment_stack_position
     ld t2, 0(t0)
     addi t3, t2, 1
@@ -359,20 +397,44 @@ IN_OCAML:
     sll t2, t2, 0x3 
     add t1, t1, t2
     sd ra, 0(t1)
-    j COMMON_C_OCAML
 
-NOT_OCAML:
-    li t4, 0
-    #store STATUS present in t4
-    sd t4, 15*8(t2)
+    # Pushing essential registers alone to stack
+    #Step 2: Read CSR_UCHECKCAPSP
+    csrr t2, ucheckcapsp
+
+    #Step 3: Storing curr_cap, ra, sp, gp, tp register
+
+    addi t2, t2, -8*8
+
+    # actual t0 stored in mscratch is saved later (neglect this comment for now, because no need to save/restore temporary registers as they are caller-saved)
+    # mepc is saved later
+
+    # Store status 0, to be used while returning from compartment
+    sd x0, 0*8(t2)
+
+    csrr t3, ucurrcap
+    # Store CURRCAP
+    sd t3, 1*8(t2)
+
+    sd ra, 2*8(t2)
+    sd sp, 3*8(t2)
+    sd gp, 4*8(t2)
+    sd tp, 5*8(t2)
+
+    csrr t3, ucurrcappcbase
+    # Store CURRCAPPCBASE
+    sd t3, 6*8(t2)
+
+    csrr t3, ucurrcappcbound
+    # Store CURRCAPPCBOUND
+    sd t3, 7*8(t2)
+
     # update CSR_UCHECKCAPSP
     csrw ucheckcapsp, t2
-        
-COMMON_C_OCAML:
+
+COMMON_C_OCAML_PUSH:
     #Step 4: setting the ra to point to CHECKCAP_CROSS_COMP_RETURN
     la ra, CHECKCAP_CROSS_COMP_RETURN
-
-
 
     ##### Not doing this check for now
     #Step 5: Checking whether CSR_UCHECKCAPSP is within CSR_MCHECKCAPSPBASE and CSR_MCHECKCAPSPBOUND
@@ -469,60 +531,67 @@ CHECKCAP_CROSS_COMP_RETURN_ISR:
     #Step 1: Read CSR_UCHECKCAPSP
     csrr t2, ucheckcapsp
 
+    add t3, t2, x0
+
     #Step 2: Popping the registers first itself
 
-    # actual t0, t1 restored later (neglect this comment for now, because no need to save/restore temporary registers as they are caller-saved)
-    ld ra, 1*8(t2)
-    ld sp, 2*8(t2)
-    ld gp, 3*8(t2)
-    ld tp, 4*8(t2)
-    # ld s0, x*8(t2)
-    # ld s1, x*8(t2)
-    ld s2, 5*8(t2)
-    ld s3, 6*8(t2)
-    ld s4, 7*8(t2)
-    ld s5, 8*8(t2)
-    ld s6, 9*8(t2)
-    ld s7, 10*8(t2)
-    ld s8, 11*8(t2)
-    ld s9, 12*8(t2)
-    # ld s10,x*8(t2)
-    # ld s11,x*8(t2)
+    ld t1, 0*8(t2)
+    beq x0, t1, POP_GC_RA
+
+SM_STACK_POP_1:
+    # Restoring Callee-saved registers
+    ld s0, 8*8(t2)
+    ld s1, 9*8(t2)
+    ld s2, 10*8(t2)
+    ld s3, 11*8(t2)
+    ld s4, 12*8(t2)
+    ld s5, 13*8(t2)
+    ld s6, 14*8(t2)
+    ld s7, 15*8(t2)
+    ld s8, 16*8(t2)
+    ld s9, 17*8(t2)
+    ld s10,18*8(t2)
+    ld s11,19*8(t2)
+
+    addi t3, t3, 12*8
+
+    j SM_STACK_POP_0
+
+POP_GC_RA:
+    la t0, ocaml_gc_cross_compartment_stack_position
+    ld t4, 0(t0)
+    beq t4, x0, SM_STACK_POP_0
+    addi t4, t4, -1
+    sd t4, 0(t0)
+    la t5, ocaml_gc_cross_compartment_stack
+    sll t4, t4, 0x3 
+    add t5, t5, t4
+    sd x0, 0(t5)
+
+SM_STACK_POP_0:
+    # Restoring essential registers
+    ld ra, 2*8(t2)
+    ld sp, 3*8(t2)
+    ld gp, 4*8(t2)
+    ld tp, 5*8(t2)
 
     # restore CSR_UCURRCAP_PCBASE
-    ld t1, 13*8(t2)
+    ld t1, 6*8(t2)
     csrw ucurrcappcbase, t1
 
     # restore CSR_UCURRCAP_PCBOUND
-    ld t1, 14*8(t2)
+    ld t1, 7*8(t2)
     csrw ucurrcappcbound, t1
     
     # restore CSR_UCURRCAP
     ld t1, 0*8(t2)
     csrw ucurrcap, t1
 
-    # Check status to pop ra from GC stack
-    ld t1, 15*8(t2)
-
     # update CSR_UCHECKCAPSP
-    addi t2, t2, 16*8
-    csrw ucheckcapsp, t2
-    
-    beq t1, x0, NOT_OCAML_R
+    addi t3, t3, 8*8
+    csrw ucheckcapsp, t3
 
-IN_OCAML_R:
-    la t0, ocaml_gc_cross_compartment_stack_position
-    ld t2, 0(t0)
-    beq t2, x0, NOT_OCAML_R
-    addi t2, t2, -1
-    sd t2, 0(t0)
-    la t1, ocaml_gc_cross_compartment_stack
-    sll t2, t2, 0x3 
-    add t1, t1, t2
-    sd x0, 0(t1)
-
-
-NOT_OCAML_R:
+COMMON_C_OCAML_POP:
     # Step 3: Zero out the t0-t6 registers 
     li t0, 0
     li t1, 0
