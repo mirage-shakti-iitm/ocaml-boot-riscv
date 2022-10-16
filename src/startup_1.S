@@ -541,7 +541,7 @@ CHECKCAP_CROSS_COMP_RETURN:
     
 CHECKCAP_CROSS_COMP_RETURN_ISR:
     la t1, CHECKCAP_CROSS_COMP_RETURN
-    bne ra, t1, CAPABILITY_LEGAL_ENTRY_POINT_FAIL
+    bne ra, t1, CAPABILITY_LEGAL_RETURN_POINT_FAIL
 
     #Step 1: Read CSR_UCHECKCAPSP
     csrr t2, checkcomsp
@@ -640,6 +640,15 @@ CAPABILITY_LEGAL_ENTRY_POINT_FAIL:
     # HWR Begin
     # HWR End
     la t1, print_checkcap_entry_fail
+    jr t1
+
+CAPABILITY_LEGAL_RETURN_POINT_FAIL:
+    # If we follow the idea where we store the registers before the actual checking is done, then we need to remove them before we exit. And next, what 
+    # should we do, poweroff!! ?
+
+    # HWR Begin
+    # HWR End
+    la t1, print_checkcap_return_fail
     jr t1
 
 CHECKCAP_NO_CROSS_COMP_FAIL:

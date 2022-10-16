@@ -42,6 +42,23 @@ void print_checkcap_entry_fail() {
     #endif
 }
 
+void print_checkcap_return_fail() {
+    boot_printf("\nCheckcap no cross-comp fail(Due to invalid return point) : (%d) to (%d) at 0x%x", read_csr(currcom), read_csr(targetcom), read_csr(comepc));
+    boot_printf("\nCurrcap_PC_Base = (%x)", read_csr(curcompcstart));
+    boot_printf("\nCurrcap_PC_Bound = (%x)", read_csr(curcompcend));
+    boot_printf("\nParcap_PC_Base = (%x)", read_csr(parcompcstart));
+    boot_printf("\nAnycap_PC_Base = (%x)", read_csr(anycompcstart));
+    boot_printf("\nAnycap_PC_Bound = (%x)\n", read_csr(anycompcend));
+    
+    #if !defined(SHAKTI_UART)   
+        htif_poweroff();
+    #elif defined(SHAKTI_UART)
+        uart_exit();
+    #else
+        while(1);
+    #endif
+}
+
 void print_checkcap_no_cross_comp_fail() {
     boot_printf("\nCheckcap no cross-comp fail(Due to 254) : (%d) to (%d) at 0x%x", read_csr(currcom), read_csr(targetcom), read_csr(comepc));
     boot_printf("\nCurrcap_PC_Base = (%x)", read_csr(curcompcstart));
