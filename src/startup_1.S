@@ -489,7 +489,7 @@ Found_index:
     srl t5, t5, t4
     # anding t3 and t5(mask). If the output is 0 then check fail else, pass
     and t3, t3, t5
-    # beqz t3, CAPABILITY_CHECK_FAIL
+    beqz t3, CAPABILITY_CHECK_FAIL
 
     #Step 7: Change current_cap to target_cap
     csrw ucurrcap, t2
