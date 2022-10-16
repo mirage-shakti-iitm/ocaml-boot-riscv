@@ -1,4 +1,4 @@
-riscv_poweroff:39
-riscv_write:39
-riscv_clock_monotonic:39
-riscv_wait:39
+riscv_poweroff:3
+riscv_write:4
+riscv_clock_monotonic:4
+riscv_wait:4

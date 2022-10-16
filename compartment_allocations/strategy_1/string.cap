@@ -1,7 +1,7 @@
-boot_strcmp:39
-boot_strcpy:39
-boot_strlen:39
-boot_isstring:39
-boot_memset:39
-boot_vsnprintf:39
-boot_snprintf:39
+boot_strcmp:254
+boot_strcpy:254
+boot_strlen:254
+boot_isstring:254
+boot_memset:254
+boot_vsnprintf:254
+boot_snprintf:254

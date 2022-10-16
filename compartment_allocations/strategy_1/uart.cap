@@ -1,4 +1,4 @@
-uart_putchar:39
-uart_getchar:39
-init_uart:39
-uart_exit:39
+uart_putchar:2
+uart_getchar:2
+init_uart:2
+uart_exit:3
