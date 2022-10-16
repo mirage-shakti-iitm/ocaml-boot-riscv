@@ -329,7 +329,7 @@ CALLER_OCAML_255_CHECK:
 
 CALLEE_OCAML_TARGET_CAP_CHECK:
     csrr t1, utargetcap
-    csrr t5, mepc
+    csrr t5, ucompepc
     sll t1, t1, 0x3
     la t0, ocaml_pc_end
     add t0, t1, t0
@@ -584,7 +584,7 @@ SM_STACK_POP_0:
     csrw ucurrcappcbound, t1
     
     # restore CSR_UCURRCAP
-    ld t1, 0*8(t2)
+    ld t1, 1*8(t2)
     csrw ucurrcap, t1
 
     # update CSR_UCHECKCAPSP
