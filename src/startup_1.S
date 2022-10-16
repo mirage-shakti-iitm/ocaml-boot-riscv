@@ -96,16 +96,13 @@ do_reset:
         # Load pc base and bound array
         la t4, pc_base_bound_array
         # load cross-comp entry ISR PC value
-        la t5, CHECKCAP_CROSS_COMP
-        # load cross-comp return ISR PC value
-        la t6, CHECKCAP_CROSS_COMP_RETURN_ISR
+        la t5, SM_ENTRY
         # set corresponding CSRs
-        csrw ucurrcap, t1
-        csrw mcapmatrixbase, t2
-        csrw ucheckcapsp, t3
-        csrw mcappcbaseboundbase, t4
-        csrw mcrosscompexception, t5
-        csrw mcrosscompretexception, t6
+        csrw currcom, t1
+        csrw commat, t2
+        csrw checkcomsp, t3
+        csrw compcbnb, t4
+        csrw comexcvec, t5
         # csrw 0xb03, 0x0   ## MHPMCOUNTER_3
         # csrw 0x323, 0x1f  ## MHPMEVENT_3 - Number of cross compartment exceptions
         # csrw 0xb04, 0x0   ## MHPMCOUNTER_4
@@ -117,7 +114,7 @@ do_reset:
         # csrw 0xb06, 0x0   ## MHPMCOUNTER_6
         # li t6, 0x22
         # csrw 0x326, t6    ## MHPMEVENT_6 - Number of cycles spent in val instructions
-        csrw mcapctl, t0
+        csrw comctl, t0
 
         # li x1, 0
         # li x2, 0
@@ -125,7 +122,7 @@ do_reset:
         # li x4, 0
         li x5, 0
         li x6, 0
-        li x7, 0
+        la x7, boot_primary
         # li x8, 0
         # li x9, 0
         # li x10, 0
@@ -151,6 +148,8 @@ do_reset:
         li x30, 0
         li x31, 0
 
+
+
         // boot process is different for each hart
         csrr a3, mhartid
 
@@ -163,8 +162,8 @@ do_reset:
         // run constructors on hart 0
         # jal run_constructors
         // and then call c-land
-        la x5, boot_primary
-        jr x5
+        la x7, boot_primary
+        jr x7
 .size do_reset, . - do_reset
 
 # .section .text.trap_vector,"ax",@progbits
@@ -175,7 +174,7 @@ trap_vector:
     li t3, CAUSE_TEE_PC_OUT_OF_BOUNDS_EXCEPTION
     beq t3, t2, CHECKCAP_NO_CROSS_COMP_FAIL #CHECKCAP_NO_CROSS_COMP_FAIL
 
-    csrw mcapctl, x0 # Disable Capability checks
+    csrw comctl, x0 # Disable Capability checks
     # HWR End
 
     csrw mscratch, sp
@@ -284,7 +283,7 @@ trap_vector:
 #    t5 is ra
 #    3 regions:
 #    region 1 if(t1 >= t5) IN_OCMAL_CURR_CAP # t1 is ocaml_pc_end[curr_cap] # TARGET => SM_STACK_PUSH_0
-#    region 2 if(t5 < t1) IN_C_CURR_CAP # t1 is uanycappcbase               # TARGET => CALLEE_OCAML_TARGET_CAP_CHECK
+#    region 2 if(t5 < t1) IN_C_CURR_CAP # t1 is anycompcstart               # TARGET => CALLEE_OCAML_TARGET_CAP_CHECK
 #    region 3 if(t5 < t1) IN_OCAML_ANY_CAP # t1 is ocaml_pc_end[255]        # TARGET => SM_STACK_PUSH_0
 
 #CALLEE_OCAML_TARGET_CAP_CHECK:
@@ -295,6 +294,18 @@ trap_vector:
 # SM_STACK_PUSH_1:
     
 # SM_STACK_PUSH_0:
+
+
+SM_ENTRY:
+    csrr t1, comexccause
+    beq t1, x0, CHECKCAP_NO_CROSS_COMP_FAIL
+    li t2, 0x1
+    beq t1, t2, CHECKCAP_CROSS_COMP_RETURN
+    li t2, 0x2
+    beq t1, t2, CHECKCAP_CROSS_COMP
+    li t2, 0x3
+    beq t1, t2, CAPABILITY_LEGAL_ENTRY_POINT_FAIL
+
 
 CHECKCAP_CROSS_COMP:
 
@@ -308,18 +319,18 @@ CHECKCAP_CROSS_COMP:
 
     # Pushing actual ra to separate stack for ocaml root scanning
 CALLER_OCAML_CURR_CAP_CHECK:
-    csrr t1, ucurrcap
+    csrr t1, currcom
     sll t1, t1, 0x3
     la t0, ocaml_pc_end
     add t0, t1, t0
     ld t1, 0(t0)
     bgeu t1, ra, SM_STACK_PUSH_0
 CALLER_C_CURR_CAP_CHECK:
-    csrr t1, uanycappcbase
+    csrr t1, anycompcstart
     bltu ra, t1, CALLEE_OCAML_TARGET_CAP_CHECK
 CALLER_OCAML_255_CHECK:
 #   Removing the lower bound check since cross-compartment calls can only take place from 255 and not 254. 
-#   csrr t1, uanycappcbase
+#   csrr t1, anycompcstart
     addi t1, x0, 0xff
     sll t1, t1, 0x3
     la t0, ocaml_pc_end
@@ -328,8 +339,8 @@ CALLER_OCAML_255_CHECK:
     bltu ra, t1, SM_STACK_PUSH_0
 
 CALLEE_OCAML_TARGET_CAP_CHECK:
-    csrr t1, utargetcap
-    csrr t5, ucompepc
+    csrr t1, targetcom
+    csrr t5, comepc
     sll t1, t1, 0x3
     la t0, ocaml_pc_end
     add t0, t1, t0
@@ -339,7 +350,7 @@ CALLEE_OCAML_TARGET_CAP_CHECK:
 
 SM_STACK_PUSH_1:
     #Step 2: Read CSR_UCHECKCAPSP
-    csrr t2, ucheckcapsp
+    csrr t2, checkcomsp
 
     #Step 3: Storing curr_cap, ra, sp, gp, tp register, all callee-saved registers
 
@@ -352,7 +363,7 @@ SM_STACK_PUSH_1:
     li t3, 1 
     sd t3, 0*8(t2)
 
-    csrr t3, ucurrcap
+    csrr t3, currcom
     # Store CURRCAP
     sd t3, 1*8(t2)
 
@@ -361,11 +372,11 @@ SM_STACK_PUSH_1:
     sd gp, 4*8(t2)
     sd tp, 5*8(t2)
 
-    csrr t3, ucurrcappcbase
+    csrr t3, curcompcstart
     # Store CURRCAPPCBASE
     sd t3, 6*8(t2)
 
-    csrr t3, ucurrcappcbound
+    csrr t3, curcompcend
     # Store CURRCAPPCBOUND
     sd t3, 7*8(t2)
 
@@ -383,7 +394,7 @@ SM_STACK_PUSH_1:
     sd s11,19*8(t2)
 
     # update CSR_UCHECKCAPSP
-    csrw ucheckcapsp, t2
+    csrw checkcomsp, t2
 
     j COMMON_C_OCAML_PUSH
 
@@ -400,7 +411,7 @@ SM_STACK_PUSH_0:
 
     # Pushing essential registers alone to stack
     #Step 2: Read CSR_UCHECKCAPSP
-    csrr t2, ucheckcapsp
+    csrr t2, checkcomsp
 
     #Step 3: Storing curr_cap, ra, sp, gp, tp register
 
@@ -412,7 +423,7 @@ SM_STACK_PUSH_0:
     # Store status 0, to be used while returning from compartment
     sd x0, 0*8(t2)
 
-    csrr t3, ucurrcap
+    csrr t3, currcom
     # Store CURRCAP
     sd t3, 1*8(t2)
 
@@ -421,16 +432,16 @@ SM_STACK_PUSH_0:
     sd gp, 4*8(t2)
     sd tp, 5*8(t2)
 
-    csrr t3, ucurrcappcbase
+    csrr t3, curcompcstart
     # Store CURRCAPPCBASE
     sd t3, 6*8(t2)
 
-    csrr t3, ucurrcappcbound
+    csrr t3, curcompcend
     # Store CURRCAPPCBOUND
     sd t3, 7*8(t2)
 
     # update CSR_UCHECKCAPSP
-    csrw ucheckcapsp, t2
+    csrw checkcomsp, t2
 
 COMMON_C_OCAML_PUSH:
     #Step 4: setting the ra to point to CHECKCAP_CROSS_COMP_RETURN
@@ -446,15 +457,15 @@ COMMON_C_OCAML_PUSH:
 
 COMMON_CROSS_COMP:
     #Step 6: Checking for cross-compartment Capability condition
-    # ucurrcap
-    # utargetcap
-    # mcapmatrixbase
+    # currcom
+    # targetcom
+    # commat
     ## access capability matrix. 
     # Here I am assuming that the capability matrix base address is stored in CSR_BASE_CAP_MATRIX
-    csrr t0, mcapmatrixbase
+    csrr t0, commat
     # Current Capability and Target Capability stored in CSRs CSR_UCURRCAP and CSR_UTARGETCAP respectively
-    csrr t1, ucurrcap
-    csrr t2, utargetcap
+    csrr t1, currcom
+    csrr t2, targetcom
     # Assuming that the Capability matrix is stored as an array, where each compartment has its corresponding capability information in 256 bit entry.
     # Assuming each word is 64 bits, so the word that contains the target_cap info w.r.t curr_cap has to be loaded.
     # Accessing the capability matrix for a given curr_cap and target_cap is as follows:
@@ -492,10 +503,10 @@ Found_index:
     beqz t3, CAPABILITY_CHECK_FAIL
 
     #Step 7: Change current_cap to target_cap
-    csrw ucurrcap, t2
+    csrw currcom, t2
 
     #Step 8: Change CSR_UCURRCAP_PCBASE and CSR_UCURRCAP_PCBOUND
-    csrr t3, mcappcbaseboundbase
+    csrr t3, compcbnb
     # pc_base index
     sll t5, t2, 0x1
     sll t5, t5, 0x3
@@ -507,8 +518,8 @@ Found_index:
     # loading pc_bound
     ld t5, 0(t3)
     # setting the CSRs
-    csrw ucurrcappcbase, t4
-    csrw ucurrcappcbound, t5
+    csrw curcompcstart, t4
+    csrw curcompcend, t5
 
     #Step 9: zeroing out non-argument/return value registers. Not zeroing out sp, tp, gp, fp
     li t0, 0
@@ -520,7 +531,8 @@ Found_index:
     li t6, 0
 
     #Step 10: Call target function again
-    mret
+    csrr x7, comepc
+    jr x7
 
 CHECKCAP_CROSS_COMP_RETURN:
 
@@ -528,8 +540,11 @@ CHECKCAP_CROSS_COMP_RETURN:
     checkcap 0
     
 CHECKCAP_CROSS_COMP_RETURN_ISR:
+    la t1, CHECKCAP_CROSS_COMP_RETURN
+    bne ra, t1, CAPABILITY_LEGAL_ENTRY_POINT_FAIL
+
     #Step 1: Read CSR_UCHECKCAPSP
-    csrr t2, ucheckcapsp
+    csrr t2, checkcomsp
 
     add t3, t2, x0
 
@@ -577,19 +592,19 @@ SM_STACK_POP_0:
 
     # restore CSR_UCURRCAP_PCBASE
     ld t1, 6*8(t2)
-    csrw ucurrcappcbase, t1
+    csrw curcompcstart, t1
 
     # restore CSR_UCURRCAP_PCBOUND
     ld t1, 7*8(t2)
-    csrw ucurrcappcbound, t1
+    csrw curcompcend, t1
     
     # restore CSR_UCURRCAP
     ld t1, 1*8(t2)
-    csrw ucurrcap, t1
+    csrw currcom, t1
 
     # update CSR_UCHECKCAPSP
     addi t3, t3, 8*8
-    csrw ucheckcapsp, t3
+    csrw checkcomsp, t3
 
 COMMON_C_OCAML_POP:
     # Step 3: Zero out the t0-t6 registers 
@@ -601,30 +616,37 @@ COMMON_C_OCAML_POP:
     li t5, 0
     li t6, 0
 
-    #Step 4: Change ucompepc. Originally it was pointing to CHECKCAP_CROSS_COMP_RETURN
-    csrw ucompepc, ra
+    #Step 4: Change comepc. Originally it was pointing to CHECKCAP_CROSS_COMP_RETURN
+    csrw comepc, x0
+    add x7, ra, x0
 
-    # Step 5: Return to ra(through mepc)
-    mret
-
+    # Step 5: Return to ra(through x7)
+    jr x7
 
 CAPABILITY_CHECK_FAIL:
     # If we follow the idea where we store the registers before the actual checking is done, then we need to remove them before we exit. And next, what 
     # should we do, poweroff!! ?
 
     # HWR Begin
-    csrw mcapctl, x0 # Disable Capability checks
+    csrw comctl, x0 # Disable Capability checks
     # HWR End
     la t1, print_checkcap_cap_matrix_fail
+    jr t1
+
+CAPABILITY_LEGAL_ENTRY_POINT_FAIL:
+    # If we follow the idea where we store the registers before the actual checking is done, then we need to remove them before we exit. And next, what 
+    # should we do, poweroff!! ?
+
+    # HWR Begin
+    # HWR End
+    la t1, print_checkcap_entry_fail
     jr t1
 
 CHECKCAP_NO_CROSS_COMP_FAIL:
     # Cross-Compartment jump attempted when CSR_UNOCROSSCOMP bit set
 
     # HWR Begin
-    csrw mcapctl, x0 # Disable Capability checks
+    csrw comctl, x0 # Disable Capability checks
     # HWR End
     la t1, print_checkcap_no_cross_comp_fail
     jr t1
-
-

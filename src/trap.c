@@ -25,13 +25,30 @@ void trap_handler(uint64_t mcause, uintptr_t context) {
     #endif
 }
 
+void print_checkcap_entry_fail() {
+    boot_printf("\nCheckcap no cross-comp fail(Due to invalid entry point) : (%d) to (%d) at 0x%x", read_csr(currcom), read_csr(targetcom), read_csr(comepc));
+    boot_printf("\nCurrcap_PC_Base = (%x)", read_csr(curcompcstart));
+    boot_printf("\nCurrcap_PC_Bound = (%x)", read_csr(curcompcend));
+    boot_printf("\nParcap_PC_Base = (%x)", read_csr(parcompcstart));
+    boot_printf("\nAnycap_PC_Base = (%x)", read_csr(anycompcstart));
+    boot_printf("\nAnycap_PC_Bound = (%x)\n", read_csr(anycompcend));
+    
+    #if !defined(SHAKTI_UART)   
+        htif_poweroff();
+    #elif defined(SHAKTI_UART)
+        uart_exit();
+    #else
+        while(1);
+    #endif
+}
+
 void print_checkcap_no_cross_comp_fail() {
-    boot_printf("\nCheckcap no cross-comp fail(Due to 254) : (%d) to (%d) at 0x%x", read_csr(ucurrcap), read_csr(utargetcap), read_csr(ucompepc));
-    boot_printf("\nCurrcap_PC_Base = (%x)", read_csr(ucurrcappcbase));
-    boot_printf("\nCurrcap_PC_Bound = (%x)", read_csr(ucurrcappcbound));
-    boot_printf("\nParcap_PC_Base = (%x)", read_csr(uparcappcbase));
-    boot_printf("\nAnycap_PC_Base = (%x)", read_csr(uanycappcbase));
-    boot_printf("\nAnycap_PC_Bound = (%x)\n", read_csr(uanycappcbound));
+    boot_printf("\nCheckcap no cross-comp fail(Due to 254) : (%d) to (%d) at 0x%x", read_csr(currcom), read_csr(targetcom), read_csr(comepc));
+    boot_printf("\nCurrcap_PC_Base = (%x)", read_csr(curcompcstart));
+    boot_printf("\nCurrcap_PC_Bound = (%x)", read_csr(curcompcend));
+    boot_printf("\nParcap_PC_Base = (%x)", read_csr(parcompcstart));
+    boot_printf("\nAnycap_PC_Base = (%x)", read_csr(anycompcstart));
+    boot_printf("\nAnycap_PC_Bound = (%x)\n", read_csr(anycompcend));
     
     #if !defined(SHAKTI_UART)   
         htif_poweroff();
@@ -43,12 +60,12 @@ void print_checkcap_no_cross_comp_fail() {
 }
 
 void print_checkcap_cap_matrix_fail() {
-    boot_printf("\nCheckcap capability matrix fail(Due to invalid compartment jump) : (%d) to (%d) at 0x%x", read_csr(ucurrcap), read_csr(utargetcap), read_csr(ucompepc));
-    boot_printf("\nCurrcap_PC_Base = (%x)", read_csr(ucurrcappcbase));
-    boot_printf("\nCurrcap_PC_Bound = (%x)", read_csr(ucurrcappcbound));
-    boot_printf("\nParcap_PC_Base = (%x)", read_csr(uparcappcbase));
-    boot_printf("\nAnycap_PC_Base = (%x)", read_csr(uanycappcbase));
-    boot_printf("\nAnycap_PC_Bound = (%x)\n", read_csr(uanycappcbound));
+    boot_printf("\nCheckcap capability matrix fail(Due to invalid compartment jump) : (%d) to (%d) at 0x%x", read_csr(currcom), read_csr(targetcom), read_csr(comepc));
+    boot_printf("\nCurrcap_PC_Base = (%x)", read_csr(curcompcstart));
+    boot_printf("\nCurrcap_PC_Bound = (%x)", read_csr(curcompcend));
+    boot_printf("\nParcap_PC_Base = (%x)", read_csr(parcompcstart));
+    boot_printf("\nAnycap_PC_Base = (%x)", read_csr(anycompcstart));
+    boot_printf("\nAnycap_PC_Bound = (%x)\n", read_csr(anycompcend));
     
     #if !defined(SHAKTI_UART)   
         htif_poweroff();
