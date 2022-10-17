@@ -1,5 +1,5 @@
-__check_fromhost_exception:39
-__set_tohost_exception:39
-htif_console_getchar_exception:39
-do_tohost_fromhost_exception:39
-htif_console_putchar_exception:39
+__check_fromhost_exception:255
+__set_tohost_exception:255
+htif_console_getchar_exception:255
+do_tohost_fromhost_exception:255
+htif_console_putchar_exception:255

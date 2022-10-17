@@ -820,7 +820,7 @@ void boot_primary() {
     // boot_printf("\nPerformance numbers : \n mcycle: 0x%lx \n", read_csr(mcycle));
 
     if(!ENABLE_CAP){
-    	boot_printf("\nStart => mcycle: 0x%lx\n", read_csr(mcycle));
+    	// boot_printf("\nStart => mcycle: 0x%lx\n", read_csr(mcycle));
     }
 
     #if defined(C_BACKEND)
@@ -838,7 +838,7 @@ void boot_primary() {
 		riscv_boot_finished(start, mem_size);
     #endif
 
-	boot_printf("\nEnd => mcycle: 0x%lx\n", read_csr(mcycle));
+	// boot_printf("\nEnd => mcycle: 0x%lx\n", read_csr(mcycle));
 	// boot_printf("\nPerformance numbers : \n mcycle: 0x%lx ;", read_csr(mcycle));
 	// boot_printf(" \n comp_exceptions : 0x%lx ; \n cycles_comp_exceptions : 0x%lx ; \n cycles_hash : 0x%lx ; \n cycles_val : 0x%lx ;", read_csr(mhpmcounter3), read_csr(mhpmcounter4), read_csr(mhpmcounter5), read_csr(mhpmcounter6));
     #if defined(SHAKTI_UART)
@@ -874,7 +874,7 @@ void initialize_pc_bounds (void){
 	// printf("Address of ocaml_gc_cross_compartment_stack_position => %x\n", &ocaml_gc_cross_compartment_stack_position);
 	// printf("Address of ocaml_gc_cross_compartment_stack => %x\n", ocaml_gc_cross_compartment_stack);
 	if(ENABLE_CAP){
-			boot_printf("\nStart => mcycle: 0x%lx\n", read_csr(mcycle));
+			// boot_printf("\nStart => mcycle: 0x%lx\n", read_csr(mcycle));
 	}
 
     pc_base_bound_array[0] = (uint64_t)(pc_base_0);
