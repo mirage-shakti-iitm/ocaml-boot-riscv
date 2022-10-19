@@ -2,7 +2,7 @@
 
 option=$1
 chosen_dir="compartment_allocations/strategy_${option}"
-cap_matrix_dir="compartment_strategy_details/strategy_${option}"
+cap_matrix_dir="/home/sai/Shakti-TEE-Practical/mirage-shakti/setu-cap-matrix"
 src_dir="src/"
 
 # chosen_dir will contain the *(.cap/cap_tee.ml) files
