@@ -67,6 +67,45 @@ do_reset:
         li x31, 0
         csrw mscratch, x0
 
+# 10 -> icache accesses
+# 11 -> 1cache miss
+# 13 -> non-cacheable icache accesses
+# 15 -> dcache read accesses
+# 16 -> dcache write accesses
+# 18 -> dcache non-cacheable read
+# 19 -> dcache non-cacheable write
+# 20 -> read miss
+# 21 -> write miss
+# 30 -> cross compartment exceptions
+# 31 -> cross compartment cycles
+# 32 -> hash cycles
+# 33 -> val cycles
+# 34
+        # csrwi mhpmevent3,icache_access         
+        # csrwi mhpmevent4,icache_miss           
+        # csrwi mhpmevent5,icache_ncaccess       
+        # csrwi mhpmevent6,dcache_read_access      
+        # csrwi mhpmevent7,dcache_write_access     
+        # csrwi mhpmevent8,dcache_nc_read_access   
+        # csrwi mhpmevent9,dcache_nc_write_access
+        # csrwi mhpmevent10,dcache_read_miss          
+        # csrwi mhpmevent11,dcache_write_miss         
+        csrwi mhpmevent12,cross_comps_num
+
+        li t6, cross_comps_cycles
+        csrw mhpmevent13,t6
+
+        li t6, hash
+        csrw mhpmevent14,t6
+
+        li t6, val
+        csrw mhpmevent15,t6
+
+        csrwi mhpmcounter12, 0
+        csrwi mhpmcounter13, 0
+        csrwi mhpmcounter14, 0
+        csrwi mhpmcounter15, 0
+
 
         # write mtvec and make sure it sticks
         la t0, trap_vector

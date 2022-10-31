@@ -3,6 +3,42 @@
 #ifndef RISCV_CSR_ENCODING_H
 #define RISCV_CSR_ENCODING_H
 
+#define misprediction           1 
+#define exceptions              2
+#define interrupts              3
+#define csrops                  4
+#define jumps                   5
+#define branches                6
+#define floats                  7
+#define muldiv                  8
+#define rawstalls               9
+#define exetalls                10
+#define icache_access           11
+#define icache_miss             12
+#define icache_fbhit            13
+#define icache_ncaccess         14
+#define icache_fbrelease        15
+#define dcache_read_access      16
+#define dcache_write_access     17
+#define dcache_atomic_access    18
+#define dcache_nc_read_access   19
+#define dcache_nc_write_access  20
+#define dcache_read_miss        21
+#define dcache_write_miss       22
+#define dcache_atomic_miss      23
+#define dcache_read_fb_hits     24
+#define dcache_write_fb_hits    25
+#define dcache_atomic_fb_hits   26
+#define dcache_fb_releases      27
+#define dcache_line_evictions   28
+#define itlb_misses             29
+#define dtlb_misses             30
+#define cross_comps_num         31
+#define cross_comps_cycles      32
+#define hash                    33
+#define val                     34
+
+
 #define MSTATUS_UIE         0x00000001
 #define MSTATUS_SIE         0x00000002
 #define MSTATUS_HIE         0x00000004

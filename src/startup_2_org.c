@@ -839,13 +839,25 @@ void boot_primary() {
     #endif
 
 	boot_printf("\nEnd => mcycle: 0x%lx\n", read_csr(mcycle));
-	// boot_printf("\nPerformance numbers : \n mcycle: 0x%lx ;", read_csr(mcycle));
-	// boot_printf(" \n comp_exceptions : 0x%lx ; \n cycles_comp_exceptions : 0x%lx ; \n cycles_hash : 0x%lx ; \n cycles_val : 0x%lx ;", read_csr(mhpmcounter3), read_csr(mhpmcounter4), read_csr(mhpmcounter5), read_csr(mhpmcounter6));
+	// boot_printf("\nEnd => minstret: 0x%lx\n", read_csr(minstret));
+	// boot_printf("\nICache accesses => 0x%lx\n", read_csr(mhpmcounter3));
+	// boot_printf("\nICache hits => 0x%lx\n", read_csr(mhpmcounter4));
+	// boot_printf("\nNon-cacheable ICache accesses => 0x%lx\n", read_csr(mhpmcounter5));
+	// boot_printf("\nDCache read accesses => 0x%lx\n", read_csr(mhpmcounter6));
+	// boot_printf("\nDCache write accesses => 0x%lx\n", read_csr(mhpmcounter7));
+	// boot_printf("\nDCache non-cacheable read => 0x%lx\n", read_csr(mhpmcounter8));
+	// boot_printf("\nDCache non-cacheable write => 0x%lx\n", read_csr(mhpmcounter9));
+	// boot_printf("\nDCache read hits => 0x%lx\n", read_csr(mhpmcounter10));
+	// boot_printf("\nDcache write hits => 0x%lx\n", read_csr(mhpmcounter11));
+	boot_printf("\nCross compartment exception => 0x%lx\n", read_csr(mhpmcounter12));
+	boot_printf("\nCross compartment cycles => 0x%lx\n", read_csr(mhpmcounter13));
+	boot_printf("\nHash cycles => 0x%lx\n", read_csr(mhpmcounter14));
+	boot_printf("\nVal cycles => 0x%lx\n", read_csr(mhpmcounter15));
+    boot_printf("ocaml-boot: caml runtime returned. shutting down!\n");
+
     #if defined(SHAKTI_UART)
     	// boot_printf("\nLeast sp : 0x%x \n ",read_csr(0x80a));
     #endif
-
-    boot_printf("ocaml-boot: caml runtime returned. shutting down!\n");
 
 // #ifndef UART
 #if !defined(SHAKTI_UART)   
