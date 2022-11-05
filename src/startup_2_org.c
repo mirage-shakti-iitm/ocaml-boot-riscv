@@ -778,6 +778,10 @@ extern char pc_bound_254[];
 extern char pc_base_255[];
 extern char pc_bound_255[];
 
+uint64_t startup_cycle_end;
+uint64_t startup_inst_end;
+uint64_t boot_end_cycle = 0;
+uint64_t boot_end_inst = 0;
 
     unsigned char 
     __attribute__((section (".checkcap-stack-reserved") ))
@@ -819,6 +823,9 @@ void boot_primary() {
     // boot_printf("ocaml-boot: heap@0x%x stack@0x%x\n",start, &stack[stack_size]);
     // boot_printf("\nPerformance numbers : \n mcycle: 0x%lx \n", read_csr(mcycle));
 
+    boot_end_cycle = read_csr(0xb00);
+    boot_end_inst = read_csr(0xb02);
+
     #if defined(C_BACKEND)
     	_nolibc_init(start, mem_size);
     	main();
@@ -834,7 +841,12 @@ void boot_primary() {
 		riscv_boot_finished(start, mem_size);
     #endif
 
-	boot_printf("\nEnd => mcycle: 0x%lx | minstret: 0x%lx\n", read_csr(mcycle), read_csr(minstret));
+    uint64_t cycle_end = read_csr(0xb00);
+    uint64_t inst_end = read_csr(0xb02);
+
+    boot_printf("\nBoot end => mcycle: 0x%lx | minstret => 0x%lx", boot_end_cycle, boot_end_inst);
+    boot_printf("\nOCaml startup end => mcycle: 0x%lx | minstret => 0x%lx", startup_cycle_end, startup_inst_end);
+    boot_printf("\nEnd => mcycle: 0x%lx | minstret => 0x%lx", cycle_end, inst_end);
 	// boot_printf("\nEnd => minstret: 0x%lx\n", read_csr(minstret));
 	// boot_printf("\nICache accesses => 0x%lx\n", read_csr(mhpmcounter3));
 	// boot_printf("\nICache hits => 0x%lx\n", read_csr(mhpmcounter4));
@@ -881,7 +893,7 @@ void initialize_pc_bounds (void){
 
 	// printf("Address of ocaml_gc_cross_compartment_stack_position => %x\n", &ocaml_gc_cross_compartment_stack_position);
 	// printf("Address of ocaml_gc_cross_compartment_stack => %x\n", ocaml_gc_cross_compartment_stack);
-	boot_printf("\nStart => mcycle: 0x%lx\n", read_csr(mcycle));
+	// boot_printf("\nStart => mcycle: 0x%lx\n", read_csr(mcycle));
 
     pc_base_bound_array[0] = (uint64_t)(pc_base_0);
     pc_base_bound_array[1] = (uint64_t)(pc_bound_0);
