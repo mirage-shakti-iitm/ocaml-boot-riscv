@@ -826,6 +826,9 @@ void boot_primary() {
     boot_end_cycle = read_csr(0xb00);
     boot_end_inst = read_csr(0xb02);
 
+    
+    // boot_memset(start, 0, mem_size);
+
     #if defined(C_BACKEND)
     	_nolibc_init(start, mem_size);
     	main();
