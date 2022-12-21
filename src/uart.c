@@ -71,6 +71,7 @@
 
 void uart_exit()
 {
+   asm volatile ("ebreak"); 
    asm volatile (
         "csrr t5, 0xb03" "\n\t"
         "csrr t6, 0xb04" "\n\t"
