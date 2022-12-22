@@ -805,8 +805,10 @@ uint64_t boot_end_inst = 0;
     ocaml_gc_cross_compartment_stack_position = 0;
 
     unsigned char 
-        __attribute__(( aligned (16) )) 
-        stack[STACK_SIZE] = {0xde, 0xad, 0xbe, 0xef};
+    __attribute__((section (".stack-reserved") ))
+    __attribute__(( aligned (16) ))
+    stack[STACK_SIZE] = {0};
+
     extern void riscv_boot_finished(uintptr_t heap_start, uint64_t heap_size);
 void boot_primary() {
     // init floating point unit
@@ -823,11 +825,19 @@ void boot_primary() {
     // boot_printf("ocaml-boot: heap@0x%x stack@0x%x\n",start, &stack[stack_size]);
     // boot_printf("\nPerformance numbers : \n mcycle: 0x%lx \n", read_csr(mcycle));
 
+	boot_printf("&start_uninitialized_data : 0x%lx ; &end_uninitialized_data : 0x%lx ; start : 0x%lx\n", &start_uninitialized_data, &end_uninitialized_data, start);
+	boot_printf("stack @ 0x%lx - 0x%lx\n", stack, stack + STACK_SIZE);
+	boot_printf("start_stack @ 0x%lx - 0x%lx\n", &start_stack, &end_stack);
+
+    for(uint64_t* s = &start_uninitialized_data; s < &end_uninitialized_data; s++){
+        // boot_printf("x", s);
+        *s = 0;
+    }
+
     boot_end_cycle = read_csr(0xb00);
     boot_end_inst = read_csr(0xb02);
 
     
-    // boot_memset(start, 0, mem_size);
 
     #if defined(C_BACKEND)
     	_nolibc_init(start, mem_size);
