@@ -786,7 +786,7 @@ uint64_t boot_end_inst = 0;
     unsigned char 
     __attribute__((section (".checkcap-stack-reserved") ))
     __attribute__(( aligned (16) ))
-    checkcap_stack[1048576] = {0xde, 0xad, 0xbe, 0xef};
+    checkcap_stack[32768] = {0xde, 0xad, 0xbe, 0xef};
 
 
     uint64_t 
