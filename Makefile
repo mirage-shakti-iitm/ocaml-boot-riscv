@@ -12,8 +12,8 @@ $(BUILD)/src/libboot.a: $(BUILD)/src/Makefile
 
 all: $(BUILD)/src/libboot.a
 
-add-cap-files:
-	./choose_compartment_strategy.sh $(COMPARTMENT_STRATEGY_CHOICE)
+add-comp-matrix:
+	./choose_compartment_strategy.sh
 
 install: all
 	./install.sh

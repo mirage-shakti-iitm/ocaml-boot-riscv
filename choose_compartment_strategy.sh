@@ -1,12 +1,12 @@
 #!/bin/sh -ex
 
-option=$1
-chosen_dir="compartment_allocations/strategy_${option}"
+# option=$1
+# chosen_dir="compartment_allocations/strategy_${option}"
 cap_matrix_dir="/home/sai/Shakti-TEE-Practical/mirage-shakti/setu-cap-matrix"
 src_dir="src/"
 
 # chosen_dir will contain the *(.cap/cap_tee.ml) files
-cp ${chosen_dir}/* ${src_dir}/
+# cp ${chosen_dir}/* ${src_dir}/
 
 # generate cap_matrix.h in chosen_dir
 cap_matrix_generator ${cap_matrix_dir}/cap_table.txt
