@@ -1426,9 +1426,9 @@ void initialize_pc_bounds (void){
     pc_base_bound_array[511] = (uint64_t)(pc_bound_255);
     write_csr(curcompcstart, pc_base_bound_array[INITIAL_COMPARTMENT*2]);
     write_csr(curcompcend, pc_base_bound_array[INITIAL_COMPARTMENT*2+1]);
-    write_csr(parcompcstart, pc_base_bound_array[Restricted_Compartment*2]);
-    write_csr(anycompcstart, pc_base_bound_array[Fully_Trusted_Compartment*2]);
-    write_csr(anycompcend, pc_base_bound_array[Fully_Trusted_Compartment*2+1]);
+    // write_csr(parcompcstart, pc_base_bound_array[Restricted_Compartment*2]);
+    // write_csr(anycompcstart, pc_base_bound_array[Fully_Trusted_Compartment*2]);
+    // write_csr(anycompcend, pc_base_bound_array[Fully_Trusted_Compartment*2+1]);
 // boot_printf("pc_base_0 : %x\n", pc_base_0);
 // boot_printf("pc_bound_0 : %x\n", pc_bound_0);
 // boot_printf("pc_base_1 : %x\n", pc_base_1);
