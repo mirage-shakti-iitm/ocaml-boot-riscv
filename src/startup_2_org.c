@@ -829,6 +829,8 @@ void boot_primary() {
 	boot_printf("stack @ 0x%lx - 0x%lx\n", stack, stack + STACK_SIZE);
 	boot_printf("start_stack @ 0x%lx - 0x%lx\n", &start_stack, &end_stack);
 
+	boot_printf("ocaml_gc_cross_compartment_stack @ 0x%lx\n", ocaml_gc_cross_compartment_stack);
+
     for(uint64_t* s = &start_uninitialized_data; s < &end_uninitialized_data; s++){
         // boot_printf("x", s);
         *s = 0;
@@ -1426,9 +1428,9 @@ void initialize_pc_bounds (void){
     pc_base_bound_array[511] = (uint64_t)(pc_bound_255);
     write_csr(curcompcstart, pc_base_bound_array[INITIAL_COMPARTMENT*2]);
     write_csr(curcompcend, pc_base_bound_array[INITIAL_COMPARTMENT*2+1]);
-    // write_csr(parcompcstart, pc_base_bound_array[Restricted_Compartment*2]);
-    // write_csr(anycompcstart, pc_base_bound_array[Fully_Trusted_Compartment*2]);
-    // write_csr(anycompcend, pc_base_bound_array[Fully_Trusted_Compartment*2+1]);
+    write_csr(parcompcstart, pc_base_bound_array[Restricted_Compartment*2]);
+    write_csr(anycompcstart, pc_base_bound_array[Fully_Trusted_Compartment*2]);
+    write_csr(anycompcend, pc_base_bound_array[Fully_Trusted_Compartment*2+1]);
 boot_printf("pc_base_0 : %x\n", pc_base_0);
 boot_printf("pc_bound_0 : %x\n", pc_bound_0);
 boot_printf("pc_base_1 : %x\n", pc_base_1);
@@ -2452,7 +2454,7 @@ ocaml_pc_end[255] = (uint64_t)(pc_ocaml_end_255);
 // boot_printf("pc_ocaml_end_251 : %x/n", pc_ocaml_end_251);
 // boot_printf("pc_ocaml_end_252 : %x/n", pc_ocaml_end_252);
 // boot_printf("pc_ocaml_end_253 : %x/n", pc_ocaml_end_253);
-// boot_printf("pc_ocaml_end_254 : %x/n", pc_ocaml_end_254);
-// boot_printf("pc_ocaml_end_255 : %x/n", pc_ocaml_end_255);
+boot_printf("pc_ocaml_end_254 : %x/n", pc_ocaml_end_254);
+boot_printf("pc_ocaml_end_255 : %x/n", pc_ocaml_end_255);
 // return 0;
 }

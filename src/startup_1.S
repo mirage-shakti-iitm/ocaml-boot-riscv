@@ -567,7 +567,7 @@ Found_index:
     li t3, 0
     li t4, 0
     li t5, 0
-    li t6, 0
+    # li t6, 0
 
     #Step 10: Call target function again
     csrr x7, comepc
@@ -653,7 +653,7 @@ COMMON_C_OCAML_POP:
     li t3, 0
     li t4, 0
     li t5, 0
-    li t6, 0
+    # li t6, 0
 
     #Step 4: Change comepc. Originally it was pointing to CHECKCAP_CROSS_COMP_RETURN
     csrw comepc, x0
