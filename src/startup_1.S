@@ -365,8 +365,8 @@ CALLER_OCAML_CURR_CAP_CHECK:
     ld t1, 0(t0)
     bgeu t1, ra, SM_STACK_PUSH_0
 CALLER_C_CURR_CAP_CHECK:
-    csrr t1, anycompcstart
-    bltu ra, t1, CALLEE_OCAML_TARGET_CAP_CHECK
+    csrr t1, curcompcend
+    bltu ra, t1, SM_STACK_PUSH_1
 CALLER_OCAML_255_CHECK:
 #   Removing the lower bound check since cross-compartment calls can only take place from 255 and not 254. 
 #   csrr t1, anycompcstart
@@ -377,14 +377,14 @@ CALLER_OCAML_255_CHECK:
     ld t1, 0(t0)
     bltu ra, t1, SM_STACK_PUSH_0
 
-CALLEE_OCAML_TARGET_CAP_CHECK:
-    csrr t1, targetcom
-    csrr t5, comepc
-    sll t1, t1, 0x3
-    la t0, ocaml_pc_end
-    add t0, t1, t0
-    ld t1, 0(t0)
-    bgeu t1, t5, SM_STACK_PUSH_0
+# CALLEE_OCAML_TARGET_CAP_CHECK:
+#    csrr t1, targetcom
+#    csrr t5, comepc
+#    sll t1, t1, 0x3
+#    la t0, ocaml_pc_end
+#    add t0, t1, t0
+#    ld t1, 0(t0)
+#    bgeu t1, t5, SM_STACK_PUSH_0
 
 
 SM_STACK_PUSH_1:
