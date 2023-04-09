@@ -10,7 +10,7 @@ ASM_INCLUDES=-I/home/sai/Shakti_TEE_Practical/mirage-shakti/ocaml-boot-riscv/inc
 C_FLAGS=-mcmodel=medany -ffunction-sections --gcc-toolchain=$(RISCV) -march=rv64gc
 
 # COMPARTMENT_FLAGS=-mllvm -enable-compartment-pass -mllvm -default-compartment-id -mllvm 40 -ffunction-sections
-COMPARTMENT_FLAGS=-mllvm -enable-compartment-pass -mllvm -default-compartment-id -mllvm 4 -mllvm -cap-file-path -mllvm /home/sai/Shakti-TEE-Practical/mirage-shakti/fides-cap-files/fides-voting-system-1/ocaml-boot-riscv
+COMPARTMENT_FLAGS=-mllvm -enable-compartment-pass -mllvm -default-compartment-id -mllvm 255 -mllvm -cap-file-path -mllvm /home/sai/Shakti-TEE-Practical/mirage-shakti/fides-cap-files/fides-voting-system-1/ocaml-boot-riscv
 C_FLAGS+=$(COMPARTMENT_FLAGS)
 
 C_DEFINES=$(UART_BACKEND) $(COMPARTMENT_STATUS) $(BOOT_BACKEND)
