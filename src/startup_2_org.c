@@ -831,6 +831,9 @@ void boot_primary() {
 
 	boot_printf("ocaml_gc_cross_compartment_stack @ 0x%lx\n", ocaml_gc_cross_compartment_stack);
 
+	// uint64_t anycompcstart_value = read_csr(0x7fb);
+	// boot_printf("CSR_ANYCOMPCSTART : 0x%lx\n", anycompcstart_value);
+
     for(uint64_t* s = &start_uninitialized_data; s < &end_uninitialized_data; s++){
         // boot_printf("x", s);
         *s = 0;
@@ -1428,9 +1431,20 @@ void initialize_pc_bounds (void){
     pc_base_bound_array[511] = (uint64_t)(pc_bound_255);
     write_csr(curcompcstart, pc_base_bound_array[INITIAL_COMPARTMENT*2]);
     write_csr(curcompcend, pc_base_bound_array[INITIAL_COMPARTMENT*2+1]);
-    // write_csr(parcompcstart, pc_base_bound_array[Restricted_Compartment*2]);
-    // write_csr(anycompcstart, pc_base_bound_array[Fully_Trusted_Compartment*2]);
-    // write_csr(anycompcend, pc_base_bound_array[Fully_Trusted_Compartment*2+1]);
+    #if defined(ENABLE_FLUID_COMPARTMENTS)
+    	write_csr(parcompcstart, pc_base_bound_array[Restricted_Compartment*2]);
+    	write_csr(anycompcstart, pc_base_bound_array[Fully_Trusted_Compartment*2]);
+    	write_csr(anycompcend, pc_base_bound_array[Fully_Trusted_Compartment*2+1]);
+    #else 
+    	int g=0;
+    	write_csr(parcompcstart, g);
+    	write_csr(anycompcstart, g);
+    	write_csr(anycompcend, g);
+    #endif
+
+    uint64_t anycompcstart_value = read_csr(0x7fb);
+	boot_printf("CSR_ANYCOMPCSTART : 0x%lx\n", anycompcstart_value);
+
 // boot_printf("pc_base_0 : %x\n", pc_base_0);
 // boot_printf("pc_bound_0 : %x\n", pc_bound_0);
 // boot_printf("pc_base_1 : %x\n", pc_base_1);

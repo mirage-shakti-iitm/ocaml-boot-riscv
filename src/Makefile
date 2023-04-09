@@ -13,7 +13,7 @@ C_FLAGS=-mcmodel=medany -ffunction-sections --gcc-toolchain=$(RISCV) -march=rv64
 COMPARTMENT_FLAGS=-mllvm -enable-compartment-pass -mllvm -default-compartment-id -mllvm 255 -mllvm -cap-file-path -mllvm /home/sai/Shakti-TEE-Practical/mirage-shakti/fides-cap-files/fides-voting-system-1/ocaml-boot-riscv
 C_FLAGS+=$(COMPARTMENT_FLAGS)
 
-C_DEFINES=$(UART_BACKEND) $(COMPARTMENT_STATUS) $(BOOT_BACKEND)
+C_DEFINES=$(UART_BACKEND) $(COMPARTMENT_STATUS) $(BOOT_BACKEND) $(FLUID_COMPARTMENTS)
 
 # C_INCLUDES=-I/home/sai/Shakti_TEE_Practical/mirage-shakti/ocaml-boot-riscv/include -I/home/sai/Shakti_TEE_Practical/mirage-shakti/ocaml-boot-riscv/include/ocaml-boot-riscv -I/home/sai/Shakti_TEE_Practical/mirage-shakti/ocaml-boot-riscv/src 
 C_INCLUDES=-I../include -I../include/ocaml-boot-riscv -I. 
