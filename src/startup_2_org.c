@@ -783,6 +783,9 @@ uint64_t startup_inst_end;
 uint64_t boot_end_cycle = 0;
 uint64_t boot_end_inst = 0;
 
+uint64_t comp_end_cycle = 0;
+uint64_t comp_end_inst = 0;
+
     unsigned char 
     __attribute__((section (".checkcap-stack-reserved") ))
     __attribute__(( aligned (16) ))
@@ -813,6 +816,8 @@ uint64_t boot_end_inst = 0;
 void boot_primary() {
     // init floating point unit
     // enable timer interrupts & interrupts in general
+    comp_end_cycle = read_csr(0xb00);
+    comp_end_inst = read_csr(0xb02);
     uint64_t status = read_csr(mstatus);
     status |= MSTATUS_FS;
     status |= MSTATUS_MIE;
@@ -862,6 +867,7 @@ void boot_primary() {
     uint64_t cycle_end = read_csr(0xb00);
     uint64_t inst_end = read_csr(0xb02);
 
+    boot_printf("\nComp end => mcycle: 0x%lx | minstret => 0x%lx", comp_end_cycle, comp_end_inst);
     boot_printf("\nBoot end => mcycle: 0x%lx | minstret => 0x%lx", boot_end_cycle, boot_end_inst);
     boot_printf("\nOCaml startup end => mcycle: 0x%lx | minstret => 0x%lx", startup_cycle_end, startup_inst_end);
     boot_printf("\nEnd => mcycle: 0x%lx | minstret => 0x%lx", cycle_end, inst_end);
