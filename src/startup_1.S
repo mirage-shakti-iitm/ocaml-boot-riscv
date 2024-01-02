@@ -352,14 +352,16 @@ CHECKCAP_CROSS_COMP:
     #Step 0: Saving t2
     # csrw mscratch, t2
 
-    #Step 1: Check if it is a tail-call, if yes skip saving the return registers on the checkcap-stack and changing the return-address
-    la t2, CHECKCAP_CROSS_COMP_RETURN
-    beq ra, t2, COMMON_CROSS_COMP
-
     #Checking if it is an exception
     csrr t5, comepc    
     la t2, SM_EXN_HANDLER
     beq t2, t5, SM_EXCEPTION_UNWINDING
+
+    #Step 1: Check if it is a tail-call, if yes skip saving the return registers on the checkcap-stack and changing the return-address
+    la t2, CHECKCAP_CROSS_COMP_RETURN
+    beq ra, t2, COMMON_CROSS_COMP
+
+
 
     # Pushing actual ra to separate stack for ocaml root scanning
 # CALLER_OCAML_CURR_CAP_CHECK:
@@ -626,13 +628,16 @@ CHECKCAP_CROSS_COMP_RETURN:
     checkcap 0
     
 CHECKCAP_CROSS_COMP_RETURN_ISR:
-    la t1, CHECKCAP_CROSS_COMP_RETURN
-    bne ra, t1, CAPABILITY_LEGAL_RETURN_POINT_FAIL
 
     #Checking if it is an exception
     csrr t5, comepc    
     la t2, SM_EXN_HANDLER
     beq t2, t5, SM_EXCEPTION_UNWINDING
+
+    la t1, CHECKCAP_CROSS_COMP_RETURN
+    bne ra, t1, CAPABILITY_LEGAL_RETURN_POINT_FAIL
+
+
 
     #Step 1: Read CSR_UCHECKCAPSP
     csrr t2, checkcomsp
