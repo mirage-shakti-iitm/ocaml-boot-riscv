@@ -495,7 +495,7 @@ SM_STACK_PUSH_OCAML:
 EXCEPTION_CHECK:
     ld t4, 8(t0) // trap_handler pc
     la t3, SM_EXN_HANDLER
-    beq t4,t3 NO_EXCEPTION_STORE
+    beq t4,t3, NO_EXCEPTION_STORE
 
     sd t3, 8(t0) // changing trap_handler pc to SM_EXN_HANDLER
     # storing old trap_handler pc to SM stack
