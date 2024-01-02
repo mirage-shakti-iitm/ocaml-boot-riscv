@@ -316,24 +316,24 @@ trap_vector:
 .global print_checkcap_no_cross_comp_fail
 
 
-#SM_STACK_PUSH_0 => either one is OCaml compartment
-#SM_STACK_PUSH_1 => both are C compartments
+#SM_STACK_PUSH_OCAML => callee is OCaml
+#SM_STACK_PUSH_C => callee is C
 
 #CALLER_OCAML_CHECK:
 #    t5 is ra
 #    3 regions:
-#    region 1 if(t1 >= t5) IN_OCMAL_CURR_CAP # t1 is ocaml_pc_end[curr_cap] # TARGET => SM_STACK_PUSH_0
+#    region 1 if(t1 >= t5) IN_OCMAL_CURR_CAP # t1 is ocaml_pc_end[curr_cap] # TARGET => SM_STACK_PUSH_OCAML
 #    region 2 if(t5 < t1) IN_C_CURR_CAP # t1 is anycompcstart               # TARGET => CALLEE_OCAML_TARGET_CAP_CHECK
-#    region 3 if(t5 < t1) IN_OCAML_ANY_CAP # t1 is ocaml_pc_end[255]        # TARGET => SM_STACK_PUSH_0
+#    region 3 if(t5 < t1) IN_OCAML_ANY_CAP # t1 is ocaml_pc_end[255]        # TARGET => SM_STACK_PUSH_OCAML
 
 #CALLEE_OCAML_TARGET_CAP_CHECK:
 #    t5 is mepc
 #    2 regions:
-#    region 1 if(t1 >= t5) IN_OCAML_TARGET_CAP # t1 is ocaml_pc_end[target_cap] # TARGET => SM_STACK_PUSH_0
+#    region 1 if(t1 >= t5) IN_OCAML_TARGET_CAP # t1 is ocaml_pc_end[target_cap] # TARGET => SM_STACK_PUSH_OCAML
 
-# SM_STACK_PUSH_1:
+# SM_STACK_PUSH_C:
     
-# SM_STACK_PUSH_0:
+# SM_STACK_PUSH_OCAML:
 
 
 SM_ENTRY:
@@ -356,39 +356,43 @@ CHECKCAP_CROSS_COMP:
     la t2, CHECKCAP_CROSS_COMP_RETURN
     beq ra, t2, COMMON_CROSS_COMP
 
+    #Checking if it is an exception
+    csrr t5, comepc    
+    la t2, SM_EXN_HANDLER
+    beq t2, t5, SM_EXCEPTION_UNWINDING
 
     # Pushing actual ra to separate stack for ocaml root scanning
-CALLER_OCAML_CURR_CAP_CHECK:
-    csrr t1, currcom
-    sll t1, t1, 0x3
-    la t0, ocaml_pc_end
-    add t0, t1, t0
-    ld t1, 0(t0)
-    bgeu t1, ra, SM_STACK_PUSH_0
-CALLER_C_CURR_CAP_CHECK:
-    csrr t1, anycompcstart
-    bltu ra, t1, CALLEE_OCAML_TARGET_CAP_CHECK
-CALLER_OCAML_255_CHECK:
+# CALLER_OCAML_CURR_CAP_CHECK:
+#    csrr t1, currcom
+#    sll t1, t1, 0x3
+#    la t0, ocaml_pc_end
+#    add t0, t1, t0
+#    ld t1, 0(t0)
+#    bgeu t1, ra, SM_STACK_PUSH_OCAML
+#CALLER_C_CURR_CAP_CHECK:
+#    csrr t1, anycompcstart
+#    bltu ra, t1, CALLEE_OCAML_TARGET_CAP_CHECK
+#CALLER_OCAML_255_CHECK:
 #   Removing the lower bound check since cross-compartment calls can only take place from 255 and not 254. 
 #   csrr t1, anycompcstart
-    addi t1, x0, 0xff
-    sll t1, t1, 0x3
-    la t0, ocaml_pc_end
-    add t0, t1, t0
-    ld t1, 0(t0)
-    bltu ra, t1, SM_STACK_PUSH_0
+#    addi t1, x0, 0xff
+#    sll t1, t1, 0x3
+#    la t0, ocaml_pc_end
+#    add t0, t1, t0
+#    ld t1, 0(t0)
+#    bltu ra, t1, SM_STACK_PUSH_OCAML
 
 CALLEE_OCAML_TARGET_CAP_CHECK:
     csrr t1, targetcom
-    csrr t5, comepc
+#    csrr t5, comepc done already
     sll t1, t1, 0x3
     la t0, ocaml_pc_end
     add t0, t1, t0
     ld t1, 0(t0)
-    bgeu t1, t5, SM_STACK_PUSH_0
+    bgeu t1, t5, SM_STACK_PUSH_OCAML
 
 
-SM_STACK_PUSH_1:
+SM_STACK_PUSH_C:
     #Step 2: Read CSR_UCHECKCAPSP
     csrr t2, checkcomsp
 
@@ -433,19 +437,22 @@ SM_STACK_PUSH_1:
     sd s10,18*8(t2)
     sd s11,19*8(t2)
 
-    # update CSR_UCHECKCAPSP
-    csrw checkcomsp, t2
+    # Store status 1, to be used while returning from compartment
+    li t5, 1
 
-    j COMMON_C_OCAML_PUSH
+    # Get location of exception pointer in t0, in C: Caml_state
+    la t0, caml_state_exnptr_addr
+    ld t0, 0(t0) // exception pointer in t0
+    j EXCEPTION_CHECK
 
-SM_STACK_PUSH_0:
+SM_STACK_PUSH_OCAML:
     # Pushing actual ra to separate stack for ocaml root scanning
     la t0, ocaml_gc_cross_compartment_stack_position
     ld t2, 0(t0)
     addi t3, t2, 1
     sd t3, 0(t0)
     la t1, ocaml_gc_cross_compartment_stack
-    sll t2, t2, 0x3 
+    sll t2, t2, 0x3
     add t1, t1, t2
     sd ra, 0(t1)
 
@@ -480,10 +487,49 @@ SM_STACK_PUSH_0:
     # Store CURRCAPPCBOUND
     sd t3, 7*8(t2)
 
+    mv t5, x0
+
+    # Get location of exception pointer in t0, in C: Caml_state
+    mv t0, s1 // exception pointer in t0
+
+EXCEPTION_CHECK:
+    ld t4, 8(t0) // trap_handler pc
+    la t3, SM_EXN_HANDLER
+    beq t4,t3 NO_EXCEPTION_STORE
+
+    sd t3, 8(t0) // changing trap_handler pc to SM_EXN_HANDLER
+    # storing old trap_handler pc to SM stack
+    sd t4, 0*8(t2)
+    # storing ocaml_gc_cross_compartment_stack_position for unwinding
+    # needs to be done only for ocaml, but no problem doing for both C and OCaml
+    addi t2, t2, -1*8
+    sd t6, 0*8(t2)
+    # storing exception_pointer, in case of C Caml_state->exception_pointer
+    addi t2, t2, -1*8
+    sd t0, 0*8(t2)
+    # storing status_c_ocaml_exception
+    addi t2, t2, -1*8
+
+    # Pushing checkcomsp(t2) to separate stack for unwinding
+    la t0, ocaml_exception_cross_compartment_stack_position
+    ld t4, 0(t0)
+    addi t3, t4, 1
+    sd t3, 0(t0)
+    la t1, ocaml_exception_cross_compartment_stack
+    sll t4, t4, 0x3
+    add t1, t1, t4
+    sd t2, 0(t1)
+    j COMMON_C_OCAML_PUSH
+
+NO_EXCEPTION_STORE:
+    addi t5, t5, 2
+
+COMMON_C_OCAML_PUSH:
+    sd t5, 0*8(t2)
+
     # update CSR_UCHECKCAPSP
     csrw checkcomsp, t2
 
-COMMON_C_OCAML_PUSH:
     #Step 4: setting the ra to point to CHECKCAP_CROSS_COMP_RETURN
     la ra, CHECKCAP_CROSS_COMP_RETURN
 
@@ -583,15 +629,52 @@ CHECKCAP_CROSS_COMP_RETURN_ISR:
     la t1, CHECKCAP_CROSS_COMP_RETURN
     bne ra, t1, CAPABILITY_LEGAL_RETURN_POINT_FAIL
 
+    #Checking if it is an exception
+    csrr t5, comepc    
+    la t2, SM_EXN_HANDLER
+    beq t2, t5, SM_EXCEPTION_UNWINDING
+
     #Step 1: Read CSR_UCHECKCAPSP
     csrr t2, checkcomsp
 
-    add t3, t2, x0
+    ld t5, 0*8(t2)
+    li t3, 2
+    bgeu t5, t3, COMMON_POP
 
+
+EXCEPTION_POP:  
+    # storing exception_pointer, in case of C Caml_state->exception_pointer
+    addi t2, t2, 1*8
+    ld t0, 0*8(t2)
+
+    # popping ocaml_gc_cross_compartment_stack_position
+    addi t2, t2, 1*8
+    # ld t6, 0*8(t2) no need to restore
+
+    # restoring old trap_handler pc
+    addi t2, t2, 1*8
+    ld t4, 0*8(t2)  
+    sd t4, 8(t0)
+
+
+    # Popping checkcomsp(t2)
+    la t0, ocaml_exception_cross_compartment_stack_position
+    ld t4, 0(t0)
+    beq t4, x0, SM_STACK_POP_0
+    addi t4, t4, -1
+    sd t4, 0(t0)
+    la t1, ocaml_exception_cross_compartment_stack
+    sll t4, t4, 0x3 
+    add t1, t1, t4
+    sd x0, 0(t1)
+
+    
+    addi t5, t5, -2
+    
+COMMON_POP:
     #Step 2: Popping the registers first itself
-
-    ld t1, 0*8(t2)
-    beq x0, t1, POP_GC_RA
+    add t3, t2, x0
+    beq x0, t5, POP_GC_RA
 
 SM_STACK_POP_1:
     # Restoring Callee-saved registers
@@ -662,6 +745,73 @@ COMMON_C_OCAML_POP:
 
     # Step 5: Return to ra(through x7)
     jr x7
+
+SM_EXN_HANDLER:
+    checkcap 0
+SM_EXCEPTION_UNWINDING:
+    la t0, ocaml_exception_cross_compartment_stack_position
+    ld t4, 0(t0)
+    beq t4, x0, SM_STACK_POP_0
+    addi t4, t4, -1
+    sd t4, 0(t0)
+    la t1, ocaml_exception_cross_compartment_stack
+    sll t4, t4, 0x3 
+    add t1, t1, t4
+    ld t2, 0(t1)
+    sd x0, 0(t1)
+
+    # restoring exception_pointer, in case of C Caml_state->exception_pointer
+    addi t2, t2, 1*8
+    # ld t0, 0*8(t2)
+
+    # popping ocaml_gc_cross_compartment_stack_position
+    addi t2, t2, 1*8
+    ld t6, 0*8(t2)
+    la t0, ocaml_gc_cross_compartment_stack_position
+    sd t6, 0(t0)
+
+    # restoring old trap_handler pc
+    addi t2, t2, 1*8
+    ld t4, 0*8(t2)  
+    sd t4, 8(t0)
+
+    # Restoring essential registers
+    # ld ra, 2*8(t2)
+    # ld sp, 3*8(t2)
+    # ld gp, 4*8(t2)
+    # ld tp, 5*8(t2)
+
+    # restore CSR_UCURRCAP_PCBASE
+    ld t1, 6*8(t2)
+    csrw curcompcstart, t1
+
+    # restore CSR_UCURRCAP_PCBOUND
+    ld t1, 7*8(t2)
+    csrw curcompcend, t1
+    
+    # restore CSR_UCURRCAP
+    ld t1, 1*8(t2)
+    csrw currcom, t1
+
+    # update CSR_UCHECKCAPSP
+    addi t3, t3, 8*8
+    csrw checkcomsp, t3
+
+    # Step 3: Zero out the t0-t6 registers 
+    li t0, 0
+    li t1, 0
+    li t2, 0
+    li t3, 0
+    li t5, 0
+    li t6, 0
+
+    #Step 4: Change comepc. Originally it was pointing to CHECKCAP_CROSS_COMP_RETURN
+    csrw comepc, x0
+    mv x7, t4
+
+    # Step 5: Return to ra(through x7)
+    jr x7
+
 
 CAPABILITY_CHECK_FAIL:
     # If we follow the idea where we store the registers before the actual checking is done, then we need to remove them before we exit. And next, what 

@@ -786,6 +786,19 @@ uint64_t boot_end_inst = 0;
 uint64_t comp_end_cycle = 0;
 uint64_t comp_end_instret = 0;
 
+	uint64_t dummy_exnptr_cell[2];
+	uint64_t caml_state_exnptr_addr;
+
+    uint64_t
+    __attribute__((section (".checkcap-stack-reserved") ))
+    __attribute__(( aligned (16) ))
+    ocaml_exception_cross_compartment_stack_position = 0;
+
+    uint64_t 
+    __attribute__((section (".checkcap-stack-reserved") ))
+    __attribute__(( aligned (16) ))
+    ocaml_exception_cross_compartment_stack[4096];
+
     unsigned char 
     __attribute__((section (".checkcap-stack-reserved") ))
     __attribute__(( aligned (16) ))
@@ -828,6 +841,9 @@ void boot_primary() {
 
     // init nolibc of ocaml_freestanding
     uintptr_t start = (uintptr_t) &__KERNEL_END;
+
+    // init caml_state_exnptr_addr to dummy value. points to Caml_state(exception_pointer) only on OCaml startup 
+    caml_state_exnptr_addr = &dummy_exnptr_cell;
 
     // boot_printf("ocaml-boot: heap@0x%x stack@0x%x\n",start, &stack[stack_size]);
     // boot_printf("\nPerformance numbers : \n mcycle: 0x%lx \n", read_csr(mcycle));
