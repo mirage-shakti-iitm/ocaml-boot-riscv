@@ -674,9 +674,10 @@ EXCEPTION_POP:
     sd x0, 0(t1)
 
     
-    addi t5, t5, -2
+    addi t5, t5, 2
     
 COMMON_POP:
+    addi t5, t5, -2
     #Step 2: Popping the registers first itself
     add t3, t2, x0
     beq x0, t5, POP_GC_RA
