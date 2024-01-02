@@ -799,8 +799,8 @@ SM_EXCEPTION_UNWINDING:
     csrw currcom, t1
 
     # update CSR_UCHECKCAPSP
-    addi t3, t3, 8*8
-    csrw checkcomsp, t3
+    addi t2, t2, 8*8
+    csrw checkcomsp, t2
 
     # Step 3: Zero out the t0-t6 registers 
     li t0, 0
