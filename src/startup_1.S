@@ -495,6 +495,7 @@ SM_STACK_PUSH_OCAML:
     mv t0, s1 // exception pointer in t0
 
 EXCEPTION_CHECK:
+    beq t0, x0, NO_EXCEPTION_STORE
     ld t4, 8(t0) // trap_handler pc
     la t3, SM_EXN_HANDLER
     beq t4,t3, NO_EXCEPTION_STORE
