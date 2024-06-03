@@ -2,7 +2,7 @@
 
 # option=$1
 # chosen_dir="compartment_allocations/strategy_${option}"
-cap_matrix_dir="/home/sai/Shakti-TEE-Practical/mirage-shakti/fides-cap-matrix/exceptions"
+cap_matrix_dir="${CAP_MATRIX_PATH}"
 src_dir="src/"
 
 # chosen_dir will contain the *(.cap/cap_tee.ml) files
