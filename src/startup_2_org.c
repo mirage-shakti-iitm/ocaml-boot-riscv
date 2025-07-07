@@ -810,6 +810,22 @@ uint64_t comp_end_instret = 0;
     __attribute__(( aligned (16) ))
     ocaml_gc_cross_compartment_stack[4096];
 
+
+    uint64_t 
+    __attribute__((section (".checkcap-stack-reserved") ))
+    __attribute__(( aligned (16) ))
+    __fides_bounds_table[NUM_ENTRIES*2];
+
+    uint64_t
+    __attribute__((section (".checkcap-stack-reserved") ))
+    __attribute__(( aligned (16) ))
+    max_index = 0;
+
+    uint64_t
+    __attribute__((section (".checkcap-stack-reserved") ))
+    __attribute__(( aligned (16) ))
+    max_heap_objects = 0;
+
     uint64_t 
     __attribute__((section (".checkcap-stack-reserved") ))
     __attribute__(( aligned (16) ))
@@ -884,6 +900,8 @@ void boot_primary() {
     boot_printf("\nBoot end => mcycle: 0x%lx | minstret => 0x%lx", boot_end_cycle, boot_end_inst);
     boot_printf("\nOCaml startup end => mcycle: 0x%lx | minstret => 0x%lx", startup_cycle_end, startup_inst_end);
     boot_printf("\nEnd => mcycle: 0x%lx | minstret => 0x%lx", cycle_end, inst_end);
+    boot_printf("\nBounds table max index => 0x%lx", max_index);
+    boot_printf("\nBounds table max heap objects => 0x%lx", max_heap_objects);
 	// boot_printf("\nEnd => minstret: 0x%lx\n", read_csr(minstret));
 	// boot_printf("\nICache accesses => 0x%lx\n", read_csr(mhpmcounter3));
 	// boot_printf("\nICache hits => 0x%lx\n", read_csr(mhpmcounter4));
@@ -922,6 +940,7 @@ uint64_t
 __attribute__((section (".pc-bounds-reserved") ))
 __attribute__(( aligned (16) ))
 pc_base_bound_array[512] = {0};
+
 
 
 uint64_t

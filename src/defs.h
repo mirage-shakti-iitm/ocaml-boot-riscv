@@ -14,3 +14,4 @@
 // #define Fully_Trusted_Compartment_2 255
 #define Restricted_Compartment 254
 #define Reserved_Compartment 0
+#define NUM_ENTRIES 64*1024
