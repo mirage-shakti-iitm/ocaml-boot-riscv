@@ -842,6 +842,75 @@ uint64_t comp_end_instret = 0;
     stack[STACK_SIZE] = {0};
 
     extern void riscv_boot_finished(uintptr_t heap_start, uint64_t heap_size);
+/* ---------------------------------------------------------------------
+   FIDES: globals.
+
+   The compiler routes every global aggregate through a slot holding that
+   object's tagged pointer, and emits one record saying where the slot is
+   and what the object's bounds are. It cannot choose the index itself: an
+   index that is unique across the whole image can only be picked where the
+   whole image is visible, and that is here.
+
+   Taking the index from __fides_alloc_index -- the same allocator the heap
+   uses -- is what makes collisions impossible and means nothing has to be
+   set aside for globals.
+   --------------------------------------------------------------------- */
+struct fides_global_record {
+    uint64_t slot;              /* where to store the tagged pointer      */
+    uint64_t base;              /* untagged address of the object         */
+    uint64_t size;              /* in bytes                               */
+};
+
+struct fides_global_reloc {
+    uint64_t target;            /* initialiser word to patch              */
+    uint64_t slot;              /* slot holding the tagged pointer        */
+    uint64_t addend;            /* offset within the pointed-to object    */
+};
+
+extern struct fides_global_record __start_fides_globals[];
+extern struct fides_global_record __stop_fides_globals[];
+extern struct fides_global_reloc  __start_fides_global_relocs[];
+extern struct fides_global_reloc  __stop_fides_global_relocs[];
+
+extern uint64_t __fides_alloc_index(void);
+
+#define FIDES_NO_INDEX (NUM_ENTRIES)
+
+static void fides_init_globals(void)
+{
+    struct fides_global_record *r;
+    struct fides_global_reloc  *k;
+    uint64_t n = 0;
+
+    for (r = __start_fides_globals; r < __stop_fides_globals; r++) {
+        uint64_t index = __fides_alloc_index();
+        if (index == FIDES_NO_INDEX) {
+            boot_printf("\nFIDES: metadata table full, %lu globals left untagged",
+                        (uint64_t)(__stop_fides_globals - r));
+            break;
+        }
+
+        /* Same encoding __fides_malloc writes: base in the high half,
+           bound (one past the end) in the low half. */
+        __fides_bounds_table[index*2]   = (r->base << 32) | (r->base + r->size);
+        __fides_bounds_table[index*2+1] = 0;    /* globals are never freed */
+
+        /* Same layout craft_fides_pointer builds: index in 63:48,
+           temporal id in 47:32, address in 31:0. */
+        *(uint64_t *)r->slot = (index << 48) | r->base;
+        n++;
+    }
+
+    /* Initialiser words pointing at a tagged global: the linker wrote the
+       raw address, replace it now that the tagged one exists. The addend
+       only touches bits 31:0, so it cannot disturb the tag. */
+    for (k = __start_fides_global_relocs; k < __stop_fides_global_relocs; k++)
+        *(uint64_t *)k->target = *(uint64_t *)k->slot + k->addend;
+
+    boot_printf("\nFIDES: %lu globals tagged, %lu initialiser words patched",
+                n, (uint64_t)(__stop_fides_global_relocs - __start_fides_global_relocs));
+}
+
 void boot_primary() {
     // init floating point unit
     // enable timer interrupts & interrupts in general
@@ -872,6 +941,11 @@ void boot_primary() {
         // boot_printf("x", s);
         *s = 0;
     }
+
+    /* After the zeroing loop above, which would otherwise wipe the table,
+       and before _nolibc_init below, which is the first thing that can
+       call malloc and therefore take an index. */
+    fides_init_globals();
 
     boot_end_cycle = read_csr(0xb00);
     boot_end_inst = read_csr(0xb02);
