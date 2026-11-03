@@ -39,6 +39,25 @@ SECTIONS
     PROVIDE( _erodata = . );
   }
 
+  /* FIDES: one record per tagged global, and one entry per initialiser word
+     that points at a tagged global. KEEP because nothing in the image refers
+     to these by name, so --gc-sections would otherwise drop them. */
+  . = ALIGN(8);
+  .fides_globals :
+  {
+    PROVIDE( __start_fides_globals = . );
+    KEEP(*(fides_globals))
+    PROVIDE( __stop_fides_globals = . );
+  }
+
+  . = ALIGN(8);
+  .fides_global_relocs :
+  {
+    PROVIDE( __start_fides_global_relocs = . );
+    KEEP(*(fides_global_relocs))
+    PROVIDE( __stop_fides_global_relocs = . );
+  }
+
   /*--------------------------------------------------------------------*/
   /* HTIF, isolated onto separate page                                  */
   /*--------------------------------------------------------------------*/
